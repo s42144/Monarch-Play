@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playing Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg:#050b14; --card:#162030; --primary:#fbbf24; --text:#f8fafc; --success:#10b981; --danger:#ef4444; }
+        body { margin:0; font-family:'Inter', sans-serif; background:var(--bg); color:var(--text); display:flex; flex-direction:column; height:100vh; align-items:center; justify-content:center; }
+        .game-container { width:90%; max-width:400px; text-align:center; }
+        h1 { font-family:'Rajdhani'; margin-bottom:20px; text-transform:uppercase; letter-spacing:1px; }
+        .back-btn { position:absolute; top:20px; left:20px; color:var(--text); background:none; border:none; font-size:1.5rem; cursor:pointer; }
+        .controls { background:var(--card); padding:20px; border-radius:16px; margin-bottom:20px; }
+        input { width:100%; padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:white; font-family:'Rajdhani'; font-size:1.2rem; text-align:center; margin-bottom:10px; box-sizing:border-box; }
+        .btn { width:100%; padding:14px; border-radius:12px; border:none; font-weight:700; cursor:pointer; font-size:1rem; }
+        .btn-primary { background:var(--primary); color:#000; }
+        .btn-secondary { background:rgba(255,255,255,0.1); color:white; margin-top:5px; }
+        .status { min-height:24px; margin-bottom:10px; font-size:0.9rem; color:rgba(255,255,255,0.6); }
+        
+        /* Mines Specific */
+        .mines-board { display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; margin-bottom:20px; }
+        .mine-cell { aspect-ratio:1; background:rgba(0,0,0,0.4); border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.2rem; }
+        .mine-cell.safe { background:var(--card); border:1px solid var(--success); color:var(--success); }
+        .mine-cell.boom { background:var(--danger); color:white; }
+        .mine-cell.disabled { pointer-events:none; opacity:0.5; }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.history.back()"><i class="fa-solid fa-arrow-left"></i></button>
+    
+    <div class="game-container">
+        <h1 id="game-title">Loading...</h1>
+        <div class="status" id="status">Place your bet</div>
+        
+        <div id="game-area"></div>
+
+        <div class="controls">
+            <input type="number" id="bet-amount" placeholder="Bet Amount" value="10">
+            <button class="btn btn-primary" id="action-btn" onclick="startGame()">START</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get, update, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBD8tW5sHlSze2E4E-EjXSjx9eMBdnneQ4",
+            authDomain: "free-money-9b371.firebaseapp.com",
+            databaseURL: "https://free-money-9b371-default-rtdb.firebaseio.com",
+            projectId: "free-money-9b371",
+            storageBucket: "free-money-9b371.firebasestorage.app",
+            messagingSenderId: "331937781056",
+            appId: "1:331937781056:web:ab7fdba321b4053be7d6a5"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Parse URL Params
+        const params = new URLSearchParams(window.location.search);
+        const gameType = params.get('g');
+        const uid = params.get('uid');
+        
+        const titleEl = document.getElementById('game-title');
+        const areaEl = document.getElementById('game-area');
+        const statusEl = document.getElementById('status');
+        const actionBtn = document.getElementById('action-btn');
+        const betInput = document.getElementById('bet-amount');
+
+        let gameData = {};
+        let isInProgress = false;
+
+        titleEl.innerText = gameType.replace('-', ' ').toUpperCase();
+
+        // Init UI based on game
+        if (gameType === 'mines') {
+            let html = '<div class="mines-board">';
+            for(let i=0; i<25; i++) html += `<div class="mine-cell" id="c-${i}" onclick="reveal(${i})"></div>`;
+            html += '</div>';
+            areaEl.innerHTML = html;
+        } else {
+            areaEl.innerHTML = `<div style="padding:40px; background:rgba(255,255,255,0.05); border-radius:12px;">Ready to play!</div>`;
+        }
+
+        // Game Logic
+        window.startGame = async function() {
+            if(isInProgress) return;
+            const bet = parseInt(betInput.value);
+            if(!bet || bet <= 0) return alert("Invalid bet");
+
+            // Check Balance
+            const userRef = ref(db, 'users/' + uid);
+            const snapshot = await get(userRef);
+            const currentBal = snapshot.val().balance;
+
+            if(currentBal < bet) return alert("Insufficient Balance");
+
+            // Deduct Balance
+            await update(userRef, { balance: currentBal - bet });
+            
+            isInProgress = true;
+            actionBtn.style.display = 'none';
+            statusEl.innerText = "Game Active";
+            statusEl.style.color = "var(--primary)";
+            
+            // Setup Game Data
+            gameData = { bet: bet, mines: [], multiplier: 1.0 };
+            
+            if(gameType === 'mines') {
+                // Place 3 mines
+                while(gameData.mines.length < 3) {
+                    let r = Math.floor(Math.random() * 25);
+                    if(!gameData.mines.includes(r)) gameData.mines.push(r);
+                }
+                // Reset UI
+                document.querySelectorAll('.mine-cell').forEach(c => { c.className = "mine-cell"; c.innerHTML = ""; });
+                actionBtn.innerText = "CASH OUT";
+                actionBtn.style.display = 'block';
+                actionBtn.className = "btn btn-secondary";
+                actionBtn.onclick = cashout;
+            } else {
+                // Simple random win/loss for other games
+                setTimeout(async () => {
+                    const isWin = Math.random() > 0.5; // 50% chance
+                    if(isWin) {
+                        const winAmt = bet * 2;
+                        await update(userRef, { balance: (currentBal - bet) + winAmt }); // Add win amt
+                        statusEl.innerText = `YOU WIN +${winAmt}`;
+                        statusEl.style.color = "var(--success)";
+                    } else {
+                        statusEl.innerText = "YOU LOST";
+                        statusEl.style.color = "var(--danger)";
+                    }
+                    reset();
+                }, 1500);
+            }
+        };
+
+        window.reveal = async function(index) {
+            if(!isInProgress || gameType !== 'mines') return;
+            const cell = document.getElementById(`c-${index}`);
+            if(cell.classList.contains('safe') || cell.classList.contains('boom')) return;
+
+            if(gameData.mines.includes(index)) {
+                // BOOM
+                cell.classList.add('boom');
+                cell.innerHTML = '<i class="fa-solid fa-bomb"></i>';
+                statusEl.innerText = "BOOM! You lost.";
+                statusEl.style.color = "var(--danger)";
+                reset();
+            } else {
+                // SAFE
+                cell.classList.add('safe');
+                cell.innerHTML = '<i class="fa-regular fa-gem"></i>';
+                gameData.multiplier += 0.25; // Increment multiplier
+                statusEl.innerText = `Multiplier: ${gameData.multiplier.toFixed(2)}x`;
+            }
+        };
+
+        window.cashout = async function() {
+            if(!isInProgress) return;
+            const winAmt = Math.floor(gameData.bet * gameData.multiplier);
+            
+            const userRef = ref(db, 'users/' + uid);
+            const snapshot = await get(userRef);
+            const currentBal = snapshot.val().balance;
+
+            await update(userRef, { balance: currentBal + winAmt });
+            
+            statusEl.innerText = `Cashed out +${winAmt}`;
+            statusEl.style.color = "var(--success)";
+            reset();
+        };
+
+        function reset() {
+            isInProgress = false;
+            actionBtn.innerText = "START";
+            actionBtn.className = "btn btn-primary";
+            actionBtn.onclick = startGame;
+            actionBtn.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
