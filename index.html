@@ -5,31 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Royal Diamond Casino</title>
     
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <!-- Fonts: Inter & Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Firebase SDKs (Compat version for easy vanilla JS usage) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Telegram WebApp Script -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
     <style>
         :root {
-            /* Palette: Dark Premium */
             --bg-body: #050b14;
             --bg-surface: #0f1724;
             --bg-card: #162030;
             --bg-glass: rgba(22, 32, 48, 0.7);
             
-            --primary: #fbbf24; /* Gold */
+            --primary: #fbbf24;
             --primary-glow: rgba(251, 191, 36, 0.3);
-            --secondary: #38bdf8; /* Cyan */
-            --accent: #f43f5e; /* Pink/Red */
+            --secondary: #38bdf8;
+            --accent: #f43f5e;
             
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -59,7 +59,6 @@
             flex-direction: column;
         }
 
-        /* --- Background Effects --- */
         .bg-blob {
             position: absolute;
             width: 300px;
@@ -72,42 +71,45 @@
             pointer-events: none;
         }
 
-        /* --- Header --- */
         header {
             z-index: 10;
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(180deg, rgba(5,11,20,0.95) 0%, rgba(5,11,20,0.8) 100%);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: linear-gradient(180deg, rgba(5,11,20,0.9) 0%, rgba(5,11,20,0) 100%);
         }
 
-        .profile-header {
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+        .brand i { color: var(--primary); }
+
+        .profile-section {
             display: flex;
             align-items: center;
             gap: 10px;
             cursor: pointer;
         }
 
-        .profile-pic {
+        .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            border: 2px solid var(--primary);
-            object-fit: cover;
-            background: #2a3344;
-        }
-
-        .profile-info h2 {
-            margin: 0;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-        .profile-info span {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
         }
 
         .balance-pill {
@@ -121,6 +123,7 @@
             gap: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
+
         .balance-amount {
             font-family: 'Rajdhani', sans-serif;
             font-weight: 700;
@@ -128,16 +131,14 @@
             color: var(--primary);
         }
 
-        /* --- Main Layout --- */
         main {
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
             position: relative;
             z-index: 1;
-            padding: 16px;
-            padding-bottom: 100px; /* Space for nav */
-            scrollbar-width: none; 
+            padding: 0 16px 100px 16px;
+            scrollbar-width: none;
         }
         main::-webkit-scrollbar { display: none; }
 
@@ -158,9 +159,7 @@
             margin: 20px 0 16px 0;
             color: var(--text-main);
         }
-        h3 { font-family: 'Rajdhani'; margin: 0 0 10px 0; color: var(--text-muted); font-size: 1.1rem; }
 
-        /* --- Components --- */
         .card {
             background: var(--bg-card);
             border-radius: var(--radius-md);
@@ -195,13 +194,8 @@
             background: rgba(255,255,255,0.1);
             color: var(--text-main);
         }
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
         .btn-secondary:active { background: rgba(255,255,255,0.2); }
 
-        /* --- Home: Games --- */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -222,6 +216,10 @@
             overflow: hidden;
         }
         .game-card:active { background: var(--bg-card); transform: scale(0.96); }
+        .game-card.selected {
+            border-color: var(--primary);
+            background: rgba(251, 191, 36, 0.05);
+        }
         .game-icon {
             width: 50px;
             height: 50px;
@@ -234,13 +232,13 @@
             color: var(--text-main);
             margin-bottom: 10px;
         }
+        .game-card.selected .game-icon { background: var(--primary); color: #000; }
         .game-name { font-weight: 600; font-size: 0.95rem; }
 
-        /* --- Game Interface (The "Active" Area) --- */
         #game-stage {
-            display: none; /* Hidden by default */
+            display: none;
             margin-top: 20px;
-            background: linear-gradient(180deg, rgba(22,32,48,0.9) 0%, rgba(5,11,20,0.95) 100%);
+            background: linear-gradient(180deg, rgba(22,32,48,0.8) 0%, rgba(5,11,20,0.9) 100%);
             backdrop-filter: blur(12px);
             border-radius: var(--radius-lg);
             border: 1px solid rgba(255,255,255,0.08);
@@ -273,7 +271,6 @@
             position: relative;
         }
 
-        /* Specific Game Styles */
         .mines-board {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -293,7 +290,8 @@
         }
         .mine-cell.safe { background: var(--bg-card); border: 1px solid var(--success); color: var(--success); }
         .mine-cell.boom { background: var(--danger); color: white; animation: shake 0.4s; }
-        
+        .mine-cell.dimmed { opacity: 0.3; pointer-events: none; }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
@@ -331,7 +329,6 @@
             text-align: center;
         }
 
-        /* --- Ranking List --- */
         .rank-row {
             display: flex;
             align-items: center;
@@ -355,12 +352,15 @@
             font-size: 0.9rem;
             overflow: hidden;
         }
-        .rank-avatar img { width:100%; height:100%; object-fit:cover; }
+        .rank-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .rank-info { flex: 1; }
         .rank-name { font-weight: 600; font-size: 0.95rem; }
-        .rank-val { font-family: 'Rajdhani'; font-weight: 700; color: var(--primary); }
+        .rank-val { font-family: 'Rajdhani', font-weight: 700; color: var(--primary); }
 
-        /* --- Wallet --- */
         .wallet-stats {
             display: flex;
             gap: 10px;
@@ -376,7 +376,25 @@
         .w-stat small { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; }
         .w-stat div { font-family: 'Rajdhani'; font-size: 1.2rem; font-weight: 700; margin-top: 5px; }
 
-        /* --- Friends --- */
+        .tx-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .tx-left { display: flex; gap: 12px; align-items: center; }
+        .tx-icon {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem;
+        }
+        .tx-amount { font-family: 'Rajdhani'; font-weight: 700; }
+        .tx-plus { color: var(--success); }
+        .tx-minus { color: var(--text-main); }
+
         .invite-card {
             background: linear-gradient(135deg, #1e293b, #0f172a);
             text-align: center;
@@ -392,10 +410,8 @@
             letter-spacing: 2px;
             margin: 15px 0;
             border: 1px dashed var(--secondary);
-            word-break: break-all;
         }
 
-        /* --- Tasks --- */
         .task-card {
             display: flex;
             align-items: center;
@@ -406,50 +422,10 @@
             border-radius: 10px;
             object-fit: cover;
         }
+        .task-meta { flex: 1; }
+        .task-title { font-weight: 600; margin-bottom: 4px; }
+        .task-reward { font-size: 0.8rem; color: var(--primary); }
 
-        /* --- Settings --- */
-        .settings-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .setting-item {
-            background: var(--bg-card);
-            padding: 15px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .setting-left { display: flex; align-items: center; gap: 12px; }
-
-        /* --- ADMIN PANEL STYLES --- */
-        #admin-view {
-            display: none;
-        }
-        .admin-dashboard {
-            padding: 10px;
-        }
-        .admin-stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .admin-table-container {
-            overflow-x: auto;
-        }
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-        .admin-table th { text-align: left; color: var(--text-muted); padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .admin-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .action-link { color: var(--secondary); cursor: pointer; margin-right: 10px; }
-        .action-link.delete { color: var(--danger); }
-
-        /* --- Navigation --- */
         nav {
             position: fixed;
             bottom: 0;
@@ -486,7 +462,6 @@
         .nav-btn.active { color: var(--primary); }
         .nav-btn.active i { transform: translateY(-3px); }
 
-        /* --- Utilities --- */
         .badge {
             font-size: 0.7rem;
             padding: 2px 6px;
@@ -494,7 +469,6 @@
             background: rgba(255,255,255,0.1);
         }
 
-        /* Toast */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -527,39 +501,148 @@
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        .loading-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: var(--bg-body); z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 15px;
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            margin: auto;
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .settings-item:last-child { border-bottom: none; }
+
+        .toggle-switch {
+            width: 50px;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: var(--success);
+        }
+
+        .toggle-switch-circle {
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.active .toggle-switch-circle {
+            left: 22px;
         }
     </style>
 </head>
 <body>
 
-    <div class="loading-overlay" id="loader">
-        <i class="fa-solid fa-gem fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
-        <div style="font-family:'Rajdhani'">CONNECTING TO ROYAL...</div>
-    </div>
-
     <div class="bg-blob"></div>
 
     <header>
-        <div class="profile-header" onclick="app.nav('settings', null)">
-            <img src="https://picsum.photos/seed/user/100/100" id="header-pic" class="profile-pic" alt="Profile">
-            <div class="profile-info">
-                <h2 id="header-name">Guest</h2>
-                <span>ID: <span id="header-id">...</span></span>
-            </div>
+        <div class="brand" onclick="settingsModal.show()">
+            <i class="fa-solid fa-gem"></i>
+            <span>ROYAL</span>
         </div>
-        <div class="balance-pill">
-            <i class="fa-regular fa-gem" style="color:var(--primary); font-size:0.9rem;"></i>
-            <span class="balance-amount" id="global-balance">0</span>
+        <div class="profile-section" onclick="settingsModal.show()">
+            <div class="user-avatar" id="user-avatar">R</div>
+            <div class="balance-pill">
+                <i class="fa-regular fa-gem" style="color:var(--primary); font-size:0.9rem;"></i>
+                <span class="balance-amount" id="global-balance">1,000</span>
+            </div>
         </div>
     </header>
 
     <div id="toast-container"></div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin: 0; font-family: 'Rajdhani';">Settings</h3>
+                <button class="modal-close" onclick="settingsModal.hide()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div class="user-avatar" id="modal-avatar" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 10px;"></div>
+                <div id="user-name" style="font-weight: 600; font-size: 1.1rem;"></div>
+                <div id="user-id" style="color: var(--text-muted); font-size: 0.9rem;"></div>
+            </div>
+            <div class="settings-item">
+                <span>Telegram ID</span>
+                <span id="setting-tg-id" style="color: var(--primary); font-family: 'Rajdhani';">--</span>
+            </div>
+            <div class="settings-item">
+                <span>Total Wagered</span>
+                <span id="setting-wagered" style="color: var(--secondary); font-family: 'Rajdhani';">0</span>
+            </div>
+            <div class="settings-item">
+                <span>Notifications</span>
+                <div class="toggle-switch active" onclick="settingsModal.toggleNotifications(this)">
+                    <div class="toggle-switch-circle"></div>
+                </div>
+            </div>
+            <button class="btn btn-secondary" style="margin-top: 20px;" onclick="settingsModal.connectWallet()">
+                <i class="fa-solid fa-wallet"></i> Connect TON Wallet
+            </button>
+            <button class="btn btn-secondary" style="margin-top: 10px;" onclick="settingsModal.logout()">
+                <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
 
     <main>
         
@@ -593,24 +676,18 @@
                 </div>
             </div>
 
-            <!-- Dynamic Game Container -->
             <div id="game-stage">
                 <div class="game-header">
                     <h3 id="game-title" style="margin:0; font-family:'Rajdhani'; color:var(--primary);">GAME NAME</h3>
                     <button class="close-btn" onclick="gameManager.closeGame()"><i class="fa-solid fa-xmark"></i></button>
                 </div>
 
-                <!-- Game Visualization Area -->
-                <div id="game-visual" class="game-visual">
-                    <!-- Injected via JS -->
-                </div>
+                <div id="game-visual" class="game-visual"></div>
 
-                <!-- Status Text -->
                 <div id="game-status" style="text-align:center; min-height:24px; font-size:0.9rem; margin-bottom:10px; color:var(--text-muted);"></div>
 
-                <!-- Controls -->
                 <div class="bet-controls">
-                    <input type="number" id="bet-input" class="bet-input" value="20" min="20">
+                    <input type="number" id="bet-input" class="bet-input" value="50" min="20">
                     <button class="btn btn-secondary" onclick="gameManager.halfBet()">1/2</button>
                 </div>
                 <button id="action-btn" class="btn btn-primary" onclick="gameManager.handleAction()">BET</button>
@@ -622,8 +699,6 @@
             <h2>Leaderboard</h2>
             <div class="card">
                 <div id="ranking-list" style="padding: 0 10px;">
-                    <!-- Populated by JS -->
-                    <div style="text-align:center; color:var(--text-muted); padding:20px;">Loading rankings...</div>
                 </div>
             </div>
         </div>
@@ -635,7 +710,7 @@
             <div class="wallet-stats">
                 <div class="w-stat">
                     <small>Balance</small>
-                    <div style="color:var(--primary)" id="wallet-balance">0</div>
+                    <div style="color:var(--primary)" id="wallet-balance">1,000</div>
                 </div>
                 <div class="w-stat">
                     <small>Total Wagered</small>
@@ -651,7 +726,6 @@
             <h3>Recent Activity</h3>
             <div class="card" style="padding: 0 16px;">
                 <div id="transaction-list">
-                    <!-- JS Populated -->
                 </div>
             </div>
         </div>
@@ -664,14 +738,16 @@
                 <h3>Get 10% Commission</h3>
                 <p style="color:var(--text-muted); font-size:0.9rem; margin:10px 0;">Earn 10% of every friend's deposit directly to your balance.</p>
                 
-                <div class="ref-box" id="ref-link">https://monarch-play.vercel.app/?ref=ID</div>
+                <div class="ref-box" id="ref-code" onclick="app.copyRef()">
+                    https://monarch-play.vercel.app/?ref=<span id="ref-span">LOADING</span>
+                </div>
                 <button class="btn btn-primary" onclick="app.copyRef()">Copy Link</button>
             </div>
 
             <h3>Your Team</h3>
             <div class="card">
                 <div id="referral-list">
-                    <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.9rem;">No friends joined yet.</div>
+                    <div style="text-align:center; padding:20px; color:var(--text-muted);">No referrals yet</div>
                 </div>
             </div>
         </div>
@@ -680,106 +756,13 @@
         <div id="tasks-view" class="tab-view">
             <h2>Daily Tasks</h2>
             <div id="task-list">
-                <!-- Populated via JS -->
-            </div>
-        </div>
-
-        <!-- === SETTINGS SECTION === -->
-        <div id="settings-view" class="tab-view">
-            <h2>Settings</h2>
-            <div class="settings-list">
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <i class="fa-solid fa-wallet" style="color:var(--primary)"></i>
-                        <span>Connect TON Wallet</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right" style="color:var(--text-muted)"></i>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <i class="fa-solid fa-bell" style="color:var(--secondary)"></i>
-                        <span>Notifications</span>
-                    </div>
-                    <i class="fa-solid fa-toggle-on" style="color:var(--success); font-size:1.5rem;"></i>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <i class="fa-solid fa-circle-info" style="color:var(--text-muted)"></i>
-                        <span>About</span>
-                    </div>
-                    <span style="font-size:0.8rem; color:var(--text-muted)">v1.0</span>
-                </div>
-                
-                <!-- Secret Admin Entry -->
-                <div class="setting-item" onclick="adminPanel.login()" style="margin-top:20px; border: 1px solid rgba(255,255,255,0.1);">
-                    <div class="setting-left">
-                        <i class="fa-solid fa-lock" style="color:var(--danger)"></i>
-                        <span>Admin Panel</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- === ADMIN PANEL SECTION === -->
-        <div id="admin-view" class="tab-view">
-            <div class="game-header">
-                <h3 style="margin:0; color:var(--primary);">ADMIN DASHBOARD</h3>
-                <button class="close-btn" onclick="app.nav('home', null)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="admin-dashboard">
-                <div class="admin-stat-grid">
-                    <div class="w-stat">
-                        <small>Total Users</small>
-                        <div id="admin-total-users" style="color:var(--primary)">0</div>
-                    </div>
-                    <div class="w-stat">
-                        <small>Online (Simulated)</small>
-                        <div id="admin-online-users" style="color:var(--success)">0</div>
-                    </div>
-                </div>
-
-                <div style="margin-bottom:20px;">
-                    <h3>Game Win Rate (%)</h3>
-                    <div style="display:flex; gap:10px;">
-                        <input type="number" id="admin-winrate" class="bet-input" value="50">
-                        <button class="btn btn-primary" onclick="adminPanel.updateWinRate()">Update</button>
-                    </div>
-                </div>
-
-                <h3>User Management</h3>
-                <div class="card">
-                    <div class="admin-table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Bal</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-user-list">
-                                <!-- Populated JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <h3>Add Task</h3>
-                <div class="card">
-                    <input type="text" id="admin-task-name" class="bet-input" placeholder="Task Name" style="margin-bottom:10px;">
-                    <input type="text" id="admin-task-link" class="bet-input" placeholder="Link URL" style="margin-bottom:10px;">
-                    <input type="number" id="admin-task-reward" class="bet-input" placeholder="Reward" style="margin-bottom:10px;">
-                    <button class="btn btn-primary" onclick="adminPanel.addTask()">Publish Task</button>
-                </div>
             </div>
         </div>
 
     </main>
 
     <!-- Navigation -->
-    <nav id="main-nav">
+    <nav>
         <div class="nav-bar">
             <div class="nav-btn active" onclick="app.nav('home', this)">
                 <i class="fa-solid fa-house"></i>
@@ -805,7 +788,7 @@
     </nav>
 
     <script>
-        // --- 1. FIREBASE & TELEGRAM INIT ---
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBD8tW5sHlSze2E4E-EjXSjx9eMBdnneQ4",
             authDomain: "free-money-9b371.firebaseapp.com",
@@ -819,162 +802,151 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const db = firebase.database();
 
-        // Initialize Telegram WebApp
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand(); // Expand to full height
+        // Telegram Bot Token
+        const TELEGRAM_BOT_TOKEN = "8583171793:AAEg649kmH347L4Y6bfVKaDmb5d_r2yn6vw";
+        const TELEGRAM_BOT_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
 
-        // User Data Object
-        let currentUser = {
-            id: 0,
-            name: 'Guest',
-            photo: '',
-            balance: 1000,
-            wagered: 0,
-            referredBy: null,
-            isBanned: false
-        };
+        let WebApp = window.Telegram?.WebApp;
+        let currentUser = null;
+        let currentUserData = null;
 
-        // --- 2. CORE APPLICATION LOGIC ---
+        // Initialize Telegram Web App
+        function initTelegram() {
+            if (WebApp) {
+                WebApp.ready();
+                WebApp.expand();
+                WebApp.enableClosingConfirmation();
+                
+                const user = WebApp.initDataUnsafe.user;
+                if (user) {
+                    currentUser = user;
+                    loadOrCreateUser(user);
+                }
+            } else {
+                // Fallback for testing
+                currentUser = {
+                    id: 123456789,
+                    first_name: "Test",
+                    last_name: "User",
+                    username: "testuser"
+                };
+                loadOrCreateUser(currentUser);
+            }
+        }
+
+        // Load or Create User in Firebase
+        function loadOrCreateUser(telegramUser) {
+            const userId = telegramUser.id.toString();
+            const userRef = db.ref(`users/${userId}`);
+
+            userRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    currentUserData = snapshot.val();
+                    app.state.balance = currentUserData.balance || 1000;
+                } else {
+                    // Create new user
+                    currentUserData = {
+                        telegramId: userId,
+                        firstName: telegramUser.first_name,
+                        lastName: telegramUser.last_name || "",
+                        username: telegramUser.username || "",
+                        photoUrl: telegramUser.photo_url || "",
+                        balance: 1000,
+                        totalWagered: 0,
+                        referralCode: generateReferralCode(),
+                        referrer: null,
+                        referrals: [],
+                        transactions: [],
+                        totalWins: 0,
+                        totalLosses: 0,
+                        createdAt: new Date().toISOString(),
+                        completedTasks: []
+                    };
+                    userRef.set(currentUserData);
+                }
+
+                updateUI();
+                fetchUserPhoto();
+                app.init();
+            });
+        }
+
+        function generateReferralCode() {
+            return 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        function fetchUserPhoto() {
+            if (!currentUser.photo_url) return;
+            
+            const userName = currentUser.username || currentUser.first_name;
+            document.getElementById('user-avatar').innerHTML = `<img src="${currentUser.photo_url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            document.getElementById('modal-avatar').innerHTML = `<img src="${currentUser.photo_url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            document.getElementById('user-name').innerText = userName;
+            document.getElementById('user-id').innerText = `ID: ${currentUser.id}`;
+        }
+
+        function updateUI() {
+            const userName = currentUser.username || currentUser.first_name;
+            document.getElementById('user-name').innerText = userName;
+            document.getElementById('user-id').innerText = `ID: ${currentUser.id}`;
+            document.getElementById('setting-tg-id').innerText = currentUser.id;
+            document.getElementById('ref-span').innerText = currentUserData.referralCode;
+        }
+
+        // Save user data to Firebase
+        function saveUserData() {
+            if (!currentUserData) return;
+            const userId = currentUser.id.toString();
+            db.ref(`users/${userId}`).update(currentUserData);
+        }
+
+        // Main App
         const app = {
             state: {
+                balance: 1000,
                 transactions: [],
-                winRate: 50, // Default global win rate
-                tasks: []
+                totalWagered: 0,
+                user: currentUser
             },
 
-            init: async function() {
-                // 1. Fetch Telegram User Data
-                const tgUser = tg.initDataUnsafe.user;
-                
-                if (tgUser) {
-                    currentUser.id = tgUser.id;
-                    currentUser.name = tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '');
-                    currentUser.photo = tgUser.photo_url || `https://ui-avatars.com/api/?name=${currentUser.name}&background=random`;
-                } else {
-                    // Fallback for testing on desktop
-                    currentUser.id = 999999;
-                    currentUser.name = "Desktop User";
-                    currentUser.photo = "https://ui-avatars.com/api/?name=Desktop+User&background=random";
-                }
-
-                // Check URL params for referral
-                const urlParams = new URLSearchParams(window.location.search);
-                const referrerId = urlParams.get('ref');
-                if (referrerId && parseInt(referrerId) !== currentUser.id) {
-                    currentUser.referredBy = parseInt(referrerId);
-                }
-
-                // 2. Load or Create User in Firestore
-                await this.loadUserData();
-                
-                // 3. Update UI
-                this.updateUI();
-                
-                // 4. Load Global Data
-                await this.loadGlobalData();
-
-                // 5. Remove Loader
-                document.getElementById('loader').style.display = 'none';
-            },
-
-            loadUserData: async function() {
-                const userRef = db.collection('users').doc(currentUser.id.toString());
-                const doc = await userRef.get();
-
-                if (!doc.exists) {
-                    // New User
-                    const newUser = {
-                        id: currentUser.id,
-                        name: currentUser.name,
-                        photo: currentUser.photo,
-                        balance: 1000,
-                        wagered: 0,
-                        referredBy: currentUser.referredBy,
-                        isBanned: false,
-                        lastSeen: firebase.firestore.FieldValue.serverTimestamp()
-                    };
-                    await userRef.set(newUser);
-                    currentUser = { ...currentUser, ...newUser };
-                    
-                    // Handle Referral Logic
-                    if (currentUser.referredBy) {
-                        const referrerRef = db.collection('users').doc(currentUser.referredBy.toString());
-                        // In a real app, you'd increment a referral count here
-                        db.runTransaction(t => t.get(referrerRef).then(doc => {
-                            // Logic to reward referrer if needed
-                        }));
-                    }
-                } else {
-                    // Existing User
-                    const data = doc.data();
-                    if (data.isBanned) {
-                        alert("You are banned from the casino.");
-                        return;
-                    }
-                    currentUser = { ...currentUser, ...data };
-                    // Update last seen
-                    userRef.update({ lastSeen: firebase.firestore.FieldValue.serverTimestamp() });
-                }
-            },
-
-            loadGlobalData: async function() {
-                // Load Tasks
-                const tasksSnapshot = await db.collection('tasks').get();
-                this.state.tasks = tasksSnapshot.docs.map(d => ({id: d.id, ...d.data()}));
+            init: function() {
+                this.updateBalance(0);
+                this.renderRanking();
                 this.renderTasks();
-
-                // Load Config (Win Rate)
-                const configDoc = await db.collection('config').doc('global').get();
-                if (configDoc.exists) {
-                    this.state.winRate = configDoc.data().winRate || 50;
-                }
+                this.renderTransactions();
+                this.renderReferrals();
             },
 
-            updateUI: function() {
-                // Header
-                document.getElementById('header-name').innerText = currentUser.name;
-                document.getElementById('header-id').innerText = currentUser.id;
-                document.getElementById('header-pic').src = currentUser.photo;
+            updateBalance: function(amount, type = 'adjust') {
+                this.state.balance += amount;
+                currentUserData.balance = this.state.balance;
                 
-                // Balance
-                this.updateBalance(0); // Refresh display only
-                
-                // Ref Link
-                const baseUrl = "https://monarch-play.vercel.app/";
-                document.getElementById('ref-link').innerText = `${baseUrl}?ref=${currentUser.id}`;
-            },
-
-            updateBalance: async function(amount, type = 'adjust') {
-                // Optimistic UI update
-                currentUser.balance += amount;
-                
-                const fmt = new Intl.NumberFormat().format(currentUser.balance);
+                const fmt = new Intl.NumberFormat().format(this.state.balance);
                 document.getElementById('global-balance').innerText = fmt;
                 document.getElementById('wallet-balance').innerText = fmt;
 
-                // Sync to Firestore
-                if (type !== 'adjust') {
-                    try {
-                        await db.collection('users').doc(currentUser.id.toString()).update({
-                            balance: currentUser.balance,
-                            wagered: firebase.firestore.FieldValue.increment(amount > 0 ? 0 : amount) // Only count bets towards wagered
-                        });
-                        this.logTransaction(type, amount);
-                        if(type === 'win') this.showToast(`You won ${amount} Diamonds!`, 'success');
-                    } catch (e) {
-                        console.error("Balance sync failed", e);
-                        this.showToast("Sync error. Refreshing...", 'error');
-                        setTimeout(() => location.reload(), 2000);
+                if (type !== 'adjust' && type !== 'cancel') {
+                    this.logTransaction(type, amount);
+                    if(type === 'win') {
+                        this.showToast(`You won ${amount} Diamonds!`, 'success');
+                        currentUserData.totalWins = (currentUserData.totalWins || 0) + amount;
+                    }
+                    if(type === 'bet') {
+                        this.state.totalWagered += amount;
+                        currentUserData.totalWagered = this.state.totalWagered;
+                        document.getElementById('total-wagered').innerText = this.state.totalWagered;
                     }
                 }
+                
+                saveUserData();
             },
 
             logTransaction: function(type, amount) {
-                const tx = { type, amount, date: new Date() };
+                const tx = { type, amount, date: new Date().toISOString() };
                 this.state.transactions.unshift(tx);
+                currentUserData.transactions = this.state.transactions;
                 this.renderTransactions();
                 this.renderRanking();
             },
@@ -998,35 +970,19 @@
             },
 
             nav: function(viewId, el) {
-                // Hide all views
                 document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+                document.getElementById(viewId + '-view').classList.add('active');
                 
-                // Show target view
-                const target = document.getElementById(viewId + '-view');
-                if(target) target.classList.add('active');
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                el.classList.add('active');
 
-                // Handle Nav Styling
-                if (el) {
-                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                    el.classList.add('active');
-                }
-                
-                // Hide/Show Bottom Nav based on view
-                const nav = document.getElementById('main-nav');
-                if (viewId === 'admin') {
-                    nav.style.display = 'none';
-                    adminPanel.loadUsers(); // Refresh admin data
-                } else {
-                    nav.style.display = 'block';
-                }
-
-                // Refresh specific views
                 if(viewId === 'ranking') this.renderRanking();
-                if(viewId === 'friends') this.loadReferrals();
+                if(viewId === 'wallet') {
+                    document.getElementById('total-wagered').innerText = this.state.totalWagered;
+                }
             },
 
             deposit: function() {
-                // Simulate payment gateway
                 const btn = event.currentTarget;
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
@@ -1038,7 +994,7 @@
             },
 
             withdraw: function() {
-                if(currentUser.balance < 1000) {
+                if(this.state.balance < 1000) {
                     this.showToast('Minimum withdrawal is 1000 Diamonds', 'error');
                     return;
                 }
@@ -1047,64 +1003,35 @@
             },
 
             copyRef: function() {
-                const code = document.getElementById('ref-link').innerText;
+                const code = `https://monarch-play.vercel.app/?ref=${currentUserData.referralCode}`;
                 navigator.clipboard.writeText(code);
                 this.showToast('Referral link copied!', 'success');
             },
 
-            loadReferrals: async function() {
-                // Query users where referredBy == currentUser.id
-                const snapshot = await db.collection('users').where('referredBy', '==', currentUser.id).limit(5).get();
-                const list = document.getElementById('referral-list');
-                
-                if (snapshot.empty) {
-                    list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.9rem;">No friends joined yet.</div>';
-                    return;
-                }
+            renderRanking: function() {
+                db.ref('users').orderByChild('balance').limitToLast(20).once('value', (snapshot) => {
+                    const users = [];
+                    snapshot.forEach((child) => {
+                        users.unshift({
+                            id: child.key,
+                            ...child.val()
+                        });
+                    });
 
-                let html = '';
-                snapshot.forEach(doc => {
-                    const u = doc.data();
-                    html += `
+                    const html = users.map((u, i) => `
                         <div class="rank-row">
+                            <div class="rank-num rank-${i+1}">${i+1}</div>
                             <div class="rank-avatar">
-                                <img src="${u.photo}" />
+                                ${u.photoUrl ? `<img src="${u.photoUrl}" alt="${u.username}">` : u.firstName.charAt(0)}
                             </div>
                             <div class="rank-info">
-                                <div class="rank-name">${u.name}</div>
-                                <small style="color:var(--text-muted)">Joined</small>
+                                <div class="rank-name">${u.username || u.firstName}</div>
                             </div>
+                            <div class="rank-val">${new Intl.NumberFormat().format(u.balance || 1000)}</div>
                         </div>
-                    `;
+                    `).join('');
+                    document.getElementById('ranking-list').innerHTML = html;
                 });
-                list.innerHTML = html;
-            },
-
-            renderRanking: async function() {
-                const list = document.getElementById('ranking-list');
-                list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">Loading...</div>';
-                
-                // Query top 10 by balance
-                const snapshot = await db.collection('users').orderBy('balance', 'desc').limit(10).get();
-                
-                let html = '';
-                snapshot.forEach(doc => {
-                    const u = doc.data();
-                    const isMe = u.id === currentUser.id;
-                    html += `
-                        <div class="rank-row" style="${isMe ? 'background:rgba(251,191,36,0.05)' : ''}">
-                            <div class="rank-num">${isMe ? 'You' : (snapshot.docs.indexOf(doc) + 1)}</div>
-                            <div class="rank-avatar">
-                                <img src="${u.photo}" alt="${u.name}">
-                            </div>
-                            <div class="rank-info">
-                                <div class="rank-name">${u.name}</div>
-                            </div>
-                            <div class="rank-val">${new Intl.NumberFormat().format(u.balance)}</div>
-                        </div>
-                    `;
-                });
-                list.innerHTML = html;
             },
 
             renderTransactions: function() {
@@ -1112,7 +1039,7 @@
                     document.getElementById('transaction-list').innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.9rem;">No recent activity</div>';
                     return;
                 }
-                const html = this.state.transactions.map(t => {
+                const html = this.state.transactions.slice(0, 10).map(t => {
                     const isPlus = t.type === 'deposit' || t.type === 'win' || t.type === 'task';
                     return `
                     <div class="tx-item">
@@ -1122,7 +1049,7 @@
                             </div>
                             <div>
                                 <div style="font-size:0.9rem; font-weight:600; text-transform:capitalize;">${t.type}</div>
-                                <div style="font-size:0.75rem; color:var(--text-muted);">${t.date.toLocaleTimeString()}</div>
+                                <div style="font-size:0.75rem; color:var(--text-muted);">${new Date(t.date).toLocaleTimeString()}</div>
                             </div>
                         </div>
                         <div class="tx-amount ${isPlus ? 'tx-plus' : 'tx-minus'}">
@@ -1133,142 +1060,116 @@
                 document.getElementById('transaction-list').innerHTML = html;
             },
 
+            renderReferrals: function() {
+                if (!currentUserData.referrals || currentUserData.referrals.length === 0) {
+                    document.getElementById('referral-list').innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">No referrals yet. Share your link to earn!</div>';
+                    return;
+                }
+
+                const html = currentUserData.referrals.map(refId => {
+                    return `<div class="rank-row">
+                        <div class="rank-avatar"><i class="fa-solid fa-user"></i></div>
+                        <div class="rank-info">
+                            <div class="rank-name">${refId}</div>
+                            <small style="color:var(--text-muted)">Active</small>
+                        </div>
+                        <div style="color:var(--success);">+10%</div>
+                    </div>`;
+                }).join('');
+                document.getElementById('referral-list').innerHTML = html;
+            },
+
             renderTasks: function() {
-                const html = this.state.tasks.map(t => `
+                const tasks = [
+                    { id: 1, title: "Join Channel", reward: 50, img: "https://picsum.photos/seed/tele/100/100", link: "https://t.me/yourchanel" },
+                    { id: 2, title: "Follow X", reward: 30, img: "https://picsum.photos/seed/x/100/100", link: "https://twitter.com" },
+                    { id: 3, title: "Invite 1 Friend", reward: 200, img: "https://picsum.photos/seed/inv/100/100", link: "#" }
+                ];
+                
+                const completed = currentUserData.completedTasks || [];
+                const html = tasks.map(t => {
+                    const isCompleted = completed.includes(t.id);
+                    return `
                     <div class="card task-card">
-                        <img src="${t.img || 'https://picsum.photos/seed/task/100/100'}" class="task-img" alt="icon">
+                        <img src="${t.img}" class="task-img" alt="icon">
                         <div class="task-meta">
-                            <div class="task-title">${t.name}</div>
+                            <div class="task-title">${t.title}</div>
                             <div class="task-reward">+${t.reward} Diamonds</div>
                         </div>
-                        <a href="${t.link}" target="_blank" class="btn btn-secondary" style="width:auto; padding:8px 16px; font-size:0.8rem;" onclick="app.completeTask(this, '${t.id}', ${t.reward})">Start</a>
+                        <button class="btn btn-secondary" style="width:auto; padding:8px 16px; font-size:0.8rem;" ${isCompleted ? 'disabled' : ''} onclick="app.completeTask(this, ${t.reward}, ${t.id}, '${t.link}')">${isCompleted ? 'Claimed' : 'Start'}</button>
                     </div>
-                `).join('');
-                document.getElementById('task-list').innerHTML = html || '<div style="text-align:center; padding:20px;">No tasks available.</div>';
+                `;
+                }).join('');
+                document.getElementById('task-list').innerHTML = html;
             },
 
-            completeTask: async function(btn, taskId, reward) {
-                btn.innerText = "Checking...";
-                // In a real app, verify interaction via backend
-                setTimeout(async () => {
-                    btn.innerText = "Claimed";
-                    btn.disabled = true;
-                    btn.style.opacity = "0.5";
-                    await this.updateBalance(reward, 'task');
-                    this.showToast(`Task completed! +${reward}`, 'success');
-                }, 1000);
+            completeTask: function(btn, reward, taskId, link) {
+                if (link !== '#') {
+                    if (WebApp) {
+                        WebApp.openLink(link);
+                    } else {
+                        window.open(link, '_blank');
+                    }
+                }
+                
+                btn.innerText = "Claimed";
+                btn.disabled = true;
+                btn.style.opacity = "0.5";
+                this.updateBalance(reward, 'task');
+                
+                if (!currentUserData.completedTasks) currentUserData.completedTasks = [];
+                currentUserData.completedTasks.push(taskId);
+                
+                this.showToast(`Task completed! +${reward}`, 'success');
             }
         };
 
-        // --- 3. ADMIN PANEL LOGIC ---
-        const adminPanel = {
-            login: function() {
-                const pass = prompt("Enter Admin Password:");
-                if (pass === "admin") { // Simple client-side check for demo
-                    app.nav('admin', null);
+        // Settings Modal
+        const settingsModal = {
+            show: function() {
+                document.getElementById('settings-modal').classList.add('active');
+            },
+
+            hide: function() {
+                document.getElementById('settings-modal').classList.remove('active');
+            },
+
+            toggleNotifications: function(el) {
+                el.classList.toggle('active');
+            },
+
+            connectWallet: function() {
+                app.showToast('TON Wallet connection coming soon!', 'info');
+            },
+
+            logout: function() {
+                if (WebApp) {
+                    WebApp.close();
                 } else {
-                    app.showToast("Access Denied", 'error');
+                    window.location.href = '/';
                 }
-            },
-
-            loadUsers: async function() {
-                const list = document.getElementById('admin-user-list');
-                const totalEl = document.getElementById('admin-total-users');
-                const onlineEl = document.getElementById('admin-online-users');
-                
-                list.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
-                
-                const snapshot = await db.collection('users').orderBy('balance', 'desc').limit(20).get();
-                
-                totalEl.innerText = snapshot.size;
-                onlineEl.innerText = Math.floor(snapshot.size * 0.8); // Mock online count
-
-                let html = '';
-                snapshot.forEach(doc => {
-                    const u = doc.data();
-                    html += `
-                        <tr>
-                            <td>${u.id}</td>
-                            <td>${u.name.substring(0, 10)}...</td>
-                            <td>${u.balance}</td>
-                            <td>
-                                <span class="action-link" onclick="adminPanel.modBalance(${u.id}, 100)">+100</span>
-                                <span class="action-link" onclick="adminPanel.modBalance(${u.id}, -100)">-100</span>
-                                <span class="action-link delete" onclick="adminPanel.banUser(${u.id})">Ban</span>
-                            </td>
-                        </tr>
-                    `;
-                });
-                list.innerHTML = html;
-            },
-
-            modBalance: async function(userId, amount) {
-                if(confirm(`Adjust balance for ${userId} by ${amount}?`)) {
-                    await db.collection('users').doc(userId.toString()).update({
-                        balance: firebase.firestore.FieldValue.increment(amount)
-                    });
-                    this.loadUsers();
-                    app.showToast('Balance updated', 'success');
-                }
-            },
-
-            banUser: async function(userId) {
-                if(confirm(`BAN user ${userId}?`)) {
-                    await db.collection('users').doc(userId.toString()).update({ isBanned: true });
-                    this.loadUsers();
-                    app.showToast('User banned', 'success');
-                }
-            },
-
-            updateWinRate: async function() {
-                const rate = parseInt(document.getElementById('admin-winrate').value);
-                await db.collection('config').doc('global').set({ winRate: rate }, { merge: true });
-                app.state.winRate = rate;
-                app.showToast('Win rate updated', 'success');
-            },
-
-            addTask: async function() {
-                const name = document.getElementById('admin-task-name').value;
-                const link = document.getElementById('admin-task-link').value;
-                const reward = parseInt(document.getElementById('admin-task-reward').value);
-
-                if (!name || !link || !reward) return app.showToast('Fill all fields', 'error');
-
-                await db.collection('tasks').add({
-                    name, link, reward, 
-                    img: `https://picsum.photos/seed/${name}/100/100`
-                });
-                
-                app.showToast('Task Added', 'success');
-                // Clear inputs
-                document.getElementById('admin-task-name').value = '';
-                document.getElementById('admin-task-link').value = '';
-                document.getElementById('admin-task-reward').value = '';
             }
         };
 
-        // --- 4. GAME MANAGER (Enhanced with Redirect Simulation) ---
+        // Game Manager
         const gameManager = {
             activeGame: null,
             inProgress: false,
             data: {},
 
             selectGame: function(gameName, el) {
-                // "Redirect" Simulation
-                // We hide the main views and show a game-only view, 
-                // or we keep the current structure but scroll to stage.
-                // Based on request "redirect to another page", we use history API.
-                
-                // But to keep it single file, we just hide the game grid and show full stage.
-                document.querySelector('.games-grid').style.display = 'none';
-                document.getElementById('game-stage').style.display = 'block';
-                document.getElementById('game-stage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
+                el.classList.add('selected');
 
                 this.activeGame = gameName;
                 this.inProgress = false;
                 
+                const stage = document.getElementById('game-stage');
+                stage.style.display = 'block';
+                stage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
                 document.getElementById('game-title').innerText = gameName.replace('-', ' ').toUpperCase();
-                document.getElementById('game-status').innerText = "Place your bet to start";
+                document.getElementById('game-status').innerText = "Place your bet to start (Min: 20)";
                 document.getElementById('game-status').style.color = "var(--text-muted)";
                 
                 const btn = document.getElementById('action-btn');
@@ -1279,17 +1180,15 @@
             },
 
             closeGame: function() {
-                // "Go Back" Simulation
                 document.getElementById('game-stage').style.display = 'none';
-                document.querySelector('.games-grid').style.display = 'grid';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
                 this.activeGame = null;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             },
 
             halfBet: function() {
                 const input = document.getElementById('bet-input');
-                let val = parseInt(input.value);
-                if (val > 20) input.value = Math.max(20, Math.floor(val / 2));
+                input.value = Math.max(20, Math.floor(input.value / 2));
             },
 
             initGameVisuals: function(game) {
@@ -1314,19 +1213,50 @@
                 else if (game === 'limbo') {
                     visual.innerHTML = `<div style="font-size:3.5rem; font-family:'Rajdhani'; font-weight:700;" id="limbo-res">1.00x</div>`;
                 }
-                else {
-                    visual.innerHTML = `<div style="padding:40px; color:var(--text-muted); text-align:center;">${game.toUpperCase()} Loaded<br>Ready to Bet</div>`;
+                else if (game === 'dragon-tiger') {
+                    visual.innerHTML = `
+                        <div style="display:flex; gap:10px; width:100%; justify-content:center;">
+                            <button class="btn btn-secondary" style="flex:1" id="dt-d" onclick="gameManager.setDT('dragon')">DRAGON</button>
+                            <button class="btn btn-secondary" style="flex:1" id="dt-t" onclick="gameManager.setDT('tie')">TIE</button>
+                            <button class="btn btn-secondary" style="flex:1" id="dt-ti" onclick="gameManager.setDT('tiger')">TIGER</button>
+                        </div>
+                        <div id="dt-visual" style="margin-top:20px; font-weight:bold; height:30px;"></div>
+                    `;
+                    this.data.dtChoice = null;
+                }
+                else if (game === 'dragon-tower') {
+                    this.data.floor = 1;
+                    visual.innerHTML = `
+                        <div style="text-align:center;">
+                            <div style="font-size:2rem;">🏰</div>
+                            <div style="font-size:1.2rem; margin-top:10px;">Floor <span id="tower-f">1</span></div>
+                            <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+                                <button class="btn btn-secondary" style="width:100px;" onclick="gameManager.setTower('safe')">Safe</button>
+                                <button class="btn btn-secondary" style="width:100px;" onclick="gameManager.setTower('risk')">Risk</button>
+                            </div>
+                        </div>
+                    `;
+                    this.data.towerChoice = null;
+                }
+                else if (game === 'plinko') {
+                    visual.innerHTML = `
+                        <div style="width:100%; height:150px; border:2px dashed rgba(255,255,255,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+                            Drop Ball
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:10px; padding:0 10px; font-family:'Rajdhani'; font-weight:bold;">
+                            <span>10x</span><span>5x</span><span>2x</span><span>0.5x</span>
+                        </div>
+                    `;
                 }
             },
 
             handleAction: function() {
                 const bet = parseInt(document.getElementById('bet-input').value);
-                // Min Bet Check
-                if (isNaN(bet) || bet < 20) return app.showToast("Minimum bet is 20 Diamonds", 'error');
-                if (bet > currentUser.balance) return app.showToast("Insufficient balance", 'error');
+                if (isNaN(bet) || bet <= 0) return app.showToast("Invalid bet amount", 'error');
+                if (bet < 20) return app.showToast("Minimum bet is 20 Diamonds", 'error');
+                if (bet > app.state.balance) return app.showToast("Insufficient balance", 'error');
 
                 if (!this.inProgress) {
-                    // START GAME
                     this.inProgress = true;
                     app.updateBalance(-bet, 'bet');
                     
@@ -1339,49 +1269,38 @@
 
                     this.executeGameLogic(bet);
                 } else {
-                    // CASHOUT
                     this.cashout(bet);
                 }
             },
 
             executeGameLogic: function(bet) {
                 const status = document.getElementById('game-status');
-                // Global Win Rate Check
-                const shouldWin = Math.random() * 100 < app.state.winRate;
 
                 if (this.activeGame === 'mines') {
-                    // Place 3 random mines
                     this.data.grid.fill(0);
                     let placed = 0;
                     while(placed < 3) {
                         let r = Math.floor(Math.random()*25);
                         if(this.data.grid[r] === 0) {
-                            this.data.grid[r] = 1; // Mine
+                            this.data.grid[r] = 1;
                             placed++;
                         }
                     }
                     this.data.multiplier = 1.0;
                     this.data.bet = bet;
-                    status.innerText = "Pick a gem!";
                 }
                 else if (this.activeGame === 'dice') {
-                    // Simulate roll
                     const roll = Math.floor(Math.random() * 6) + 1;
                     const diceEl = document.getElementById('dice-res');
                     
                     let i = 0;
                     const intv = setInterval(() => {
-                        diceEl.innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][Math.floor(Math.random()*6)];
+                        diceEl.innerText = this.getDiceIcon(Math.floor(Math.random()*6)+1);
                         i++;
                         if(i > 10) {
                             clearInterval(intv);
-                            diceEl.innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][roll-1];
-                            
-                            // Logic: > 3 wins
-                            const win = (roll > 3 && shouldWin) || (roll > 3 && !shouldWin); // Simplified
-                            const realWin = roll > 3; // Standard dice rule
-
-                            if (realWin) {
+                            diceEl.innerText = this.getDiceIcon(roll);
+                            if (roll > 3) {
                                 app.updateBalance(bet * 2, 'win');
                                 status.innerText = `Rolled ${roll} - YOU WON!`;
                                 status.style.color = "var(--success)";
@@ -1393,16 +1312,70 @@
                         }
                     }, 50);
                 }
-                else {
-                    // Generic logic for other games
+                else if (this.activeGame === 'limbo') {
+                    const target = (Math.random() * 5).toFixed(2);
+                    let curr = 1.00;
+                    const el = document.getElementById('limbo-res');
+                    const intv = setInterval(() => {
+                        curr += 0.05;
+                        el.innerText = curr.toFixed(2) + "x";
+                        if (curr >= target) {
+                            clearInterval(intv);
+                            el.innerText = target + "x";
+                            if (target > 1.5) {
+                                app.updateBalance(bet * target, 'win');
+                                status.innerText = "CRASH HIGH - WIN!";
+                                status.style.color = "var(--success)";
+                            } else {
+                                status.innerText = "CRASH LOW - LOSE";
+                                status.style.color = "var(--danger)";
+                            }
+                            this.resetBtn();
+                        }
+                    }, 50);
+                }
+                else if (this.activeGame === 'dragon-tiger') {
+                    if(!this.data.dtChoice) {
+                        app.showToast("Select Dragon, Tie, or Tiger first", 'error');
+                        this.inProgress = false;
+                        app.updateBalance(bet, 'cancel');
+                        return;
+                    }
+                    const d = Math.floor(Math.random() * 13);
+                    const t = Math.floor(Math.random() * 13);
+                    const res = d > t ? 'dragon' : (t > d ? 'tiger' : 'tie');
+                    
+                    document.getElementById('dt-visual').innerHTML = `Dragon <span style="font-size:1.5rem; color:${d>t?'var(--primary)':'white'}">${d}</span> vs <span style="font-size:1.5rem; color:${t>d?'var(--primary)':'white'}">${t}</span> Tiger`;
+                    
+                    if (res === this.data.dtChoice) {
+                        const mult = res === 'tie' ? 8 : 2;
+                        app.updateBalance(bet * mult, 'win');
+                        status.innerText = `Winner: ${res.toUpperCase()}!`;
+                        status.style.color = "var(--success)";
+                    } else {
+                        status.innerText = `Winner: ${res.toUpperCase()}. You lost.`;
+                        status.style.color = "var(--danger)";
+                    }
+                    this.resetBtn();
+                }
+                else if (this.activeGame === 'dragon-tower') {
+                    if(!this.data.towerChoice) {
+                        app.showToast("Choose Safe or Risk", 'error');
+                        this.inProgress = false;
+                        app.updateBalance(bet, 'cancel');
+                        return;
+                    }
+                    this.checkTower(bet);
+                }
+                else if (this.activeGame === 'plinko') {
+                    const mult = [0.5, 1, 2, 5, 10][Math.floor(Math.random()*5)];
                     setTimeout(() => {
-                        if (shouldWin) {
-                            const mult = Math.floor(Math.random() * 2) + 1.5;
-                            app.updateBalance(Math.floor(bet * mult), 'win');
-                            status.innerText = `YOU WON ${mult}x!`;
+                        if (mult > 1) {
+                            app.updateBalance(bet * mult, 'win');
+                            status.innerText = `Landed in ${mult}x slot!`;
                             status.style.color = "var(--success)";
                         } else {
-                            status.innerText = "YOU LOST";
+                            status.innerText = `Landed in ${mult}x slot.`;
                             status.style.color = "var(--danger)";
                         }
                         this.resetBtn();
@@ -1425,39 +1398,30 @@
                 } else {
                     cell.classList.add('safe');
                     cell.innerHTML = '<i class="fa-regular fa-gem"></i>';
-                    this.data.grid[index] = 2; // revealed safe
-                    this.data.multiplier += 0.2; // Simple increment
-                    document.getElementById('game-status').innerText = `Multiplier: ${this.data.multiplier.toFixed(2)}x | Cashout?`;
+                    this.data.grid[index] = 2;
+                    this.data.multiplier += 0.25;
+                    document.getElementById('game-status').innerText = `Multiplier: ${this.data.multiplier.toFixed(2)}x`;
                 }
             },
 
-            cashout: function(bet) {
-                if (this.activeGame === 'mines') {
-                    if (this.data.multiplier > 1) {
-                        app.updateBalance(Math.floor(this.data.bet * this.data.multiplier), 'win');
-                        document.getElementById('game-status').innerText = "Cashed out successfully!";
-                        document.getElementById('game-status').style.color = "var(--success)";
-                    } else {
-                        app.showToast("Reveal a gem first!", 'error');
-                        return;
-                    }
-                }
-                this.resetBtn();
+            setDT: function(choice) {
+                this.data.dtChoice = choice;
+                ['d','t','ti'].forEach(k => document.getElementById(`dt-${k}`).classList.remove('btn-primary'));
+                document.getElementById(`dt-${choice === 'dragon'?'d':(choice==='tie'?'t':'ti')}`).classList.add('btn-primary');
             },
 
-            resetBtn: function() {
-                this.inProgress = false;
-                const btn = document.getElementById('action-btn');
-                btn.innerText = "BET";
-                btn.className = "btn btn-primary";
-            }
-        };
+            setTower: function(choice) {
+                this.data.towerChoice = choice;
+            },
 
-        // Start App
-        window.onload = function() {
-            app.init();
-        };
-
-    </script>
-</body>
-</html>
+            checkTower: function(bet) {
+                const win = Math.random() > 0.4;
+                const status = document.getElementById('game-status');
+                
+                if (win) {
+                    this.data.floor++;
+                    document.getElementById('tower-f').innerText = this.data.floor;
+                    if (this.data.floor > 5) {
+                        app.updateBalance(bet * 10, 'win');
+                        status.innerText = "Tower Conquered! 10x Win!";
+                        status.style.color = "var(--success)";
