@@ -170,7 +170,6 @@
             color: var(--text-main);
         }
         .btn-ton { background: #0098EA; color: white; } /* TON Color */
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* --- Games Grid --- */
         .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -256,10 +255,6 @@
         .rank-info { flex: 1; }
         .rank-name { font-weight: 600; font-size: 0.95rem; }
         .rank-val { font-family: 'Rajdhani'; font-weight: 700; color: var(--primary); }
-        .my-rank-banner {
-            text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; padding: 10px;
-            background: rgba(255,255,255,0.03); border-radius: 8px;
-        }
 
         /* --- Wallet --- */
         .wallet-stats { display: flex; gap: 10px; margin-bottom: 20px; }
@@ -277,34 +272,20 @@
             font-family: 'Rajdhani'; font-size: 1.2rem; letter-spacing: 2px;
             margin: 15px 0; border: 1px dashed var(--secondary); word-break: break-all;
         }
-        .ref-stats-row {
-            display: flex; justify-content: center; gap: 20px; margin-top: 15px;
-        }
-        .ref-stat-item { text-align: center; }
-        .ref-stat-val { display: block; font-weight: 700; font-size: 1.2rem; color: var(--primary); font-family: 'Rajdhani'; }
-        .ref-stat-lbl { font-size: 0.75rem; color: var(--text-muted); }
 
         /* --- Tasks --- */
-        .task-card { display: flex; align-items: center; gap: 15px; padding: 10px; }
+        .task-card { display: flex; align-items: center; gap: 15px; }
         .task-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #333; }
         .task-meta { flex: 1; }
         .task-title { font-weight: 600; margin-bottom: 4px; }
         .task-reward { font-size: 0.8rem; color: var(--primary); }
         .task-btn {
-            min-width: 80px; padding: 8px 12px; border-radius: 12px;
-            background: var(--primary); color: #000; border: none; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+            min-width: 80px; padding: 8px 12px; border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), #d97706);
+            color: #000; border: none; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; text-align: center;
         }
-        .task-btn.completed { background: #333; color: #777; cursor: default; }
-
-        /* --- Redemption Code --- */
-        .redeem-container {
-            display: flex; gap: 10px; margin-bottom: 20px;
-        }
-        .redeem-input {
-            flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            color: white; padding: 12px; border-radius: var(--radius-sm);
-            text-align: center; letter-spacing: 5px; font-family: 'Rajdhani'; font-size: 1.2rem;
-        }
+        .task-btn.completed { background: #334155; color: #94a3b8; cursor: default; }
 
         /* --- Navigation --- */
         nav {
@@ -329,6 +310,15 @@
         .modal-content {
             background: var(--bg-card); width: 90%; max-width: 400px;
             border-radius: var(--radius-lg); padding: 20px; border: 1px solid rgba(255,255,255,0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .redeem-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .redeem-input {
+            background: rgba(0,0,0,0.3); border: 1px solid var(--secondary);
+            color: white; padding: 10px; border-radius: var(--radius-sm);
+            width: 100%; font-family: 'Rajdhani'; font-size: 1.1rem; text-align: center;
+            margin-bottom: 10px;
         }
 
         /* Toast */
@@ -401,7 +391,9 @@
         <!-- === RANKING SECTION === -->
         <div id="ranking-view" class="tab-view">
             <h2>Top Players</h2>
-            <div class="my-rank-banner" id="my-rank-pos">Your Position: Calculating...</div>
+            <div class="card" style="text-align:center; margin-bottom:10px; color:var(--secondary); font-weight:700;">
+                <span id="my-rank-pos">Loading position...</span>
+            </div>
             <div class="card" id="ranking-list">
                 <div style="text-align:center; padding:20px; color:var(--text-muted)">Loading Leaderboard...</div>
             </div>
@@ -440,11 +432,15 @@
                 
                 <div class="ref-box" id="ref-link">Generating...</div>
                 <button class="btn btn-primary" onclick="app.copyRef()">Copy Link</button>
-                
-                <div class="ref-stats-row">
-                    <div class="ref-stat-item">
-                        <span class="ref-stat-val" id="ref-count">0</span>
-                        <span class="ref-stat-lbl">Total Referrals</span>
+
+                <div style="margin-top:20px; display:flex; justify-content:space-around; text-align:center;">
+                    <div>
+                        <div style="font-size:1.5rem; font-weight:700; color:var(--secondary);" id="ref-count">0</div>
+                        <small style="color:var(--text-muted);">Total Referrals</small>
+                    </div>
+                    <div>
+                        <div style="font-size:1.5rem; font-weight:700; color:var(--accent);" id="eject-count">0</div>
+                        <small style="color:var(--text-muted);">Eject Referrals</small>
                     </div>
                 </div>
             </div>
@@ -520,18 +516,16 @@
                 <h4 id="settings-name">User</h4>
                 <small id="settings-id" style="color:var(--text-muted)"></small>
             </div>
-            
-            <!-- Redeem Code Section -->
-            <h4 style="margin: 0 0 10px 0; color: var(--secondary);">Redeem Code</h4>
-            <div class="redeem-container">
-                <input type="text" id="redeem-input" class="redeem-input" placeholder="----" maxlength="4">
-                <button class="btn btn-primary" style="width: auto;" onclick="app.redeemCode()">Redeem</button>
-            </div>
-            
-            <div style="display:grid; gap:10px; margin-top: 20px;">
+            <div style="display:grid; gap:10px;">
                 <button class="btn btn-ton" onclick="app.connectTon()"><i class="fa-solid fa-wallet"></i> Connect TON Wallet</button>
                 <button class="btn btn-secondary"><i class="fa-solid fa-bell"></i> Notifications</button>
-                <button class="btn btn-secondary" style="color:var(--danger)"><i class="fa-solid fa-sign-out-alt"></i> Log Out</button>
+            </div>
+
+            <!-- Redeem Section -->
+            <div class="redeem-section">
+                <h4 style="text-align:center; margin-bottom:10px;">Redeem Code</h4>
+                <input type="text" id="redeem-input" class="redeem-input" placeholder="Enter Code" maxlength="10">
+                <button class="btn btn-primary" onclick="app.redeemCode()">Redeem</button>
             </div>
         </div>
     </div>
@@ -561,6 +555,7 @@
             userId: null,
             balance: 0,
             settings: { minesWinRate: 90, diceWinRate: 50 }, // Default fallback
+            userDataSnapshot: null, // To store user data locally
 
             init: function() {
                 // Init Telegram WebApp
@@ -577,9 +572,23 @@
                         photo: tgUser.photo_url || `https://picsum.photos/seed/${tgUser.id}/100/100`,
                         username: tgUser.username || 'user'
                     };
+                    
+                    // Handle Referral Logic
+                    // Check if start_param exists (e.g., startapp=ref_12345)
+                    const startParam = tg.initDataUnsafe.start_param;
+                    if (startParam && startParam.startsWith('r')) {
+                         const referrerId = startParam.replace('r', '');
+                         if (referrerId !== this.userId) {
+                             this.processReferral(referrerId);
+                         }
+                    }
                 } else {
                     // Fallback for browser testing
-                    this.userId = "999999";
+                    this.userId = localStorage.getItem('royal_casino_user_id');
+                    if(!this.userId) {
+                        this.userId = "guest_" + (Math.floor(10000+Math.random()*89999)).toString();
+                        localStorage.setItem('royal_casino_user_id', this.userId);
+                    }
                     this.user = { name: "Guest User", photo: "https://picsum.photos/seed/guest/100/100", username: "guest" };
                 }
 
@@ -588,7 +597,29 @@
                 this.fetchSettings();
                 this.fetchTasks();
                 this.generateRefLink();
-                this.handleReferralStart(); // Handle ?start= parameter
+            },
+
+            processReferral: function(referrerId) {
+                // Check if this user is already referred
+                const userRef = ref(db, 'users/' + this.userId);
+                get(userRef).then(snap => {
+                    if(!snap.exists() || !snap.val().referredBy) {
+                        // Update Referrer Stats
+                        const referrerRef = ref(db, 'users/' + referrerId);
+                        get(referrerRef).then(refSnap => {
+                            if(refSnap.exists()) {
+                                const data = refSnap.val();
+                                const updates = {
+                                    referrals: (data.referrals || 0) + 1
+                                };
+                                update(referrerRef, updates);
+                            }
+                        });
+                        
+                        // Mark current user as referred
+                        update(userRef, { referredBy: referrerId });
+                    }
+                });
             },
 
             updateUIProfile: function() {
@@ -606,26 +637,32 @@
                 onValue(userRef, (snapshot) => {
                     const data = snapshot.val();
                     if (data) {
-                        this.balance = data.balance || 500; // Default 500 if exists but no balance
-                        this.updateBalanceDisplay(data.wagered || 0, data.referrals || 0);
+                        this.balance = data.balance || 0;
+                        this.userDataSnapshot = data; // Cache data
+                        this.updateBalanceDisplay(data.wagered || 0);
                         
+                        // Update Ref UI
+                        document.getElementById('ref-count').innerText = data.referrals || 0;
+                        document.getElementById('eject-count').innerText = data.eject || 0;
+
                         // Check Ban
                         if(data.isBanned) {
                             alert("Your account has been banned.");
                             document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:50px'>BANNED</h1>";
                         }
                     } else {
-                        // New User Registration - Set Default Balance to 500
+                        // New User Registration
                         set(userRef, {
                             name: this.user.name,
                             photo: this.user.photo,
-                            balance: 500, // Requested default
+                            balance: 500, // Default 500 Diamonds
                             wagered: 0,
                             joinedAt: Date.now(),
                             referralCode: this.userId,
-                            referredBy: null, 
+                            referredBy: null,
                             referrals: 0,
-                            completedTasks: {}
+                            eject: 0,
+                            completedTasks: {} // Initialize tasks object
                         });
                     }
                 });
@@ -638,33 +675,6 @@
                 });
             },
 
-            handleReferralStart: function() {
-                const tg = window.Telegram.WebApp;
-                const startParam = tg.initDataUnsafe.start_param;
-                if (startParam) {
-                    // Logic to credit the referrer
-                    // Example: if startParam is a userId
-                    const referrerId = startParam;
-                    // In a real app, verify this securely via cloud functions or strict rules
-                    // Here we just update the current user's profile to store who referred them (optional)
-                    // And increment the referrer's count
-                    
-                    // Update Referrer's Count
-                    const updates = {};
-                    updates[`users/${this.userId}/referredBy`] = referrerId;
-                    // Increment referrer count
-                    // Note: This is client-side, vulnerable to abuse, but fits the single-file constraint
-                    get(ref(db, `users/${referrerId}`)).then(snap => {
-                        if(snap.exists()) {
-                            update(ref(db), {
-                                [`users/${referrerId}/referrals`]: (snap.val().referrals || 0) + 1
-                            });
-                        }
-                    });
-                    update(ref(db), updates);
-                }
-            },
-
             fetchTasks: function() {
                 const taskRef = ref(db, 'tasks');
                 onValue(taskRef, (snap) => {
@@ -675,63 +685,67 @@
                         return;
                     }
                     
-                    // Fetch current user data to check completed tasks
-                    get(ref(db, 'users/' + this.userId)).then(userSnap => {
-                        const userData = userSnap.val() || {};
-                        const completedTasks = userData.completedTasks || {};
+                    const tasks = snap.val();
+                    const completedTasks = (this.userDataSnapshot && this.userDataSnapshot.completedTasks) ? this.userDataSnapshot.completedTasks : {};
 
-                        snap.forEach(child => {
-                            const t = child.val();
-                            const tid = child.key;
-                            const isCompleted = !!completedTasks[tid];
-                            
-                            list.innerHTML += `
-                            <div class="card task-card">
-                                <img src="${t.photo || 'https://picsum.photos/seed/task/100/100'}" class="task-img">
-                                <div class="task-meta">
-                                    <div class="task-title">${t.name}</div>
-                                    <div class="task-reward">+${t.amount} Diamonds</div>
-                                </div>
-                                <button class="task-btn ${isCompleted ? 'completed' : ''}" 
-                                    onclick="app.handleTask('${tid}', '${t.link}', ${t.amount}, this)">
-                                    ${isCompleted ? 'Done' : 'Start'}
-                                </button>
-                            </div>`;
-                        });
+                    Object.keys(tasks).forEach(tid => {
+                        const t = tasks[tid];
+                        const isCompleted = completedTasks[tid];
+                        
+                        list.innerHTML += `
+                        <div class="card task-card">
+                            <img src="${t.photo}" class="task-img" onerror="this.src='https://picsum.photos/seed/task/100/100'">
+                            <div class="task-meta">
+                                <div class="task-title">${t.name}</div>
+                                <div class="task-reward">+${t.amount} Diamonds</div>
+                            </div>
+                            <button class="task-btn ${isCompleted ? 'completed' : ''}" onclick="app.handleTask('${tid}', ${t.amount}, '${t.link}', this)">
+                                ${isCompleted ? 'Completed' : 'Start'}
+                            </button>
+                        </div>`;
                     });
                 });
             },
 
-            handleTask: function(tid, link, reward, btn) {
-                if(btn.classList.contains('completed')) {
+            handleTask: function(taskId, reward, link, btn) {
+                // Check if already completed
+                if(this.userDataSnapshot && this.userDataSnapshot.completedTasks && this.userDataSnapshot.completedTasks[taskId]) {
                     window.open(link, '_blank');
                     return;
                 }
 
-                // Mark as completed and give reward
+                // Reward Logic
                 const updates = {};
-                updates[`users/${this.userId}/balance`] = this.balance + reward;
-                updates[`users/${this.userId}/completedTasks/${tid}`] = true;
+                const newBalance = this.balance + reward;
+                
+                updates['users/' + this.userId + '/balance'] = newBalance;
+                updates['users/' + this.userId + '/completedTasks/' + taskId] = true;
                 
                 update(ref(db), updates);
-                this.showToast(`+${reward} Diamonds!`, 'success');
+                
+                this.showToast(`+${reward} Diamonds earned!`, 'success');
                 window.open(link, '_blank');
+                
+                // Update UI immediately
+                btn.classList.add('completed');
+                btn.innerText = "Completed";
+                btn.onclick = null; // Prevent re-click
             },
 
             updateBalance: function(amount, type = 'adjust') {
                 const updates = {};
                 updates['users/' + this.userId + '/balance'] = this.balance + amount;
+                if (type === 'bet') {
+                    // Logic for wager tracking if needed
+                }
                 update(ref(db), updates);
             },
 
-            updateBalanceDisplay: function(wagered, referrals) {
+            updateBalanceDisplay: function(wagered) {
                 const fmt = new Intl.NumberFormat().format(this.balance);
                 document.getElementById('global-balance').innerText = fmt;
                 document.getElementById('wallet-balance').innerText = fmt;
                 document.getElementById('total-wagered').innerText = new Intl.NumberFormat().format(wagered || 0);
-                if(referrals !== undefined) {
-                    document.getElementById('ref-count').innerText = referrals;
-                }
             },
 
             nav: function(viewId, el) {
@@ -741,6 +755,8 @@
                 if(el) el.classList.add('active');
 
                 if(viewId === 'ranking') this.loadRanking();
+                if(viewId === 'friends') this.loadFriends();
+                if(viewId === 'tasks') this.fetchTasks(); // Refresh tasks on view
             },
 
             toggleSettings: function() {
@@ -750,17 +766,19 @@
 
             loadRanking: function() {
                 const rankingRef = ref(db, 'users');
-                // Order by balance (Client-side sort for this demo)
                 get(rankingRef).then((snap) => {
                     if(!snap.exists()) return;
                     const users = [];
                     snap.forEach(c => users.push({ id: c.key, ...c.val() }));
                     users.sort((a,b) => (b.balance || 0) - (a.balance || 0));
                     
-                    // Find my rank
+                    // Find My Position
                     const myIndex = users.findIndex(u => u.id === this.userId);
-                    const myPos = myIndex > -1 ? myIndex + 1 : 'Unranked';
-                    document.getElementById('my-rank-pos').innerText = `Your Position: ${myPos}`;
+                    if(myIndex !== -1) {
+                        document.getElementById('my-rank-pos').innerText = `Your Position: #${myIndex + 1}`;
+                    } else {
+                        document.getElementById('my-rank-pos').innerText = `Your Position: Unranked`;
+                    }
 
                     const html = users.slice(0, 50).map((u, i) => `
                         <div class="rank-row">
@@ -776,46 +794,20 @@
                 });
             },
 
+            loadFriends: function() {
+                // Logic handled by listener for real-time updates
+                this.generateRefLink();
+            },
+
             generateRefLink: function() {
-                // Using the specific bot link requested
-                document.getElementById('ref-link').innerText = `https://t.me/MonarchPlay_Bot/play?startapp=${this.userId}`;
+                // Using the logic provided in example but adapting to this bot
+                document.getElementById('ref-link').innerText = `https://t.me/MonarchPlay_Bot?start=r${this.userId}`;
             },
 
             copyRef: function() {
                 const text = document.getElementById('ref-link').innerText;
                 navigator.clipboard.writeText(text);
                 this.showToast('Link copied!', 'success');
-            },
-
-            redeemCode: function() {
-                const input = document.getElementById('redeem-input');
-                const code = input.value.trim();
-                
-                if(code.length !== 4) {
-                    return this.showToast('Enter valid 4-digit code', 'error');
-                }
-
-                const codeRef = ref(db, 'redeemCodes/' + code);
-                get(codeRef).then(snap => {
-                    if(snap.exists()) {
-                        // Generate random amount between 500 and 10000 as per example
-                        const amount = Math.floor(Math.random() * (10000 - 500 + 1)) + 500;
-                        
-                        // Update user balance
-                        update(ref(db), {
-                            [`users/${this.userId}/balance`]: this.balance + amount
-                        });
-                        
-                        // Remove code
-                        remove(codeRef);
-                        
-                        this.showToast(`+${amount} Diamonds Redeemed!`, 'success');
-                        input.value = '';
-                        this.toggleSettings(); // Close modal
-                    } else {
-                        this.showToast('Invalid or used code', 'error');
-                    }
-                });
             },
 
             deposit: function() {
@@ -833,11 +825,32 @@
                 this.showToast('TON Wallet Connection Mocked', 'info');
             },
 
+            redeemCode: function() {
+                const code = document.getElementById('redeem-input').value.trim();
+                if(!code || code.length < 4) return this.showToast('Enter a valid code', 'error');
+                
+                const codeRef = ref(db, 'redeemCodes/' + code);
+                get(codeRef).then(snap => {
+                    if(snap.exists()) {
+                        // Logic: Random amount between 500 and 10000
+                        const amount = Math.floor(Math.random() * (10000 - 500 + 1)) + 500;
+                        
+                        this.updateBalance(amount);
+                        remove(codeRef); // Delete code
+                        
+                        this.showToast(`Code redeemed! +${amount} Diamonds`, 'success');
+                        document.getElementById('redeem-input').value = '';
+                    } else {
+                        this.showToast('Invalid or used code', 'error');
+                    }
+                });
+            },
+
             showToast: function(msg, type = 'info') {
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
-                toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-check':(type==='error'?'fa-circle-xmark':'fa-info')}"></i> <span>${msg}</span>`;
+                toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-check':'fa-info'}"></i> <span>${msg}</span>`;
                 container.appendChild(toast);
                 setTimeout(() => { toast.style.opacity='0'; setTimeout(()=>toast.remove(), 300); }, 3000);
             }
@@ -892,7 +905,6 @@
                 } else if (game === 'limbo') {
                     visual.innerHTML = `<div class="limbo-display" id="limbo-res">1.00x</div>`;
                 } else if (game === 'dragon-tower') {
-                     // Simplified Tower Visual
                      let html = `<div class="tower-visual">`;
                      for(let i=0; i<3; i++) {
                          html += `<div class="tower-col">
