@@ -214,8 +214,12 @@
             flex: 1;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: relative;
+            width: 100%;
+            overflow: hidden;
         }
 
+        /* --- Specific Game Styles --- */
+        
         /* Mines */
         .mines-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; max-width: 350px; }
         .mine-cell {
@@ -223,7 +227,7 @@
             border-radius: 8px; display: flex; align-items: center; justify-content: center;
             font-size: 1.2rem; cursor: pointer; transition: 0.2s;
         }
-        .mine-cell.safe { background: var(--bg-card); border: 2px solid var(--success); color: var(--success); }
+        .mine-cell.safe { background: var(--bg-card); border: 2px solid var(--success); color: var(--success); transform: scale(0.95); }
         .mine-cell.boom { background: var(--danger); color: white; animation: shake 0.4s; }
         .mine-cell.dimmed { opacity: 0.3; pointer-events: none; }
 
@@ -231,7 +235,7 @@
         .dice-circle { width: 120px; height: 120px; background: var(--bg-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; border: 2px solid var(--secondary); box-shadow: 0 0 30px var(--primary-glow); }
 
         /* Limbo */
-        .limbo-display { font-size: 4rem; font-family: 'Rajdhani'; font-weight: 800; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .limbo-display { font-size: 3.5rem; font-family: 'Rajdhani'; font-weight: 800; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
 
         /* Tower */
         .tower-visual { display: flex; gap: 10px; }
@@ -239,6 +243,47 @@
         .tower-step { height: 40px; background: rgba(255,255,255,0.05); border-radius: 4px; }
         .tower-step.safe { background: var(--success); }
         .tower-step.bomb { background: var(--danger); }
+
+        /* CRASH */
+        .crash-canvas { width: 100%; height: 200px; background: rgba(0,0,0,0.2); border-radius: 12px; }
+        .crash-multiplier { font-size: 3rem; font-weight: 800; font-family: 'Rajdhani'; color: var(--secondary); }
+        .crash-multiplier.crashed { color: var(--danger); }
+
+        /* WHEEL */
+        .wheel-container { position: relative; width: 280px; height: 280px; }
+        .wheel-arrow { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 5; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid white; filter: drop-shadow(0 2px 4px black); }
+        .wheel {
+            width: 100%; height: 100%; border-radius: 50%;
+            border: 4px solid var(--primary);
+            background: conic-gradient(
+                #ef4444 0deg 45deg, 
+                #fbbf24 45deg 90deg, 
+                #10b981 90deg 135deg, 
+                #38bdf8 135deg 180deg,
+                #8b5cf6 180deg 225deg,
+                #ec4899 225deg 270deg,
+                #f97316 270deg 315deg,
+                #64748b 315deg 360deg
+            );
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .wheel-center {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60px; height: 60px; background: var(--bg-card); border-radius: 50%;
+            border: 2px solid var(--primary); z-index: 4; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-family: 'Rajdhani'; font-size: 1.2rem;
+        }
+
+        /* SLOTS */
+        .slots-machine { display: flex; gap: 10px; background: #000; padding: 15px; border-radius: 12px; border: 2px solid var(--secondary); box-shadow: 0 0 20px var(--primary-glow); }
+        .slot-reel {
+            width: 60px; height: 80px; background: #fff; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; color: #333; overflow: hidden;
+        }
+        .slot-reel.spinning { animation: bounce 0.1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
         /* Controls */
         .bet-controls { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; margin-bottom: 15px; }
@@ -384,6 +429,19 @@
                 <div class="game-card" onclick="gameManager.openGame('plinko')">
                     <div class="game-icon"><i class="fa-solid fa-arrow-down-short-wide"></i></div>
                     <div class="game-name">Plinko</div>
+                </div>
+                <!-- NEW GAMES -->
+                <div class="game-card" onclick="gameManager.openGame('crash')">
+                    <div class="game-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="game-name">Crash</div>
+                </div>
+                <div class="game-card" onclick="gameManager.openGame('wheel')">
+                    <div class="game-icon"><i class="fa-solid fa-dharmachakra"></i></div>
+                    <div class="game-name">Lucky Wheel</div>
+                </div>
+                <div class="game-card" onclick="gameManager.openGame('slots')">
+                    <div class="game-icon"><i class="fa-solid fa-clover"></i></div>
+                    <div class="game-name">Neon Slots</div>
                 </div>
             </div>
         </div>
@@ -549,19 +607,60 @@
         const fbApp = initializeApp(firebaseConfig);
         const db = getDatabase(fbApp);
 
+        // --- Sound System (Web Audio API) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.1);
+                osc.frequency.linearRampToValueAtTime(1200, now + 0.3);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+        }
+
         // --- App Logic ---
         window.app = {
             user: null,
             userId: null,
             balance: 0,
             settings: { minesWinRate: 90, diceWinRate: 50 }, // Default fallback
-            userDataSnapshot: null, // To store user data locally
+            userDataSnapshot: null,
 
             init: function() {
                 // Init Telegram WebApp
                 const tg = window.Telegram.WebApp;
                 tg.ready();
                 tg.expand();
+                // Enable Haptic Feedback
+                tg.HapticFeedback.impactOccurred('light');
 
                 // Get User Data
                 const tgUser = tg.initDataUnsafe.user;
@@ -573,8 +672,6 @@
                         username: tgUser.username || 'user'
                     };
                     
-                    // Handle Referral Logic
-                    // Check if start_param exists (e.g., startapp=ref_12345)
                     const startParam = tg.initDataUnsafe.start_param;
                     if (startParam && startParam.startsWith('r')) {
                          const referrerId = startParam.replace('r', '');
@@ -583,7 +680,6 @@
                          }
                     }
                 } else {
-                    // Fallback for browser testing
                     this.userId = localStorage.getItem('royal_casino_user_id');
                     if(!this.userId) {
                         this.userId = "guest_" + (Math.floor(10000+Math.random()*89999)).toString();
@@ -600,23 +696,16 @@
             },
 
             processReferral: function(referrerId) {
-                // Check if this user is already referred
                 const userRef = ref(db, 'users/' + this.userId);
                 get(userRef).then(snap => {
                     if(!snap.exists() || !snap.val().referredBy) {
-                        // Update Referrer Stats
                         const referrerRef = ref(db, 'users/' + referrerId);
                         get(referrerRef).then(refSnap => {
                             if(refSnap.exists()) {
                                 const data = refSnap.val();
-                                const updates = {
-                                    referrals: (data.referrals || 0) + 1
-                                };
-                                update(referrerRef, updates);
+                                update(referrerRef, { referrals: (data.referrals || 0) + 1 });
                             }
                         });
-                        
-                        // Mark current user as referred
                         update(userRef, { referredBy: referrerId });
                     }
                 });
@@ -626,7 +715,6 @@
                 document.getElementById('header-name').innerText = this.user.name;
                 document.getElementById('header-id').innerText = "ID: " + this.userId;
                 document.getElementById('header-pic').src = this.user.photo;
-                
                 document.getElementById('settings-name').innerText = this.user.name;
                 document.getElementById('settings-id').innerText = "@" + this.user.username;
                 document.getElementById('settings-pic').src = this.user.photo;
@@ -638,31 +726,29 @@
                     const data = snapshot.val();
                     if (data) {
                         this.balance = data.balance || 0;
-                        this.userDataSnapshot = data; // Cache data
+                        this.userDataSnapshot = data;
                         this.updateBalanceDisplay(data.wagered || 0);
                         
-                        // Update Ref UI
                         document.getElementById('ref-count').innerText = data.referrals || 0;
                         document.getElementById('eject-count').innerText = data.eject || 0;
 
-                        // Check Ban
                         if(data.isBanned) {
                             alert("Your account has been banned.");
                             document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:50px'>BANNED</h1>";
                         }
                     } else {
-                        // New User Registration
+                        // NEW USER REGISTRATION WITH 500 DEFAULT
                         set(userRef, {
                             name: this.user.name,
                             photo: this.user.photo,
-                            balance: 500, // Default 500 Diamonds
+                            balance: 500, // DEFAULT 500 DIAMONDS
                             wagered: 0,
                             joinedAt: Date.now(),
                             referralCode: this.userId,
                             referredBy: null,
                             referrals: 0,
                             eject: 0,
-                            completedTasks: {} // Initialize tasks object
+                            completedTasks: {}
                         });
                     }
                 });
@@ -684,14 +770,12 @@
                         list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted)">No tasks available.</div>';
                         return;
                     }
-                    
                     const tasks = snap.val();
                     const completedTasks = (this.userDataSnapshot && this.userDataSnapshot.completedTasks) ? this.userDataSnapshot.completedTasks : {};
 
                     Object.keys(tasks).forEach(tid => {
                         const t = tasks[tid];
                         const isCompleted = completedTasks[tid];
-                        
                         list.innerHTML += `
                         <div class="card task-card">
                             <img src="${t.photo}" class="task-img" onerror="this.src='https://picsum.photos/seed/task/100/100'">
@@ -708,35 +792,26 @@
             },
 
             handleTask: function(taskId, reward, link, btn) {
-                // Check if already completed
                 if(this.userDataSnapshot && this.userDataSnapshot.completedTasks && this.userDataSnapshot.completedTasks[taskId]) {
                     window.open(link, '_blank');
                     return;
                 }
-
-                // Reward Logic
                 const updates = {};
                 const newBalance = this.balance + reward;
-                
                 updates['users/' + this.userId + '/balance'] = newBalance;
                 updates['users/' + this.userId + '/completedTasks/' + taskId] = true;
-                
                 update(ref(db), updates);
-                
                 this.showToast(`+${reward} Diamonds earned!`, 'success');
                 window.open(link, '_blank');
-                
-                // Update UI immediately
                 btn.classList.add('completed');
                 btn.innerText = "Completed";
-                btn.onclick = null; // Prevent re-click
             },
 
             updateBalance: function(amount, type = 'adjust') {
                 const updates = {};
                 updates['users/' + this.userId + '/balance'] = this.balance + amount;
                 if (type === 'bet') {
-                    // Logic for wager tracking if needed
+                   updates['users/' + this.userId + '/wagered'] = (this.userDataSnapshot.wagered || 0) + Math.abs(amount);
                 }
                 update(ref(db), updates);
             },
@@ -749,6 +824,7 @@
             },
 
             nav: function(viewId, el) {
+                playSound('click');
                 document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
                 document.getElementById(viewId + '-view').classList.add('active');
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -756,12 +832,12 @@
 
                 if(viewId === 'ranking') this.loadRanking();
                 if(viewId === 'friends') this.loadFriends();
-                if(viewId === 'tasks') this.fetchTasks(); // Refresh tasks on view
+                if(viewId === 'tasks') this.fetchTasks();
             },
 
             toggleSettings: function() {
-                const modal = document.getElementById('settings-modal');
-                modal.classList.toggle('active');
+                playSound('click');
+                document.getElementById('settings-modal').classList.toggle('active');
             },
 
             loadRanking: function() {
@@ -772,18 +848,18 @@
                     snap.forEach(c => users.push({ id: c.key, ...c.val() }));
                     users.sort((a,b) => (b.balance || 0) - (a.balance || 0));
                     
-                    // Find My Position
                     const myIndex = users.findIndex(u => u.id === this.userId);
                     if(myIndex !== -1) {
                         document.getElementById('my-rank-pos').innerText = `Your Position: #${myIndex + 1}`;
                     } else {
-                        document.getElementById('my-rank-pos').innerText = `Your Position: Unranked`;
+                        document.getElementById('my-rank-pos').innerText = `Unranked`;
                     }
 
-                    const html = users.slice(0, 50).map((u, i) => `
+                    // TOP 30
+                    const html = users.slice(0, 30).map((u, i) => `
                         <div class="rank-row">
                             <div class="rank-num" style="color:${i<3?'var(--primary)':'inherit'}">${i+1}</div>
-                            <img src="${u.photo}" class="rank-avatar">
+                            <img src="${u.photo}" class="rank-avatar" onerror="this.src='https://picsum.photos/seed/${u.id}/50/50'">
                             <div class="rank-info">
                                 <div class="rank-name">${u.name}</div>
                             </div>
@@ -795,12 +871,10 @@
             },
 
             loadFriends: function() {
-                // Logic handled by listener for real-time updates
                 this.generateRefLink();
             },
 
             generateRefLink: function() {
-                // Using the logic provided in example but adapting to this bot
                 document.getElementById('ref-link').innerText = `https://t.me/MonarchPlay_Bot?start=r${this.userId}`;
             },
 
@@ -828,16 +902,12 @@
             redeemCode: function() {
                 const code = document.getElementById('redeem-input').value.trim();
                 if(!code || code.length < 4) return this.showToast('Enter a valid code', 'error');
-                
                 const codeRef = ref(db, 'redeemCodes/' + code);
                 get(codeRef).then(snap => {
                     if(snap.exists()) {
-                        // Logic: Random amount between 500 and 10000
                         const amount = Math.floor(Math.random() * (10000 - 500 + 1)) + 500;
-                        
                         this.updateBalance(amount);
-                        remove(codeRef); // Delete code
-                        
+                        remove(codeRef);
                         this.showToast(`Code redeemed! +${amount} Diamonds`, 'success');
                         document.getElementById('redeem-input').value = '';
                     } else {
@@ -853,6 +923,8 @@
                 toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-check':'fa-info'}"></i> <span>${msg}</span>`;
                 container.appendChild(toast);
                 setTimeout(() => { toast.style.opacity='0'; setTimeout(()=>toast.remove(), 300); }, 3000);
+                if(type==='success') playSound('win');
+                if(type==='error') playSound('lose');
             }
         };
 
@@ -862,23 +934,35 @@
             inProgress: false,
             betAmount: 0,
             gameState: {},
+            intervals: [], // To clear intervals
 
             openGame: function(game) {
+                playSound('click');
                 this.activeGame = game;
                 this.inProgress = false;
+                this.gameState = {};
+                this.clearTimers();
+                
                 document.getElementById('game-page').classList.add('active');
                 document.getElementById('game-title').innerText = game.toUpperCase().replace('-', ' ');
                 document.getElementById('game-status').innerText = "Place your bet";
+                document.getElementById('game-status').style.color = "var(--text-muted)";
                 document.getElementById('action-btn').innerText = "BET";
                 document.getElementById('action-btn').className = "btn btn-primary";
-                document.getElementById('bet-input').value = 20; // Reset to min
+                document.getElementById('bet-input').value = 20;
                 
                 this.renderGame(game);
             },
 
             closeGame: function() {
+                this.clearTimers();
                 document.getElementById('game-page').classList.remove('active');
                 this.activeGame = null;
+            },
+
+            clearTimers: function() {
+                this.intervals.forEach(i => clearInterval(i));
+                this.intervals = [];
             },
 
             halfBet: function() {
@@ -912,13 +996,35 @@
                          </div>`;
                      }
                      html += `</div><div style="margin-top:20px; display:flex; gap:10px;">
-                        <button class="btn btn-secondary" style="flex:1" onclick="alert('Logic handled by bet')">Left</button>
-                        <button class="btn btn-secondary" style="flex:1" onclick="alert('Logic handled by bet')">Middle</button>
-                        <button class="btn btn-secondary" style="flex:1" onclick="alert('Logic handled by bet')">Right</button>
+                        <button class="btn btn-secondary" style="flex:1" onclick="alert('Select direction before bet')">Left</button>
+                        <button class="btn btn-secondary" style="flex:1" onclick="alert('Select direction before bet')">Middle</button>
+                        <button class="btn btn-secondary" style="flex:1" onclick="alert('Select direction before bet')">Right</button>
                      </div>`;
                      visual.innerHTML = html;
                 } else if (game === 'plinko') {
-                     visual.innerHTML = `<div style="width:100%; height:200px; border:2px dashed #333; border-radius:10px; display:flex; align-items:center; justify-content:center;">Plinko Board</div>`;
+                     visual.innerHTML = `<div style="width:100%; height:200px; border:2px dashed #333; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#555;">Plinko Board</div>`;
+                } 
+                // NEW GAMES RENDER
+                else if (game === 'crash') {
+                    visual.innerHTML = `
+                        <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                            <div class="crash-multiplier" id="crash-val">1.00x</div>
+                            <canvas id="crash-graph" class="crash-canvas"></canvas>
+                        </div>`;
+                } else if (game === 'wheel') {
+                    visual.innerHTML = `
+                        <div class="wheel-container">
+                            <div class="wheel-arrow"></div>
+                            <div class="wheel" id="wheel-el"></div>
+                            <div class="wheel-center">SPIN</div>
+                        </div>`;
+                } else if (game === 'slots') {
+                    visual.innerHTML = `
+                        <div class="slots-machine">
+                            <div class="slot-reel" id="slot-1">🍒</div>
+                            <div class="slot-reel" id="slot-2">🍒</div>
+                            <div class="slot-reel" id="slot-3">🍒</div>
+                        </div>`;
                 } else {
                     visual.innerHTML = `<div style="text-align:center; padding:50px;">Select options below</div>
                     <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
@@ -943,10 +1049,9 @@
                 if(bet > app.balance) return app.showToast("Insufficient Balance", "error");
 
                 if(!this.inProgress) {
-                    // Start Game
                     this.inProgress = true;
                     this.betAmount = bet;
-                    app.updateBalance(-bet);
+                    app.updateBalance(-bet, 'bet');
                     
                     const btn = document.getElementById('action-btn');
                     btn.innerText = "CASHOUT";
@@ -955,18 +1060,17 @@
                     document.getElementById('game-status').innerText = "Game Running...";
                     this.runGameLogic();
                 } else {
-                    // Cashout
                     this.cashout();
                 }
             },
 
             runGameLogic: function() {
+                // Basic Logic
                 const winRate = app.settings[this.activeGame + 'WinRate'] || 50;
                 const roll = Math.random() * 100;
                 const won = roll < winRate;
 
                 if(this.activeGame === 'mines') {
-                    // Initialize Mines
                     this.gameState.mines = Array(25).fill(0);
                     let bombs = 3;
                     while(bombs > 0) {
@@ -975,7 +1079,7 @@
                     }
                     this.gameState.safeRevealed = 0;
                     document.getElementById('game-status').innerText = "Pick a tile!";
-                    return; // Waiting for input
+                    return; 
                 } 
                 else if (this.activeGame === 'dice') {
                     this.animateDice((result) => {
@@ -985,12 +1089,20 @@
                 else if (this.activeGame === 'limbo') {
                     this.animateLimbo(won ? (Math.random()*5 + 1).toFixed(2) : "1.00", won);
                 }
+                else if (this.activeGame === 'crash') {
+                    this.animateCrash();
+                }
+                else if (this.activeGame === 'wheel') {
+                    this.animateWheel();
+                }
+                else if (this.activeGame === 'slots') {
+                    this.animateSlots();
+                }
                 else if (this.activeGame === 'dragon-tiger') {
-                    // Instant result for card games
-                    const res = Math.random() > 0.5 ? 'A' : 'B'; // Dragon or Tiger
+                    const res = Math.random() > 0.5 ? 'A' : 'B'; 
                     const choice = this.gameState.choice;
                     if(!choice) {
-                         app.updateBalance(this.betAmount); // Refund
+                         app.updateBalance(this.betAmount); 
                          this.inProgress = false; 
                          this.resetBtn();
                          return;
@@ -998,36 +1110,45 @@
                     this.finishGame(choice === res ? (this.betAmount * 1.9) : 0);
                 }
                 else {
-                    // Generic logic for Plinko/Tower (Simulated)
                     setTimeout(() => {
                         this.finishGame(won ? (this.betAmount * (Math.random() > 0.8 ? 5 : 2)) : 0);
                     }, 1000);
                 }
             },
 
-            // --- Specific Game Interactions ---
+            // --- Game Specific Animations ---
+
             minesClick: function(idx) {
                 if(!this.inProgress || this.gameState.mines[idx] !== 0) return;
                 const cell = document.getElementById(`m-${idx}`);
                 
                 if(this.gameState.mines[idx] === 1) {
-                    // Boom
                     cell.classList.add('boom');
                     cell.innerHTML = '<i class="fa-solid fa-bomb"></i>';
+                    playSound('lose');
                     this.gameOver();
                 } else {
-                    // Safe
                     cell.classList.add('safe');
                     cell.innerHTML = '<i class="fa-regular fa-gem"></i>';
-                    this.gameState.mines[idx] = 2; // Mark revealed
+                    this.gameState.mines[idx] = 2; 
                     this.gameState.safeRevealed++;
-                    this.betAmount = Math.floor(this.betAmount * 1.2); // Simple multiplier
+                    this.betAmount = Math.floor(this.betAmount * 1.2); 
                     document.getElementById('game-status').innerText = `Current Pot: ${this.betAmount}`;
+                    playSound('click');
                 }
             },
 
             cashout: function() {
-                if(this.activeGame === 'mines') {
+                if(this.activeGame === 'crash') {
+                    const multiplier = parseFloat(document.getElementById('crash-val').innerText);
+                    if(multiplier > 1) {
+                        const win = Math.floor(this.betAmount * multiplier);
+                        app.updateBalance(win, 'win');
+                        app.showToast(`Cashed out at ${multiplier}x! +${win}`, 'success');
+                        this.inProgress = false;
+                        this.resetBtn();
+                    }
+                } else if(this.activeGame === 'mines') {
                     if(this.gameState.safeRevealed > 0) {
                         app.updateBalance(this.betAmount, 'win');
                         app.showToast(`Cashed out ${this.betAmount}!`, 'success');
@@ -1046,9 +1167,11 @@
                     app.showToast(`You Won ${winAmount}!`, 'success');
                     document.getElementById('game-status').innerText = "WINNER!";
                     document.getElementById('game-status').style.color = "var(--success)";
+                    playSound('win');
                 } else {
                     document.getElementById('game-status').innerText = "YOU LOST";
                     document.getElementById('game-status').style.color = "var(--danger)";
+                    playSound('lose');
                 }
                 this.resetBtn();
             },
@@ -1074,7 +1197,7 @@
                     count++;
                     if(count > 15) {
                         clearInterval(interval);
-                        const final = Math.floor(Math.random()*6) + 1; // 1-6
+                        const final = Math.floor(Math.random()*6) + 1; 
                         el.innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][final-1];
                         callback(final);
                     }
@@ -1093,6 +1216,104 @@
                         this.finishGame(isWin ? (this.betAmount * target) : 0);
                     }
                 }, 50);
+                this.intervals.push(interval);
+            },
+
+            animateCrash: function() {
+                const el = document.getElementById('crash-val');
+                const canvas = document.getElementById('crash-graph');
+                const ctx = canvas.getContext('2d');
+                
+                // Fix canvas size
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                let multiplier = 1.00;
+                let speed = 0.01;
+                let crashed = false;
+                
+                // Random crash point (simple algorithm)
+                const crashPoint = (Math.random() < 0.3 ? 1.0 : (Math.random() * 5 + 1.0)).toFixed(2);
+                
+                const loop = setInterval(() => {
+                    if(crashed) {
+                        clearInterval(loop);
+                        return;
+                    }
+                    
+                    multiplier += speed;
+                    speed += 0.0005; // Accelerate
+                    el.innerText = multiplier.toFixed(2) + "x";
+                    
+                    // Draw simple graph
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.beginPath();
+                    ctx.moveTo(0, canvas.height);
+                    ctx.lineTo(canvas.width, canvas.height - (multiplier * 10)); // Just a visual line rising
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+
+                    if(multiplier >= crashPoint) {
+                        crashed = true;
+                        el.classList.add('crashed');
+                        el.innerText = "CRASHED @ " + crashPoint + "x";
+                        playSound('lose');
+                        this.resetBtn();
+                    }
+                }, 50);
+                
+                this.intervals.push(loop);
+            },
+
+            animateWheel: function() {
+                const wheel = document.getElementById('wheel-el');
+                const deg = 1800 + Math.floor(Math.random() * 360); // At least 5 spins
+                wheel.style.transform = `rotate(${deg}deg)`;
+                
+                setTimeout(() => {
+                    // Determine result based on angle is complex, simplifying to random for demo
+                    const won = Math.random() > 0.5;
+                    this.finishGame(won ? (this.betAmount * 2) : 0);
+                }, 4000);
+            },
+
+            animateSlots: function() {
+                const symbols = ['🍒','🍋','🍉','🍇','💎','7️⃣'];
+                const reels = [document.getElementById('slot-1'), document.getElementById('slot-2'), document.getElementById('slot-3')];
+                
+                reels.forEach(r => r.classList.add('spinning'));
+                
+                let spins = 0;
+                const interval = setInterval(() => {
+                    reels.forEach(r => {
+                        r.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                    });
+                    spins++;
+                    
+                    if(spins > 20) {
+                        clearInterval(interval);
+                        reels.forEach(r => r.classList.remove('spinning'));
+                        
+                        // Force specific result logic or random
+                        const r1 = symbols[Math.floor(Math.random() * symbols.length)];
+                        const r2 = symbols[Math.floor(Math.random() * symbols.length)];
+                        const r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                        
+                        reels[0].innerText = r1;
+                        reels[1].innerText = r2;
+                        reels[2].innerText = r3;
+
+                        if(r1 === r2 && r2 === r3) {
+                            this.finishGame(this.betAmount * 10); // Jackpot
+                        } else if(r1 === r2 || r2 === r3 || r1 === r3) {
+                            this.finishGame(this.betAmount * 2); // Small win
+                        } else {
+                            this.finishGame(0);
+                        }
+                    }
+                }, 100);
+                this.intervals.push(interval);
             }
         };
 
