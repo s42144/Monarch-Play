@@ -1,1245 +1,884 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Royal Diamond Casino</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1" />
+  <title>Shark Casino | Summer Hot</title>
+  <link rel="icon" href="https://i.postimg.cc/s27MT4Mr/1000027547-Picsart-Background-Remover.png?raw=true" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <!-- Monetag SDK -->
+  <script src="//libtl.com/sdk.js" data-zone="9970324" data-sdk="show_9970324"></script>
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  
+  <!-- TON Connect -->
+  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+  
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+      --secondary-gradient: linear-gradient(135deg, #FFD166 0%, #FF9F43 100%);
+      --success-gradient: linear-gradient(135deg, #2ECC71 0%, #26A65B 100%);
+      --dark-gradient: linear-gradient(135deg, #1a0b1e 0%, #2D1B2E 50%, #4A192C 100%);
+      --card-bg: rgba(30, 20, 35, 0.85);
+      --card-border: rgba(255, 110, 107, 0.2);
+      --text-primary: #ffffff;
+      --text-secondary: #ffcccb;
+      --accent-gold: #FFD166;
+      --accent-neon: #00ffcc;
+      
+      --shadow-glow: 0 0 20px rgba(255, 107, 107, 0.5);
+    }
     
-    <!-- Telegram WebApp Script -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    html, body {
+      width: 100%; height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: var(--dark-gradient);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    body { padding-top: 0; } /* Removed promo bar padding for casino */
+
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: var(--dark-gradient);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    .loading-logo { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; animation: pulse 2s infinite; }
+    .loading-text { font-size: 24px; font-weight: 700; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .loading-spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #FF6B6B; border-radius: 50%; animation: spin 1s linear infinite; margin-top: 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+    /* Main App */
+    #app { display: none; min-height: 100vh; padding-bottom: 80px; position: relative; z-index: 2; }
+    #main-content { width: 100%; max-width: 500px; margin: 0 auto; padding: 16px; }
+
+    /* Navigation */
+    .nav-bar {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: rgba(26, 11, 30, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--card-border);
+      display: flex; justify-content: space-around; padding: 10px 0;
+      z-index: 1000;
+      padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+    .nav-btn { flex: 1; background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; opacity: 0.6; transition: 0.3s; padding: 5px; }
+    .nav-btn.active { opacity: 1; }
+    .nav-btn.active .nav-icon { filter: drop-shadow(0 0 8px #FF6B6B); }
+    .nav-icon { width: 28px; height: 28px; filter: brightness(0) invert(1); }
+    .nav-label { font-size: 10px; font-weight: 600; color: #fff; }
     
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    /* Cards & Common */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .btn-primary { background: var(--primary-gradient); color: white; box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3); }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    <style>
-        :root {
-            --bg-body: #050b14;
-            --bg-surface: #0f1724;
-            --bg-card: #162030;
-            --bg-glass: rgba(22, 32, 48, 0.9);
-            
-            --primary: #fbbf24; /* Gold */
-            --primary-glow: rgba(251, 191, 36, 0.3);
-            --secondary: #38bdf8; /* Cyan */
-            --accent: #f43f5e; /* Pink/Red */
-            
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            
-            --success: #10b981;
-            --danger: #ef4444;
-            
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            
-            --nav-height: 80px;
-        }
+    /* Casino Lobby */
+    .balance-header {
+      text-align: center;
+      padding: 30px 0;
+      background: linear-gradient(180deg, rgba(255, 107, 107, 0.2) 0%, transparent 100%);
+      margin: -16px -16px 20px -16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .balance-label { font-size: 14px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; }
+    .balance-amount { font-size: 42px; font-weight: 800; color: var(--accent-gold); text-shadow: 0 0 20px rgba(255, 209, 102, 0.4); }
+    .balance-usd { font-size: 14px; color: var(--text-secondary); margin-top: 5px; }
+    
+    .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .game-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .game-card:hover { transform: translateY(-3px); border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(255, 209, 102, 0.2); }
+    .game-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+    .game-name { font-size: 14px; font-weight: 700; color: #fff; }
+    
+    /* Games Common UI */
+    .game-area { min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+    .bet-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; width: 100%; }
+    .bet-input { background: rgba(0,0,0,0.3); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px; color: #fff; font-size: 18px; font-weight: 700; text-align: center; width: 100px; }
+    .bet-adjust { background: rgba(255,255,255,0.1); border: none; width: 40px; height: 40px; border-radius: 50%; color: #fff; font-size: 20px; font-weight: bold; cursor: pointer; }
+    
+    /* Slots */
+    .slot-machine { display: flex; gap: 10px; margin-bottom: 30px; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 16px; border: 2px solid #333; }
+    .slot-reel { width: 80px; height: 100px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 48px; overflow: hidden; position: relative; }
+    .slot-reel span { position: absolute; }
+    .spinning .slot-reel span { animation: slotSpin 0.1s linear infinite; }
+    @keyframes slotSpin { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+    
+    /* Roulette */
+    .roulette-wheel { width: 200px; height: 200px; border-radius: 50%; border: 8px solid #gold; position: relative; margin-bottom: 30px; background: conic-gradient(red 0% 48%, black 48% 97%, green 97% 100%); box-shadow: 0 0 30px rgba(0,0,0,0.5); transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); }
+    .roulette-ball { width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 5px #fff; }
+    .roulette-bets { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; }
+    .bet-choice { flex: 1; padding: 15px; background: rgba(255,255,255,0.1); border: 2px solid transparent; border-radius: 12px; color: #fff; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .bet-choice.selected { border-color: var(--accent-gold); background: rgba(255, 209, 102, 0.2); }
+    .bet-choice.red { color: #ff4757; }
+    .bet-choice.black { color: #fff; }
+    .bet-choice.green { color: #2ed573; }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+    /* Blackjack */
+    .bj-table { width: 100%; display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px; }
+    .bj-hand { display: flex; gap: 5px; min-height: 90px; justify-content: center; }
+    .bj-card { width: 60px; height: 85px; background: white; border-radius: 6px; display: flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: 900; font-size: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .bj-card.red { color: #ff4757; }
+    .bj-card.black { color: #2f3542; }
+    .bj-card.hidden { background: #2f3542; color: transparent; }
+    .bj-actions { display: flex; gap: 10px; width: 100%; }
 
-        /* --- Background Effects --- */
-        .bg-blob {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 0;
-            pointer-events: none;
-        }
+    /* Dice */
+    .dice-container { font-size: 64px; margin-bottom: 20px; transition: 0.3s; }
+    .dice-controls { display: flex; gap: 10px; width: 100%; margin-top: 10px; }
+    .dice-btn { flex: 1; }
+    .dice-btn.over { background: linear-gradient(135deg, #2ed573, #26de81); }
+    .dice-btn.under { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
 
-        /* --- Header & Profile --- */
-        header {
-            z-index: 10;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(180deg, rgba(5,11,20,0.9) 0%, rgba(5,11,20,0) 100%);
-            position: relative;
-        }
+    /* Modals */
+    .modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9); z-index: 2000;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-content { background: #1a0b1e; border-radius: 20px; padding: 24px; width: 100%; max-width: 400px; border: 1px solid var(--card-border); position: relative; max-height: 80vh; overflow-y: auto; }
+    .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+    .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+    
+    .result-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none; align-items: center; justify-content: center; flex-direction: column;
+      border-radius: 20px; z-index: 10;
+    }
+    .result-text { font-size: 32px; font-weight: 800; margin-bottom: 10px; }
+    .result-amount { font-size: 20px; font-weight: 600; margin-bottom: 20px; }
 
-        .profile-trigger {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            background: rgba(255,255,255,0.05);
-            padding: 5px 10px 5px 5px;
-            border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary);
-        }
-
-        .profile-info h4 { margin: 0; font-size: 0.9rem; font-family: 'Rajdhani'; font-weight: 700; }
-        .profile-info span { font-size: 0.75rem; color: var(--text-muted); display: block; }
-
-        .balance-pill {
-            background: var(--bg-surface);
-            padding: 8px 16px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(251, 191, 36, 0.3);
-        }
-        .balance-amount {
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary);
-        }
-
-        /* --- Layout --- */
-        main {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            position: relative;
-            z-index: 1;
-            padding: 0 16px 100px 16px;
-            scrollbar-width: none;
-        }
-        main::-webkit-scrollbar { display: none; }
-
-        .tab-view { display: none; animation: slideUp 0.3s ease; }
-        .tab-view.active { display: block; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        h2 { font-family: 'Rajdhani'; font-size: 1.5rem; margin: 20px 0 16px 0; color: var(--text-main); }
-
-        /* --- Components --- */
-        .card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: var(--radius-md);
-            border: none;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn:active { transform: scale(0.98); }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #d97706);
-            color: #000;
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.25);
-        }
-        
-        .btn-secondary {
-            background: rgba(255,255,255,0.1);
-            color: var(--text-main);
-        }
-        .btn-ton { background: #0098EA; color: white; }
-
-        /* --- Daily Bonus --- */
-        .daily-bonus-card {
-            background: linear-gradient(135deg, #2a1d4a, #1a2a4a);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        .daily-bonus-card .content { flex: 1; }
-        .daily-bonus-card h3 { margin: 0 0 5px 0; font-family: 'Rajdhani'; }
-        .daily-bonus-card p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
-        .daily-btn {
-            width: auto; padding: 10px 20px; font-size: 0.9rem;
-            background: var(--secondary); color: #000;
-        }
-
-        /* --- Games Grid --- */
-        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .game-card {
-            background: var(--bg-surface);
-            border-radius: var(--radius-md);
-            padding: 20px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.2s;
-        }
-        .game-card:active { transform: scale(0.96); background: var(--bg-card); }
-        .game-icon {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; color: var(--text-main); margin-bottom: 10px;
-        }
-        .game-name { font-weight: 600; font-size: 0.95rem; }
-
-        /* --- Full Screen Game Page --- */
-        #game-page {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-body);
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            padding: 20px;
-        }
-        #game-page.active { display: flex; }
-
-        .game-stage-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px;
-        }
-        .game-visual {
-            flex: 1;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; width: 100%;
-        }
-
-        /* Mines */
-        .mines-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; max-width: 350px; }
-        .mine-cell {
-            aspect-ratio: 1; background: rgba(255,255,255,0.05);
-            border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; cursor: pointer; transition: 0.2s;
-        }
-        .mine-cell.safe { background: var(--bg-card); border: 2px solid var(--success); color: var(--success); }
-        .mine-cell.boom { background: var(--danger); color: white; animation: shake 0.4s; }
-        .mine-cell.dimmed { opacity: 0.3; pointer-events: none; }
-
-        /* Dice */
-        .dice-circle { width: 120px; height: 120px; background: var(--bg-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; border: 2px solid var(--secondary); box-shadow: 0 0 30px var(--primary-glow); }
-
-        /* Limbo */
-        .limbo-display { font-size: 4rem; font-family: 'Rajdhani'; font-weight: 800; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* Crash */
-        .crash-container { width: 100%; height: 200px; position: relative; background: rgba(0,0,0,0.2); border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .crash-graph { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .crash-multiplier { position: relative; z-index: 2; font-size: 3rem; font-family: 'Rajdhani'; font-weight: 800; color: white; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-
-        /* Wheel */
-        .wheel-container { width: 200px; height: 200px; position: relative; }
-        .wheel-spinner { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--primary); position: relative; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); }
-        .wheel-spinner div { position: absolute; width: 50%; height: 50%; transform-origin: 100% 100%; left: 0; top: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 0.8rem; clip-path: polygon(0 0, 100% 0, 100% 100%); padding-top: 10px; padding-left: 15px; }
-        .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 20px solid var(--accent); z-index: 3; }
-
-        /* Coin Flip */
-        .coin { width: 100px; height: 100px; position: relative; transform-style: preserve-3d; }
-        .coin-face { position: absolute; width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; backface-visibility: hidden; border: 4px solid var(--primary); }
-        .coin-heads { background: linear-gradient(135deg, #fbbf24, #d97706); color: #000; }
-        .coin-tails { background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; transform: rotateY(180deg); }
-        .coin.flip { animation: flipCoin 3s ease-out forwards; }
-        @keyframes flipCoin { 0% { transform: rotateY(0); } 100% { transform: rotateY(1800deg); } }
-
-        /* Controls */
-        .bet-controls { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; margin-bottom: 15px; }
-        .bet-input {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            color: white; padding: 12px; border-radius: var(--radius-sm);
-            width: 100%; font-family: 'Rajdhani'; font-size: 1.2rem; text-align: center;
-        }
-
-        /* --- Ranking & Lists --- */
-        .rank-row { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .rank-num { width: 30px; font-weight: 700; color: var(--text-muted); font-family: 'Rajdhani'; }
-        .rank-avatar { width: 40px; height: 40px; border-radius: 50%; margin-right: 12px; object-fit: cover; background: #333; }
-        .rank-info { flex: 1; }
-        .rank-name { font-weight: 600; font-size: 0.95rem; }
-        .rank-val { font-family: 'Rajdhani'; font-weight: 700; color: var(--primary); }
-
-        /* --- Wallet --- */
-        .wallet-stats { display: flex; gap: 10px; margin-bottom: 20px; }
-        .w-stat { flex: 1; background: var(--bg-card); padding: 15px; border-radius: var(--radius-md); text-align: center; }
-        .w-stat small { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; }
-        .w-stat div { font-family: 'Rajdhani'; font-size: 1.2rem; font-weight: 700; margin-top: 5px; }
-
-        /* --- Friends --- */
-        .invite-card {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            text-align: center; padding: 30px 20px; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .ref-box {
-            background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 8px;
-            font-family: 'Rajdhani'; font-size: 1.2rem; letter-spacing: 2px;
-            margin: 15px 0; border: 1px dashed var(--secondary); word-break: break-all;
-        }
-
-        /* --- Tasks --- */
-        .task-card { display: flex; align-items: center; gap: 15px; }
-        .task-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #333; }
-        .task-meta { flex: 1; }
-        .task-title { font-weight: 600; margin-bottom: 4px; }
-        .task-reward { font-size: 0.8rem; color: var(--primary); }
-        .task-btn {
-            min-width: 80px; padding: 8px 12px; border-radius: 8px;
-            background: linear-gradient(135deg, var(--primary), #d97706);
-            color: #000; border: none; font-weight: 700; font-size: 0.9rem;
-            cursor: pointer; text-align: center;
-        }
-        .task-btn.completed { background: #334155; color: #94a3b8; cursor: default; }
-
-        /* --- Navigation --- */
-        nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(5, 11, 20, 0.95); backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: env(safe-area-inset-bottom); z-index: 50; height: calc(var(--nav-height) + env(safe-area-inset-bottom));
-        }
-        .nav-bar { display: flex; justify-content: space-around; height: var(--nav-height); }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.7rem; gap: 4px; width: 60px; transition: color 0.2s; cursor: pointer; }
-        .nav-btn i { font-size: 1.25rem; transition: transform 0.2s; }
-        .nav-btn.active { color: var(--primary); }
-        .nav-btn.active i { transform: translateY(-3px); }
-
-        /* --- Settings/Profile Modal --- */
-        #settings-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 200;
-            display: none; align-items: center; justify-content: center;
-        }
-        #settings-modal.active { display: flex; }
-        .modal-content {
-            background: var(--bg-card); width: 90%; max-width: 400px;
-            border-radius: var(--radius-lg); padding: 20px; border: 1px solid rgba(255,255,255,0.1);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .redeem-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .redeem-input {
-            background: rgba(0,0,0,0.3); border: 1px solid var(--secondary);
-            color: white; padding: 10px; border-radius: var(--radius-sm);
-            width: 100%; font-family: 'Rajdhani'; font-size: 1.1rem; text-align: center;
-            margin-bottom: 10px;
-        }
-
-        /* Toast */
-        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 300; width: 90%; max-width: 350px; pointer-events: none; }
-        .toast {
-            background: rgba(15, 23, 36, 0.95); border: 1px solid rgba(255,255,255,0.1);
-            color: white; padding: 12px 16px; border-radius: 12px; margin-bottom: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 10px;
-            animation: slideDown 0.3s; pointer-events: all;
-        }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-    </style>
+    @media (max-width: 360px) { .balance-amount { font-size: 32px; } .game-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 
-    <div class="bg-blob"></div>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <img src="https://i.postimg.cc/s27MT4Mr/1000027547-Picsart-Background-Remover.png" class="loading-logo" alt="Logo">
+    <div class="loading-text">Shark Casino</div>
+    <div class="loading-spinner"></div>
+  </div>
 
-    <header>
-        <div class="profile-trigger" onclick="app.toggleSettings()">
-            <img src="https://picsum.photos/seed/user/100/100" id="header-pic" class="profile-pic" alt="User">
-            <div class="profile-info">
-                <h4 id="header-name">Loading...</h4>
-                <span id="header-id">ID: ...</span>
-            </div>
-        </div>
+  <!-- Main App -->
+  <div id="app">
+    <div id="main-content">
+      <!-- Content Rendered by JS -->
+    </div>
 
-        <div class="balance-pill">
-            <i class="fa-regular fa-gem" style="color:var(--primary);"></i>
-            <span class="balance-amount" id="global-balance">0</span>
-        </div>
-    </header>
+    <!-- Navigation -->
+    <div class="nav-bar">
+      <button class="nav-btn active" data-tab="lobby">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Lobby</span>
+      </button>
+      <button class="nav-btn" data-tab="games">
+        <span class="nav-icon">🎰</span>
+        <span class="nav-label">Games</span>
+      </button>
+      <button class="nav-btn" data-tab="wallet">
+        <span class="nav-icon">💰</span>
+        <span class="nav-label">Wallet</span>
+      </button>
+      <button class="nav-btn" data-tab="leaderboard">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">Top</span>
+      </button>
+    </div>
+  </div>
 
-    <div id="toast-container"></div>
+  <script>
+    // --- Core Setup ---
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
 
-    <main>
+    // Firebase Config (Use your own)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHofuS76xf2oGPaJqEtopmcxdoJzjkDL4",
+      authDomain: "zmex-investments.firebaseapp.com",
+      databaseURL: "https://zmex-investments-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "zmex-investments",
+      storageBucket: "zmex-investments.appspot.com",
+      messagingSenderId: "971623941364",
+      appId: "1:971623941364:web:6c65604fc45c3f64e74aa1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // --- State ---
+    let userId = 'test_user_' + Math.floor(Math.random() * 1000);
+    let userData = { balance: 10000, lastBonus: 0, stats: { wins: 0, losses: 0, wagered: 0 } };
+    let currentTab = 'lobby';
+    
+    // --- Utility ---
+    const $ = (id) => document.getElementById(id);
+    const formatNum = (n) => n.toLocaleString();
+
+    // --- Initialization ---
+    function init() {
+      const user = tg.initDataUnsafe?.user;
+      if (user) {
+        userId = user.id.toString();
+        document.body.style.background = tg.themeParams.bg_color || '#1a0b1e';
+      }
+      
+      loadUserData();
+    }
+
+    function loadUserData() {
+      db.ref('users/' + userId).on('value', snap => {
+        if (snap.exists()) {
+            userData = snap.val();
+            // Merge default stats if missing
+            if(!userData.stats) userData.stats = { wins: 0, losses: 0, wagered: 0 };
+        } else {
+            // New user
+            saveUserData({ balance: 5000, lastBonus: 0, stats: { wins: 0, losses: 0, wagered: 0 }, createdAt: Date.now() });
+        }
         
-        <!-- === HOME SECTION === -->
-        <div id="home-view" class="tab-view active">
-            <!-- Daily Bonus -->
-            <div class="card daily-bonus-card">
-                <div class="content">
-                    <h3>Daily Bonus</h3>
-                    <p id="daily-status">Check in to get 100 Diamonds</p>
-                </div>
-                <button id="daily-btn" class="btn daily-btn" onclick="app.claimDaily()">CLAIM</button>
-            </div>
+        $('loading-screen').style.display = 'none';
+        $('app').style.display = 'block';
+        renderTab(currentTab);
+      });
+    }
 
-            <h2>Games</h2>
-            <div class="games-grid">
-                <div class="game-card" onclick="gameManager.openGame('mines')">
-                    <div class="game-icon"><i class="fa-solid fa-bomb"></i></div>
-                    <div class="game-name">Mines</div>
-                </div>
-                <div class="game-card" onclick="gameManager.openGame('dice')">
-                    <div class="game-icon"><i class="fa-solid fa-dice-d20"></i></div>
-                    <div class="game-name">Dice</div>
-                </div>
-                <div class="game-card" onclick="gameManager.openGame('crash')">
-                    <div class="game-icon"><i class="fa-solid fa-chart-line"></i></div>
-                    <div class="game-name">Crash</div>
-                </div>
-                <div class="game-card" onclick="gameManager.openGame('wheel')">
-                    <div class="game-icon"><i class="fa-solid fa-circle-notch"></i></div>
-                    <div class="game-name">Wheel</div>
-                </div>
-                <div class="game-card" onclick="gameManager.openGame('coinflip')">
-                    <div class="game-icon"><i class="fa-solid fa-coins"></i></div>
-                    <div class="game-name">Coin Flip</div>
-                </div>
-                <div class="game-card" onclick="gameManager.openGame('limbo')">
-                    <div class="game-icon"><i class="fa-solid fa-infinity"></i></div>
-                    <div class="game-name">Limbo</div>
-                </div>
-                 <div class="game-card" onclick="gameManager.openGame('dragon-tiger')">
-                    <div class="game-icon"><i class="fa-solid fa-dragon"></i></div>
-                    <div class="game-name">Dragon Tiger</div>
-                </div>
-                <div class="game-card" onclick="gameManager.openGame('plinko')">
-                    <div class="game-icon"><i class="fa-solid fa-arrow-down-short-wide"></i></div>
-                    <div class="game-name">Plinko</div>
-                </div>
-            </div>
-        </div>
+    function saveUserData(data) {
+        Object.assign(userData, data);
+        db.ref('users/' + userId).update(data);
+        // Refresh UI if balance changed
+        if (data.balance !== undefined) {
+            const balEl = document.querySelector('.balance-amount');
+            if (balEl) balEl.innerText = formatNum(data.balance);
+        }
+    }
 
-        <!-- === RANKING SECTION === -->
-        <div id="ranking-view" class="tab-view">
-            <h2>Top Players</h2>
-            <div class="card" style="text-align:center; margin-bottom:10px; color:var(--secondary); font-weight:700;">
-                <span id="my-rank-pos">Loading position...</span>
-            </div>
-            <div class="card" id="ranking-list">
-                <div style="text-align:center; padding:20px; color:var(--text-muted)">Loading Leaderboard...</div>
-            </div>
-        </div>
+    function updateStats(won, amount) {
+        const stats = userData.stats || { wins: 0, losses: 0, wagered: 0 };
+        stats.wagered = (stats.wagered || 0) + amount;
+        if (won) stats.wins = (stats.wins || 0) + 1;
+        else stats.losses = (stats.losses || 0) + 1;
+        saveUserData({ stats });
+    }
 
-        <!-- === WALLET SECTION === -->
-        <div id="wallet-view" class="tab-view">
-            <h2>Wallet</h2>
-            <div class="wallet-stats">
-                <div class="w-stat">
-                    <small>Balance</small>
-                    <div style="color:var(--primary)" id="wallet-balance">0</div>
-                </div>
-                <div class="w-stat">
-                    <small>Total Wagered</small>
-                    <div style="color:var(--secondary)" id="total-wagered">0</div>
-                </div>
-            </div>
+    // --- Navigation ---
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderTab(btn.dataset.tab);
+        });
+    });
 
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                <button class="btn btn-primary" onclick="app.deposit()"><i class="fa-solid fa-plus"></i> Deposit</button>
-                <button class="btn btn-secondary" onclick="app.withdraw()"><i class="fa-solid fa-arrow-up"></i> Withdraw</button>
+    function renderTab(tab) {
+        currentTab = tab;
+        const el = $('main-content');
+        switch(tab) {
+            case 'lobby': renderLobby(el); break;
+            case 'games': renderGamesHub(el); break;
+            case 'wallet': renderWallet(el); break;
+            case 'leaderboard': renderLeaderboard(el); break;
+        }
+    }
+
+    // --- Rendering: Lobby & Wallet ---
+    function renderLobby(el) {
+        const canClaim = (Date.now() - (userData.lastBonus || 0)) > 86400000; // 24h
+        el.innerHTML = `
+            <div class="balance-header">
+                <div class="balance-label">Balance</div>
+                <div class="balance-amount">${formatNum(userData.balance)}</div>
+                <div class="balance-usd">~ $${(userData.balance * 0.0005).toFixed(2)} USDT</div>
             </div>
             
-            <h3>Connect Wallet</h3>
-            <button class="btn btn-ton" onclick="app.connectTon()"><i class="fa-brands fa-telegram"></i> Connect TON Wallet</button>
-        </div>
+            <div class="card">
+                <div style="text-align:center; margin-bottom:15px;">
+                    <h3 style="color:var(--accent-gold)">Daily Bonus</h3>
+                    <p style="font-size:12px; color:var(--text-secondary); margin-top:5px">Claim free chips every 24 hours</p>
+                </div>
+                <button class="btn btn-secondary" ${canClaim ? 'onclick="claimBonus()"' : 'disabled'} style="${canClaim ? 'color:var(--accent-neon); border-color:var(--accent-neon);' : ''}">
+                    ${canClaim ? 'CLAIM 1,000 CHIPS' : 'ALREADY CLAIMED'}
+                </button>
+            </div>
 
-        <!-- === FRIENDS SECTION === -->
-        <div id="friends-view" class="tab-view">
-            <h2>Invite Friends</h2>
-            <div class="card invite-card">
-                <i class="fa-solid fa-gift" style="font-size:3rem; color:var(--primary); margin-bottom:15px; filter:drop-shadow(0 0 10px rgba(251,191,36,0.4));"></i>
-                <h3>Get 10% Commission</h3>
-                <p style="color:var(--text-muted); font-size:0.9rem; margin:10px 0;">Earn 10% of every friend's deposit directly.</p>
-                
-                <div class="ref-box" id="ref-link">Generating...</div>
-                <button class="btn btn-primary" onclick="app.copyRef()">Copy Link</button>
+            <h3 style="margin:20px 0 10px 5px; color:#fff;">Quick Play</h3>
+            <div class="game-grid">
+                <div class="game-card" onclick="renderTab('games'); startGame('slots')">
+                    <span class="game-icon">🎰</span>
+                    <span class="game-name">Slots</span>
+                </div>
+                <div class="game-card" onclick="renderTab('games'); startGame('roulette')">
+                    <span class="game-icon">🎡</span>
+                    <span class="game-name">Roulette</span>
+                </div>
+            </div>
+        `;
+    }
 
-                <div style="margin-top:20px; display:flex; justify-content:space-around; text-align:center;">
-                    <div>
-                        <div style="font-size:1.5rem; font-weight:700; color:var(--secondary);" id="ref-count">0</div>
-                        <small style="color:var(--text-muted);">Total Referrals</small>
+    function claimBonus() {
+        if ((Date.now() - (userData.lastBonus || 0)) > 86400000) {
+            saveUserData({ balance: userData.balance + 1000, lastBonus: Date.now() });
+            alert("Claimed 1,000 Chips!");
+            renderLobby($('main-content'));
+        }
+    }
+
+    function renderWallet(el) {
+        el.innerHTML = `
+            <div class="card">
+                <h3 style="text-align:center; margin-bottom:15px;">Wallet</h3>
+                <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:10px; margin-bottom:15px; text-align:center;">
+                    <div style="font-size:12px; color:#ccc;">Available</div>
+                    <div style="font-size:24px; font-weight:700; color:var(--accent-gold);">${formatNum(userData.balance)} SHB</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-secondary" onclick="alert('Deposit via TON Connect coming soon')">Deposit</button>
+                    <button class="btn btn-primary" onclick="alert('Withdrawal coming soon')">Withdraw</button>
+                </div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom:10px;">Statistics</h3>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding:8px 0;">
+                    <span>Total Wagered</span>
+                    <span style="color:var(--accent-gold)">${formatNum(userData.stats?.wagered || 0)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding:8px 0;">
+                    <span>Wins</span>
+                    <span style="color:#2ed573">${userData.stats?.wins || 0}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:8px 0;">
+                    <span>Losses</span>
+                    <span style="color:#ff4757">${userData.stats?.losses || 0}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderLeaderboard(el) {
+        el.innerHTML = `<div class="card"><h3 style="text-align:center">Top Players</h3><div style="text-align:center; margin-top:20px; color:#ccc;">Loading...</div></div>`;
+        
+        db.ref('users').orderByChild('stats/wagered').limitToLast(20).once('value', snap => {
+            let users = [];
+            snap.forEach(u => {
+                let d = u.val();
+                users.push({ name: d.name || 'Player', wagered: d.stats?.wagered || 0, id: u.key });
+            });
+            users.sort((a,b) => b.wagered - a.wagered);
+            
+            let html = `<div class="card"><h3 style="text-align:center; margin-bottom:15px;">High Rollers</h3>`;
+            users.forEach((u, i) => {
+                html += `
+                    <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="width:20px; font-weight:700; color:${i < 3 ? 'var(--accent-gold)' : '#fff'}">${i+1}.</span>
+                            <span>${u.name}</span>
+                        </div>
+                        <span style="color:var(--accent-neon)">${formatNum(u.wagered)}</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            el.innerHTML = html;
+        });
+    }
+
+    // --- Games Hub ---
+    let activeGame = null;
+
+    function renderGamesHub(el) {
+        el.innerHTML = `
+            <h3 style="margin:10px 0 15px 5px; color:#fff;">Choose Your Game</h3>
+            <div class="game-grid">
+                <div class="game-card" onclick="startGame('slots')">
+                    <span class="game-icon">🎰</span>
+                    <span class="game-name">Slots</span>
+                </div>
+                <div class="game-card" onclick="startGame('roulette')">
+                    <span class="game-icon">🎡</span>
+                    <span class="game-name">Roulette</span>
+                </div>
+                <div class="game-card" onclick="startGame('blackjack')">
+                    <span class="game-icon">🃏</span>
+                    <span class="game-name">Blackjack</span>
+                </div>
+                <div class="game-card" onclick="startGame('dice')">
+                    <span class="game-icon">🎲</span>
+                    <span class="game-name">Dice</span>
+                </div>
+            </div>
+            <div id="game-container" style="margin-top:20px;"></div>
+        `;
+    }
+
+    window.startGame = function(game) {
+        activeGame = game;
+        const container = $('game-container');
+        if (!container) return; // Ensure we are in games tab
+        
+        switch(game) {
+            case 'slots': renderSlots(container); break;
+            case 'roulette': renderRoulette(container); break;
+            case 'blackjack': renderBlackjack(container); break;
+            case 'dice': renderDice(container); break;
+        }
+    }
+
+    // --- Logic: Slots ---
+    const slotSymbols = ['🍒', '🍋', '🍊', '🔔', '💎', '7️⃣'];
+    
+    function renderSlots(el) {
+        el.innerHTML = `
+            <div class="card">
+                <div class="game-area">
+                    <div class="slot-machine" id="slotMachine">
+                        <div class="slot-reel"><span>❓</span></div>
+                        <div class="slot-reel"><span>❓</span></div>
+                        <div class="slot-reel"><span>❓</span></div>
+                    </div>
+                    
+                    <div class="result-overlay" id="slotResult">
+                        <div class="result-text" id="resText"></div>
+                        <div class="result-amount" id="resAmt"></div>
+                        <button class="btn btn-secondary" onclick="hideResult()">Close</button>
+                    </div>
+
+                    <div class="bet-controls">
+                        <button class="bet-adjust" onclick="adjustBet(-100)">-</button>
+                        <input type="number" class="bet-input" id="betAmount" value="100" min="10">
+                        <button class="bet-adjust" onclick="adjustBet(100)">+</button>
+                    </div>
+                    <button class="btn btn-primary" onclick="spinSlots()">SPIN</button>
+                </div>
+            </div>
+        `;
+    }
+
+    window.adjustBet = function(amt) {
+        let input = $('betAmount');
+        let val = parseInt(input.value) + amt;
+        if(val < 10) val = 10;
+        if(val > userData.balance) val = userData.balance;
+        input.value = val;
+    }
+
+    window.hideResult = function() {
+        const el = document.querySelector('.result-overlay');
+        if(el) el.style.display = 'none';
+    }
+
+    window.spinSlots = async function() {
+        const bet = parseInt($('betAmount').value);
+        if (bet > userData.balance) return alert("Insufficient balance");
+        if (bet < 10) return alert("Min bet 10");
+        
+        saveUserData({ balance: userData.balance - bet });
+        updateStats(false, bet); // Count as wagered
+
+        const machine = $('slotMachine');
+        machine.classList.add('spinning');
+        
+        // Generate result
+        const res = [
+            slotSymbols[Math.floor(Math.random() * slotSymbols.length)],
+            slotSymbols[Math.floor(Math.random() * slotSymbols.length)],
+            slotSymbols[Math.floor(Math.random() * slotSymbols.length)]
+        ];
+
+        // Animation
+        const reels = machine.querySelectorAll('.slot-reel span');
+        
+        // Stop reels sequentially
+        setTimeout(() => { reels[0].innerText = res[0]; machine.classList.remove('spinning'); }, 1000);
+        setTimeout(() => { reels[1].innerText = res[1]; }, 1500);
+        setTimeout(() => { reels[2].innerText = res[2]; calculateWin(res, bet); }, 2000);
+    }
+
+    function calculateWin(res, bet) {
+        let win = 0;
+        if (res[0] === res[1] && res[1] === res[2]) {
+            win = bet * 10; // Jackpot
+            if (res[0] === '7️⃣') win = bet * 50; // Super Jackpot
+        } else if (res[0] === res[1] || res[1] === res[2] || res[0] === res[2]) {
+            win = bet * 2; // Pair
+        }
+
+        if (win > 0) {
+            saveUserData({ balance: userData.balance + win });
+            showResult("WIN!", `+${formatNum(win)} SHB`, true);
+            updateStats(true, 0);
+        } else {
+            showResult("LOSS", `-${formatNum(bet)} SHB`, false);
+        }
+    }
+
+    function showResult(text, amount, isWin) {
+        $('resText').innerText = text;
+        $('resText').style.color = isWin ? 'var(--accent-neon)' : 'var(--primary-gradient)';
+        $('resAmt').innerText = amount;
+        $('slotResult').style.display = 'flex';
+    }
+
+    // --- Logic: Roulette ---
+    window.renderRoulette = function(el) {
+        el.innerHTML = `
+            <div class="card">
+                <div class="game-area">
+                    <div class="roulette-wheel" id="wheel"></div>
+                    <div class="result-overlay" id="rouletteRes" style="display:none;">
+                        <div class="result-text" id="rText"></div>
+                        <div class="result-amount" id="rAmt"></div>
+                        <button class="btn btn-secondary" onclick="hideRoulette()">Close</button>
+                    </div>
+
+                    <div class="bet-controls">
+                        <button class="bet-adjust" onclick="adjustBet(-100)">-</button>
+                        <input type="number" class="bet-input" id="betAmount" value="100">
+                        <button class="bet-adjust" onclick="adjustBet(100)">+</button>
+                    </div>
+                    
+                    <div class="roulette-bets">
+                        <button class="bet-choice red" id="choice-red" onclick="selectBet('red')">RED</button>
+                        <button class="bet-choice black" id="choice-black" onclick="selectBet('black')">BLACK</button>
+                        <button class="bet-choice green" id="choice-green" onclick="selectBet('green')">GREEN</button>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="spinRoulette()" id="spinRouletteBtn">SPIN</button>
+                </div>
+            </div>
+        `;
+    }
+
+    let currentRouletteChoice = null;
+    window.selectBet = function(choice) {
+        currentRouletteChoice = choice;
+        document.querySelectorAll('.bet-choice').forEach(b => b.classList.remove('selected'));
+        $('choice-'+choice).classList.add('selected');
+    }
+
+    window.hideRoulette = function() { $('rouletteRes').style.display = 'none'; };
+
+    window.spinRoulette = function() {
+        const bet = parseInt($('betAmount').value);
+        if (bet > userData.balance) return alert("Insufficient balance");
+        if (!currentRouletteChoice) return alert("Select Red, Black or Green");
+
+        saveUserData({ balance: userData.balance - bet });
+        updateStats(false, bet);
+
+        const wheel = $('wheel');
+        const deg = Math.floor(Math.random() * 360) + 1440; // At least 4 turns
+        wheel.style.transform = `rotate(${deg}deg)`;
+
+        setTimeout(() => {
+            // Determine result based on degree
+            const finalDeg = deg % 360;
+            let resColor = 'green';
+            if (finalDeg < 120 || finalDeg > 240) resColor = 'red'; // Simplified logic
+            else resColor = 'black';
+            
+            // Force green rarely
+            if (Math.random() < 0.05) resColor = 'green';
+
+            let win = 0;
+            if (resColor === currentRouletteChoice) {
+                win = resColor === 'green' ? bet * 14 : bet * 2;
+            }
+
+            if (win > 0) {
+                saveUserData({ balance: userData.balance + win });
+                showRouletteRes("WIN!", `+${formatNum(win)}`, true);
+                updateStats(true, 0);
+            } else {
+                showRouletteRes("LOSS", `-${formatNum(bet)}`, false);
+            }
+        }, 4000);
+    }
+
+    function showRouletteRes(t, a, win) {
+        $('rText').innerText = t; 
+        $('rText').style.color = win ? 'var(--accent-neon)' : '#ff6b6b';
+        $('rAmt').innerText = a;
+        $('rouletteRes').style.display = 'flex';
+    }
+
+    // --- Logic: Blackjack ---
+    const deck = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    
+    window.renderBlackjack = function(el) {
+        el.innerHTML = `
+            <div class="card">
+                <div class="game-area">
+                    <div style="width:100%">
+                        <div style="text-align:center; margin-bottom:10px; font-size:12px; color:#ccc;">DEALER</div>
+                        <div class="bj-hand" id="dealerHand"></div>
+                        
+                        <div style="text-align:center; margin:20px 0 10px; font-size:12px; color:#ccc;">YOU</div>
+                        <div class="bj-hand" id="playerHand"></div>
+                    </div>
+
+                    <div class="result-overlay" id="bjRes">
+                        <div class="result-text" id="bjText"></div>
+                        <div class="result-amount" id="bjAmt"></div>
+                        <button class="btn btn-secondary" onclick="resetBJ()">Play Again</button>
+                    </div>
+
+                    <div id="bjBetArea">
+                        <div class="bet-controls">
+                            <input type="number" class="bet-input" id="betAmount" value="100">
+                        </div>
+                        <button class="btn btn-primary" onclick="dealBJ()">DEAL</button>
+                    </div>
+                    
+                    <div class="bj-actions" id="bjActions" style="display:none;">
+                        <button class="btn btn-primary" onclick="bjHit()">HIT</button>
+                        <button class="btn btn-secondary" onclick="bjStand()">STAND</button>
                     </div>
                 </div>
             </div>
-        </div>
+        `;
+    }
 
-        <!-- === TASKS SECTION === -->
-        <div id="tasks-view" class="tab-view">
-            <h2>Daily Tasks</h2>
-            <div id="task-list">
-                <div style="text-align:center; padding:20px; color:var(--text-muted)">Loading Tasks...</div>
-            </div>
-        </div>
+    let bjDeck = [];
+    let playerHand = [];
+    let dealerHand = [];
+    let bjBet = 0;
 
-    </main>
+    function getCardVal(hand) {
+        let val = 0, aces = 0;
+        hand.forEach(c => {
+            if (c === 'A') { val += 11; aces++; }
+            else if (['K','Q','J','10'].includes(c)) val += 10;
+            else val += parseInt(c);
+        });
+        while (val > 21 && aces > 0) { val -= 10; aces--; }
+        return val;
+    }
 
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-bar">
-            <div class="nav-btn active" onclick="app.nav('home', this)">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-            </div>
-            <div class="nav-btn" onclick="app.nav('ranking', this)">
-                <i class="fa-solid fa-trophy"></i>
-                <span>Ranking</span>
-            </div>
-            <div class="nav-btn" onclick="app.nav('wallet', this)">
-                <i class="fa-solid fa-wallet"></i>
-                <span>Wallet</span>
-            </div>
-            <div class="nav-btn" onclick="app.nav('friends', this)">
-                <i class="fa-solid fa-user-group"></i>
-                <span>Friends</span>
-            </div>
-            <div class="nav-btn" onclick="app.nav('tasks', this)">
-                <i class="fa-solid fa-list-check"></i>
-                <span>Tasks</span>
-            </div>
-        </div>
-    </nav>
+    function drawBJCard(hand, el, hidden=false) {
+        const card = bjDeck.pop();
+        hand.push(card);
+        
+        const isRed = Math.random() > 0.5;
+        const colorClass = isRed ? 'red' : 'black';
+        
+        const cardEl = document.createElement('div');
+        cardEl.className = `bj-card ${hidden ? 'hidden' : colorClass}`;
+        if(!hidden) cardEl.innerText = card;
+        el.appendChild(cardEl);
+        return card;
+    }
 
-    <!-- === FULL SCREEN GAME PAGE === -->
-    <div id="game-page">
-        <div class="game-stage-header">
-            <button class="btn-secondary" style="width:auto; padding:8px 15px; border-radius:8px;" onclick="gameManager.closeGame()"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <h3 id="game-title" style="margin:0; font-family:'Rajdhani'; color:var(--primary);">GAME</h3>
-            <div style="width:80px;"></div>
-        </div>
+    window.dealBJ = function() {
+        bjBet = parseInt($('betAmount').value);
+        if (bjBet > userData.balance) return alert("Insufficient balance");
+        
+        saveUserData({ balance: userData.balance - bjBet });
+        updateStats(false, bjBet);
 
-        <div id="game-visual" class="game-visual">
-            <!-- Game specific HTML -->
-        </div>
+        bjDeck = [...deck, ...deck, ...deck, ...deck]; // 4 decks
+        bjDeck.sort(() => Math.random() - 0.5);
+        
+        playerHand = []; dealerHand = [];
+        $('playerHand').innerHTML = '';
+        $('dealerHand').innerHTML = '';
+        
+        drawBJCard(playerHand, $('playerHand'));
+        drawBJCard(dealerHand, $('dealerHand'));
+        drawBJCard(playerHand, $('playerHand'));
+        drawBJCard(dealerHand, $('dealerHand'), true); // Hidden card
 
-        <div id="game-status" style="text-align:center; min-height:24px; font-size:0.9rem; margin:10px 0; color:var(--text-muted);"></div>
+        $('bjBetArea').style.display = 'none';
+        $('bjActions').style.display = 'flex';
+        
+        // Check Blackjack
+        if (getCardVal(playerHand) === 21) bjStand(); // Auto-stand on 21
+    }
 
-        <div class="bet-controls">
-            <input type="number" id="bet-input" class="bet-input" value="20" min="20">
-            <button class="btn-secondary" style="width:auto; border-radius:8px;" onclick="gameManager.halfBet()">1/2</button>
-            <button class="btn-secondary" style="width:auto; border-radius:8px;" onclick="gameManager.doubleBet()">x2</button>
-        </div>
-        <button id="action-btn" class="btn btn-primary" onclick="gameManager.handleAction()">BET</button>
-    </div>
+    window.bjHit = function() {
+        drawBJCard(playerHand, $('playerHand'));
+        if (getCardVal(playerHand) > 21) endBJ('bust');
+    }
 
-    <!-- === SETTINGS MODAL === -->
-    <div id="settings-modal">
-        <div class="modal-content">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h3 style="margin:0;">Settings</h3>
-                <button onclick="app.toggleSettings()" style="background:none; border:none; color:white; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div style="text-align:center; margin-bottom:20px;">
-                <img src="" id="settings-pic" class="profile-pic" style="width:80px; height:80px; margin-bottom:10px;">
-                <h4 id="settings-name">User</h4>
-                <small id="settings-id" style="color:var(--text-muted)"></small>
-            </div>
-            <div style="display:grid; gap:10px;">
-                <button class="btn btn-ton" onclick="app.connectTon()"><i class="fa-solid fa-wallet"></i> Connect TON Wallet</button>
-            </div>
-
-            <!-- Redeem Section -->
-            <div class="redeem-section">
-                <h4 style="text-align:center; margin-bottom:10px;">Redeem Code</h4>
-                <input type="text" id="redeem-input" class="redeem-input" placeholder="Enter Code" maxlength="10">
-                <button class="btn btn-primary" onclick="app.redeemCode()">Redeem</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue, update, get, child, remove, push } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBD8tW5sHlSze2E4E-EjXSjx9eMBdnneQ4",
-            authDomain: "free-money-9b371.firebaseapp.com",
-            databaseURL: "https://free-money-9b371-default-rtdb.firebaseio.com",
-            projectId: "free-money-9b371",
-            storageBucket: "free-money-9b371.firebasestorage.app",
-            messagingSenderId: "331937781056",
-            appId: "1:331937781056:web:ab7fdba321b4053be7d6a5",
-            measurementId: "G-ZGC6B44FDV"
-        };
-
-        const fbApp = initializeApp(firebaseConfig);
-        const db = getDatabase(fbApp);
-
-        // --- App Logic ---
-        window.app = {
-            user: null,
-            userId: null,
-            balance: 0,
-            settings: { minesWinRate: 90, diceWinRate: 50 }, 
-            userDataSnapshot: null,
-
-            init: function() {
-                const tg = window.Telegram.WebApp;
-                tg.ready();
-                tg.expand();
-
-                const tgUser = tg.initDataUnsafe.user;
-                if (tgUser) {
-                    this.userId = tgUser.id.toString();
-                    this.user = {
-                        name: tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : ''),
-                        photo: tgUser.photo_url || `https://ui-avatars.com/api/?name=${tgUser.first_name}&background=random`,
-                        username: tgUser.username || 'user'
-                    };
-                    
-                    const startParam = tg.initDataUnsafe.start_param;
-                    if (startParam && startParam.startsWith('r')) {
-                         const referrerId = startParam.replace('r', '');
-                         if (referrerId !== this.userId) {
-                             this.processReferral(referrerId);
-                         }
-                    }
-                } else {
-                    this.userId = localStorage.getItem('royal_casino_user_id');
-                    if(!this.userId) {
-                        this.userId = "guest_" + (Math.floor(10000+Math.random()*89999)).toString();
-                        localStorage.setItem('royal_casino_user_id', this.userId);
-                    }
-                    this.user = { name: "Guest User", photo: "https://picsum.photos/seed/guest/100/100", username: "guest" };
-                }
-
-                this.updateUIProfile();
-                this.listenToUserData();
-                this.fetchSettings();
-                this.fetchTasks();
-                this.generateRefLink();
-            },
-
-            processReferral: function(referrerId) {
-                const userRef = ref(db, 'users/' + this.userId);
-                get(userRef).then(snap => {
-                    if(!snap.exists() || !snap.val().referredBy) {
-                        const referrerRef = ref(db, 'users/' + referrerId);
-                        get(referrerRef).then(refSnap => {
-                            if(refSnap.exists()) {
-                                const data = refSnap.val();
-                                const updates = { referrals: (data.referrals || 0) + 1 };
-                                update(referrerRef, updates);
-                            }
-                        });
-                        update(userRef, { referredBy: referrerId });
-                    }
-                });
-            },
-
-            updateUIProfile: function() {
-                document.getElementById('header-name').innerText = this.user.name;
-                document.getElementById('header-id').innerText = "ID: " + this.userId;
-                document.getElementById('header-pic').src = this.user.photo;
-                
-                document.getElementById('settings-name').innerText = this.user.name;
-                document.getElementById('settings-id').innerText = "@" + this.user.username;
-                document.getElementById('settings-pic').src = this.user.photo;
-            },
-
-            listenToUserData: function() {
-                const userRef = ref(db, 'users/' + this.userId);
-                onValue(userRef, (snapshot) => {
-                    const data = snapshot.val();
-                    if (data) {
-                        this.balance = data.balance || 0;
-                        this.userDataSnapshot = data;
-                        this.updateBalanceDisplay(data.wagered || 0);
-                        this.checkDailyBonus(data.lastClaim);
-                        
-                        document.getElementById('ref-count').innerText = data.referrals || 0;
-
-                        if(data.isBanned) {
-                            document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:50px'>ACCOUNT BANNED</h1>";
-                        }
-                    } else {
-                        // New User Registration - 500 Diamonds Default
-                        set(userRef, {
-                            name: this.user.name,
-                            photo: this.user.photo,
-                            balance: 500, 
-                            wagered: 0,
-                            joinedAt: Date.now(),
-                            referralCode: this.userId,
-                            referredBy: null,
-                            referrals: 0,
-                            lastClaim: 0,
-                            completedTasks: {}
-                        });
-                    }
-                });
-            },
-
-            checkDailyBonus: function(lastClaim) {
-                const btn = document.getElementById('daily-btn');
-                const status = document.getElementById('daily-status');
-                const now = Date.now();
-                const oneDay = 24 * 60 * 60 * 1000;
-                
-                if (!lastClaim || (now - lastClaim > oneDay)) {
-                    btn.disabled = false;
-                    btn.style.opacity = 1;
-                    btn.innerText = "CLAIM";
-                    status.innerText = "100 Diamonds available!";
-                } else {
-                    btn.disabled = true;
-                    btn.style.opacity = 0.5;
-                    btn.innerText = "CLAIMED";
-                    // Calculate remaining time
-                    const remaining = oneDay - (now - lastClaim);
-                    const hrs = Math.floor(remaining / (1000 * 60 * 60));
-                    status.innerText = `Next bonus in ${hrs} hours`;
-                }
-            },
-
-            claimDaily: function() {
-                const now = Date.now();
-                const oneDay = 24 * 60 * 60 * 1000;
-                const last = this.userDataSnapshot ? this.userDataSnapshot.lastClaim : 0;
-
-                if (!last || (now - last > oneDay)) {
-                    const updates = {
-                        balance: this.balance + 100,
-                        lastClaim: now
-                    };
-                    update(ref(db, 'users/' + this.userId), updates);
-                    this.showToast("+100 Diamonds Claimed!", "success");
-                } else {
-                    this.showToast("Already claimed today.", "error");
-                }
-            },
-
-            fetchSettings: function() {
-                const settingsRef = ref(db, 'settings');
-                onValue(settingsRef, (snap) => {
-                    if(snap.exists()) this.settings = snap.val();
-                });
-            },
-
-            fetchTasks: function() {
-                const taskRef = ref(db, 'tasks');
-                onValue(taskRef, (snap) => {
-                    const list = document.getElementById('task-list');
-                    list.innerHTML = '';
-                    if(!snap.exists()) {
-                        list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted)">No tasks available.</div>';
-                        return;
-                    }
-                    
-                    const tasks = snap.val();
-                    const completedTasks = (this.userDataSnapshot && this.userDataSnapshot.completedTasks) ? this.userDataSnapshot.completedTasks : {};
-
-                    Object.keys(tasks).forEach(tid => {
-                        const t = tasks[tid];
-                        const isCompleted = completedTasks[tid];
-                        
-                        list.innerHTML += `
-                        <div class="card task-card">
-                            <img src="${t.photo}" class="task-img" onerror="this.src='https://picsum.photos/seed/task/100/100'">
-                            <div class="task-meta">
-                                <div class="task-title">${t.name}</div>
-                                <div class="task-reward">+${t.amount} Diamonds</div>
-                            </div>
-                            <button class="task-btn ${isCompleted ? 'completed' : ''}" onclick="app.handleTask('${tid}', ${t.amount}, '${t.link}', this)">
-                                ${isCompleted ? 'Done' : 'Start'}
-                            </button>
-                        </div>`;
-                    });
-                });
-            },
-
-            handleTask: function(taskId, reward, link, btn) {
-                if(this.userDataSnapshot && this.userDataSnapshot.completedTasks && this.userDataSnapshot.completedTasks[taskId]) {
-                    window.open(link, '_blank');
-                    return;
-                }
-
-                const updates = {};
-                updates['users/' + this.userId + '/balance'] = this.balance + reward;
-                updates['users/' + this.userId + '/completedTasks/' + taskId] = true;
-                
-                update(ref(db), updates);
-                this.showToast(`+${reward} Diamonds earned!`, 'success');
-                window.open(link, '_blank');
-            },
-
-            updateBalance: function(amount, type = 'adjust') {
-                const updates = {};
-                updates['users/' + this.userId + '/balance'] = this.balance + amount;
-                if (type === 'bet') updates['users/' + this.userId + '/wagered'] = (this.userDataSnapshot.wagered || 0) + amount;
-                update(ref(db), updates);
-            },
-
-            updateBalanceDisplay: function(wagered) {
-                const fmt = new Intl.NumberFormat().format(this.balance);
-                document.getElementById('global-balance').innerText = fmt;
-                document.getElementById('wallet-balance').innerText = fmt;
-                document.getElementById('total-wagered').innerText = new Intl.NumberFormat().format(wagered || 0);
-            },
-
-            nav: function(viewId, el) {
-                document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
-                document.getElementById(viewId + '-view').classList.add('active');
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                if(el) el.classList.add('active');
-
-                if(viewId === 'ranking') this.loadRanking();
-            },
-
-            toggleSettings: function() {
-                const modal = document.getElementById('settings-modal');
-                modal.classList.toggle('active');
-            },
-
-            loadRanking: function() {
-                const rankingRef = ref(db, 'users');
-                get(rankingRef).then((snap) => {
-                    if(!snap.exists()) return;
-                    const users = [];
-                    snap.forEach(c => users.push({ id: c.key, ...c.val() }));
-                    
-                    // Sort by balance descending
-                    users.sort((a,b) => (b.balance || 0) - (a.balance || 0));
-                    
-                    // Find My Position
-                    const myIndex = users.findIndex(u => u.id === this.userId);
-                    if(myIndex !== -1) {
-                        document.getElementById('my-rank-pos').innerText = `Your Position: #${myIndex + 1} (Balance: ${users[myIndex].balance})`;
-                    } else {
-                        document.getElementById('my-rank-pos').innerText = `Your Position: Unranked`;
-                    }
-
-                    // Map Top 30
-                    const html = users.slice(0, 30).map((u, i) => `
-                        <div class="rank-row">
-                            <div class="rank-num" style="color:${i<3?'var(--primary)':'inherit'}">${i+1}</div>
-                            <img src="${u.photo}" class="rank-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${u.name || 'User'}'">
-                            <div class="rank-info">
-                                <div class="rank-name">${u.name || 'Unknown'}</div>
-                            </div>
-                            <div class="rank-val">${new Intl.NumberFormat().format(u.balance || 0)}</div>
-                        </div>
-                    `).join('');
-                    document.getElementById('ranking-list').innerHTML = html;
-                });
-            },
-
-            generateRefLink: function() {
-                document.getElementById('ref-link').innerText = `https://t.me/MonarchPlay_Bot?start=r${this.userId}`;
-            },
-
-            copyRef: function() {
-                const text = document.getElementById('ref-link').innerText;
-                navigator.clipboard.writeText(text);
-                this.showToast('Link copied!', 'success');
-            },
-
-            deposit: function() {
-                this.showToast('Payment Gateway Mock: Deposit Success', 'success');
-                this.updateBalance(500);
-            },
-            
-            withdraw: function() {
-                if(this.balance < 1000) return this.showToast('Min withdraw 1000', 'error');
-                this.updateBalance(-1000);
-                this.showToast('Withdrawal Request Sent', 'success');
-            },
-
-            connectTon: function() {
-                this.showToast('TON Wallet Connection Mocked', 'info');
-            },
-
-            redeemCode: function() {
-                const code = document.getElementById('redeem-input').value.trim();
-                if(!code || code.length < 4) return this.showToast('Enter a valid code', 'error');
-                
-                const codeRef = ref(db, 'redeemCodes/' + code);
-                get(codeRef).then(snap => {
-                    if(snap.exists()) {
-                        const amount = Math.floor(Math.random() * (10000 - 500 + 1)) + 500;
-                        this.updateBalance(amount);
-                        remove(codeRef); 
-                        this.showToast(`Code redeemed! +${amount} Diamonds`, 'success');
-                        document.getElementById('redeem-input').value = '';
-                    } else {
-                        this.showToast('Invalid or used code', 'error');
-                    }
-                });
-            },
-
-            showToast: function(msg, type = 'info') {
-                const container = document.getElementById('toast-container');
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-check':'fa-info'}"></i> <span>${msg}</span>`;
-                container.appendChild(toast);
-                setTimeout(() => { toast.style.opacity='0'; setTimeout(()=>toast.remove(), 300); }, 3000);
+    window.bjStand = function() {
+        // Reveal dealer
+        $('dealerHand').querySelector('.hidden').className = 'bj-card ' + (Math.random() > 0.5 ? 'red' : 'black');
+        $('dealerHand').querySelector('.hidden').innerText = dealerHand[1];
+        
+        // Dealer draws to 16
+        let dealerTurn = setInterval(() => {
+            if (getCardVal(dealerHand) < 17) {
+                drawBJCard(dealerHand, $('dealerHand'));
+            } else {
+                clearInterval(dealerTurn);
+                endBJ('decide');
             }
-        };
+        }, 500);
+    }
 
-        // --- Game Manager ---
-        window.gameManager = {
-            activeGame: null,
-            inProgress: false,
-            betAmount: 0,
-            gameState: {},
-            crashInterval: null,
-            crashMultiplier: 1.00,
+    function endBJ(state) {
+        let pVal = getCardVal(playerHand);
+        let dVal = getCardVal(dealerHand);
+        let win = 0;
+        let msg = "";
 
-            openGame: function(game) {
-                this.activeGame = game;
-                this.inProgress = false;
-                document.getElementById('game-page').classList.add('active');
-                document.getElementById('game-title').innerText = game.toUpperCase().replace('-', ' ');
-                document.getElementById('game-status').innerText = "Place your bet";
-                document.getElementById('action-btn').innerText = "BET";
-                document.getElementById('action-btn').className = "btn btn-primary";
-                document.getElementById('bet-input').value = 20;
-                
-                this.renderGame(game);
-            },
+        if (state === 'bust') {
+            msg = "BUST!";
+        } else if (pVal > 21) {
+            msg = "BUST!";
+        } else if (dVal > 21) {
+            msg = "DEALER BUSTS! YOU WIN!";
+            win = bjBet * 2;
+        } else if (pVal > dVal) {
+            msg = "YOU WIN!";
+            win = bjBet * 2;
+        } else if (dVal > pVal) {
+            msg = "DEALER WINS";
+        } else {
+            msg = "PUSH";
+            win = bjBet; // Return bet
+        }
 
-            closeGame: function() {
-                document.getElementById('game-page').classList.remove('active');
-                if(this.crashInterval) clearInterval(this.crashInterval);
-                this.activeGame = null;
-            },
+        if (win > 0) {
+            saveUserData({ balance: userData.balance + win });
+            if (win > bjBet) updateStats(true, 0);
+        }
 
-            halfBet: function() {
-                const input = document.getElementById('bet-input');
-                input.value = Math.max(20, Math.floor(input.value / 2));
-            },
+        $('bjActions').style.display = 'none';
+        $('bjText').innerText = msg;
+        $('bjText').style.color = win > 0 ? 'var(--accent-neon)' : '#ff6b6b';
+        $('bjAmt').innerText = win > bjBet ? `+${formatNum(win - bjBet)}` : (win === bjBet ? 'Bet Returned' : `-${bjBet}`);
+        $('bjRes').style.display = 'flex';
+    }
 
-            doubleBet: function() {
-                const input = document.getElementById('bet-input');
-                input.value = Math.floor(input.value * 2);
-            },
+    window.resetBJ = function() {
+        $('bjRes').style.display = 'none';
+        $('bjBetArea').style.display = 'block';
+        $('playerHand').innerHTML = '';
+        $('dealerHand').innerHTML = '';
+    }
 
-            renderGame: function(game) {
-                const visual = document.getElementById('game-visual');
-                visual.innerHTML = '';
-
-                if(game === 'mines') {
-                    let html = '<div class="mines-board">';
-                    for(let i=0; i<25; i++) html += `<div class="mine-cell" id="m-${i}" onclick="gameManager.minesClick(${i})"></div>`;
-                    html += '</div>';
-                    visual.innerHTML = html;
-                } 
-                else if (game === 'dice') {
-                    visual.innerHTML = `<div class="dice-circle" id="dice-res">?</div>`;
-                } 
-                else if (game === 'limbo') {
-                    visual.innerHTML = `<div class="limbo-display" id="limbo-res">1.00x</div>`;
-                }
-                else if (game === 'crash') {
-                    visual.innerHTML = `
-                        <div class="crash-container">
-                            <canvas id="crash-canvas" class="crash-graph"></canvas>
-                            <div class="crash-multiplier" id="crash-mult">1.00x</div>
-                        </div>`;
-                }
-                else if (game === 'wheel') {
-                    // Simple Wheel representation
-                    visual.innerHTML = `
-                        <div class="wheel-container">
-                            <div class="wheel-pointer"></div>
-                            <div class="wheel-spinner" id="wheel-spinner">
-                                <div style="background:#f43f5e; transform:rotate(0deg)">2x</div>
-                                <div style="background:#0f1724; transform:rotate(60deg)">0x</div>
-                                <div style="background:#fbbf24; transform:rotate(120deg)">3x</div>
-                                <div style="background:#0f1724; transform:rotate(180deg)">0x</div>
-                                <div style="background:#38bdf8; transform:rotate(240deg)">5x</div>
-                                <div style="background:#0f1724; transform:rotate(300deg)">0x</div>
-                            </div>
-                        </div>`;
-                }
-                else if (game === 'coinflip') {
-                    visual.innerHTML = `
-                        <div class="coin" id="coin-el">
-                            <div class="coin-face coin-heads">H</div>
-                            <div class="coin-face coin-tails">T</div>
-                        </div>
-                        <div style="margin-top:20px; display:flex; gap:10px; width:100%;">
-                            <button class="btn btn-secondary" style="flex:1" onclick="gameManager.setCoinChoice('heads')">Heads</button>
-                            <button class="btn btn-secondary" style="flex:1" onclick="gameManager.setCoinChoice('tails')">Tails</button>
-                        </div>
-                    `;
-                    this.gameState.coinChoice = null;
-                }
-                else {
-                    visual.innerHTML = `<div style="text-align:center; padding:50px;">Select options below</div>`;
-                }
-            },
-
-            setCoinChoice: function(c) {
-                this.gameState.coinChoice = c;
-                // Visual feedback could be added here
-            },
-
-            handleAction: function() {
-                const input = document.getElementById('bet-input');
-                const bet = parseInt(input.value);
-                
-                if(isNaN(bet) || bet < 20) return app.showToast("Minimum bet is 20 Diamonds", "error");
-                if(bet > app.balance) return app.showToast("Insufficient Balance", "error");
-
-                if(!this.inProgress) {
-                    this.inProgress = true;
-                    this.betAmount = bet;
-                    app.updateBalance(-bet);
+    // --- Logic: Dice ---
+    window.renderDice = function(el) {
+        el.innerHTML = `
+            <div class="card">
+                <div class="game-area">
+                    <div class="dice-container" id="diceFace">🎲</div>
                     
-                    const btn = document.getElementById('action-btn');
-                    btn.innerText = "CASHOUT";
-                    btn.className = "btn btn-secondary";
-                    
-                    document.getElementById('game-status').innerText = "Game Running...";
-                    document.getElementById('game-status').style.color = "var(--text-muted)";
-                    this.runGameLogic();
-                } else {
-                    this.cashout();
-                }
-            },
+                    <div class="result-overlay" id="diceRes">
+                        <div class="result-text" id="diceText"></div>
+                        <div class="result-amount" id="diceAmt"></div>
+                        <button class="btn btn-secondary" onclick="hideDice()">Close</button>
+                    </div>
 
-            runGameLogic: function() {
-                const winRate = app.settings[this.activeGame + 'WinRate'] || 50;
-                const roll = Math.random() * 100;
-                const won = roll < winRate;
+                    <div class="bet-controls">
+                        <input type="number" class="bet-input" id="betAmount" value="100">
+                    </div>
 
-                if(this.activeGame === 'mines') {
-                    this.gameState.mines = Array(25).fill(0);
-                    let bombs = 3;
-                    while(bombs > 0) {
-                        let idx = Math.floor(Math.random()*25);
-                        if(this.gameState.mines[idx] === 0) { this.gameState.mines[idx] = 1; bombs--; }
-                    }
-                    this.gameState.safeRevealed = 0;
-                    document.getElementById('game-status').innerText = "Pick a tile!";
-                    return; 
-                } 
-                else if (this.activeGame === 'dice') {
-                    this.animateDice((result) => {
-                        this.finishGame(result > 3 ? (this.betAmount * 2) : 0);
-                    });
-                }
-                else if (this.activeGame === 'limbo') {
-                    this.animateLimbo(won ? (Math.random()*5 + 1).toFixed(2) : "1.00", won);
-                }
-                else if (this.activeGame === 'crash') {
-                    this.runCrash();
-                }
-                else if (this.activeGame === 'wheel') {
-                    this.runWheel();
-                }
-                else if (this.activeGame === 'coinflip') {
-                    if(!this.gameState.coinChoice) {
-                        app.showToast("Select Heads or Tails first!", "error");
-                        this.resetBtn();
-                        this.inProgress = false;
-                        app.updateBalance(this.betAmount); // Refund
-                        return;
-                    }
-                    const res = Math.random() > 0.5 ? 'heads' : 'tails';
-                    const coinEl = document.getElementById('coin-el');
-                    coinEl.classList.add('flip');
-                    
-                    setTimeout(() => {
-                        // Rig rotation to land on result
-                        // 1800deg = 5 full spins. If tails, add 180.
-                        const deg = 1800 + (res === 'tails' ? 180 : 0);
-                        coinEl.style.transform = `rotateY(${deg}deg)`;
-                        
-                        setTimeout(() => {
-                            this.finishGame(res === this.gameState.coinChoice ? (this.betAmount * 1.9) : 0);
-                            coinEl.classList.remove('flip');
-                            coinEl.style.transform = 'rotateY(0)';
-                        }, 3000);
-                    }, 100);
-                }
-                else {
-                    setTimeout(() => {
-                        this.finishGame(won ? (this.betAmount * (Math.random() > 0.8 ? 5 : 2)) : 0);
-                    }, 1000);
-                }
-            },
+                    <div class="dice-controls">
+                        <button class="btn btn-secondary dice-btn" style="background:linear-gradient(135deg, #2ed573, #26de81)" onclick="rollDice('over')">ROLL OVER 50</button>
+                        <button class="btn btn-secondary dice-btn" style="background:linear-gradient(135deg, #ff6b6b, #ee5a24)" onclick="rollDice('under')">ROLL UNDER 50</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
-            // --- Game Specific Logic ---
+    window.hideDice = function() { $('diceRes').style.display = 'none'; }
+
+    window.rollDice = function(type) {
+        const bet = parseInt($('betAmount').value);
+        if (bet > userData.balance) return alert("Insufficient balance");
+
+        saveUserData({ balance: userData.balance - bet });
+        updateStats(false, bet);
+
+        // Animation
+        const dice = $('diceFace');
+        let rolls = 0;
+        let int = setInterval(() => {
+            dice.innerText = Math.floor(Math.random() * 100);
+            rolls++;
+            if (rolls > 20) clearInterval(int);
+        }, 50);
+
+        setTimeout(() => {
+            const res = Math.floor(Math.random() * 100) + 1;
+            dice.innerText = res;
             
-            runCrash: function() {
-                const canvas = document.getElementById('crash-canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = canvas.parentElement.clientWidth;
-                canvas.height = canvas.parentElement.clientHeight;
-                
-                this.crashMultiplier = 1.00;
-                const crashPoint = (Math.random() * 3) + 1; // Crashes between 1x and 4x usually
-                let x = 0;
-                
-                if(this.crashInterval) clearInterval(this.crashInterval);
+            let win = 0;
+            // Payout approx 2x (house edge on 50/50 is standard, usually slightly less than 2x but for fun we do 1.98x)
+            if (type === 'over' && res > 50) win = Math.floor(bet * 1.98);
+            if (type === 'under' && res < 50) win = Math.floor(bet * 1.98);
 
-                this.crashInterval = setInterval(() => {
-                    this.crashMultiplier += 0.01;
-                    document.getElementById('crash-mult').innerText = this.crashMultiplier.toFixed(2) + "x";
-                    
-                    // Draw graph
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.beginPath();
-                    ctx.moveTo(0, canvas.height);
-                    ctx.lineTo(x, canvas.height - (this.crashMultiplier * 20)); 
-                    ctx.strokeStyle = '#fbbf24';
-                    ctx.lineWidth = 3;
-                    ctx.stroke();
-
-                    x += 2;
-
-                    if(this.crashMultiplier >= crashPoint) {
-                        clearInterval(this.crashInterval);
-                        document.getElementById('crash-mult').style.color = "var(--danger)";
-                        this.finishGame(0);
-                    }
-                }, 50);
-            },
-
-            runWheel: function() {
-                const wheel = document.getElementById('wheel-spinner');
-                // Random degree between 0 and 360, plus full rotations
-                const deg = Math.floor(Math.random() * 360) + 1800;
-                wheel.style.transform = `rotate(${deg}deg)`;
-                
-                setTimeout(() => {
-                    // Simple win logic: if it lands roughly in 2x, 3x, or 5x zones
-                    // For simplicity, random chance
-                    const won = Math.random() > 0.5;
-                    const mult = Math.random() > 0.8 ? 5 : (Math.random() > 0.5 ? 3 : 2);
-                    this.finishGame(won ? (this.betAmount * mult) : 0);
-                }, 4000);
-            },
-
-            minesClick: function(idx) {
-                if(!this.inProgress || this.gameState.mines[idx] === 2) return;
-                const cell = document.getElementById(`m-${idx}`);
-                
-                if(this.gameState.mines[idx] === 1) {
-                    // Boom
-                    cell.classList.add('boom');
-                    cell.innerHTML = '<i class="fa-solid fa-bomb"></i>';
-                    this.gameOver();
-                } else {
-                    // Safe
-                    cell.classList.add('safe');
-                    cell.innerHTML = '<i class="fa-regular fa-gem"></i>';
-                    this.gameState.mines[idx] = 2; 
-                    this.gameState.safeRevealed++;
-                    this.betAmount = Math.floor(this.betAmount * 1.2); 
-                    document.getElementById('game-status').innerText = `Pot: ${this.betAmount}`;
-                }
-            },
-
-            cashout: function() {
-                if(this.activeGame === 'crash') {
-                    if(this.crashInterval) {
-                        clearInterval(this.crashInterval);
-                        app.updateBalance(Math.floor(this.betAmount * this.crashMultiplier), 'win');
-                        app.showToast(`Cashed out at ${this.crashMultiplier.toFixed(2)}x!`, 'success');
-                        this.resetBtn();
-                    }
-                } else if (this.activeGame === 'mines') {
-                    if(this.gameState.safeRevealed > 0) {
-                        app.updateBalance(this.betAmount, 'win');
-                        app.showToast(`Cashed out ${this.betAmount}!`, 'success');
-                        this.closeGame();
-                    } else {
-                        app.showToast("Reveal a gem first!", 'error');
-                    }
-                } else {
-                    app.showToast("Wait for result.", 'info');
-                }
-            },
-
-            finishGame: function(winAmount) {
-                if(winAmount > 0) {
-                    app.updateBalance(Math.floor(winAmount), 'win');
-                    app.showToast(`You Won ${Math.floor(winAmount)}!`, 'success');
-                    document.getElementById('game-status').innerText = "WINNER!";
-                    document.getElementById('game-status').style.color = "var(--success)";
-                } else {
-                    document.getElementById('game-status').innerText = "YOU LOST";
-                    document.getElementById('game-status').style.color = "var(--danger)";
-                }
-                this.resetBtn();
-            },
-
-            gameOver: function() {
-                document.getElementById('game-status').innerText = "BOOM! GAME OVER";
-                document.getElementById('game-status').style.color = "var(--danger)";
-                this.resetBtn();
-            },
-
-            resetBtn: function() {
-                this.inProgress = false;
-                const btn = document.getElementById('action-btn');
-                btn.innerText = "BET";
-                btn.className = "btn btn-primary";
-                if(this.activeGame === 'crash') {
-                     document.getElementById('crash-mult').style.color = "white";
-                }
-            },
-
-            animateDice: function(callback) {
-                const el = document.getElementById('dice-res');
-                let count = 0;
-                const interval = setInterval(() => {
-                    el.innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][Math.floor(Math.random()*6)];
-                    count++;
-                    if(count > 15) {
-                        clearInterval(interval);
-                        const final = Math.floor(Math.random()*6) + 1;
-                        el.innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][final-1];
-                        callback(final);
-                    }
-                }, 50);
-            },
-
-            animateLimbo: function(target, isWin) {
-                const el = document.getElementById('limbo-res');
-                let current = 1.00;
-                const interval = setInterval(() => {
-                    current += (isWin ? 0.1 : 0.01);
-                    el.innerText = current.toFixed(2) + "x";
-                    if(current >= parseFloat(target)) {
-                        clearInterval(interval);
-                        el.innerText = target + "x";
-                        this.finishGame(isWin ? (this.betAmount * target) : 0);
-                    }
-                }, 50);
+            if (win > 0) {
+                saveUserData({ balance: userData.balance + win });
+                showDiceRes("WIN!", `+${formatNum(win)}`, true);
+                updateStats(true, 0);
+            } else {
+                showDiceRes("LOSS", `-${formatNum(bet)}`, false);
             }
-        };
+        }, 1000);
+    }
 
-        // Initialize App
-        app.init();
-    </script>
+    function showDiceRes(t, a, win) {
+        $('diceText').innerText = t;
+        $('diceText').style.color = win ? 'var(--accent-neon)' : '#ff6b6b';
+        $('diceAmt').innerText = a;
+        $('diceRes').style.display = 'flex';
+    }
+
+    // Start
+    init();
+  </script>
 </body>
 </html>
