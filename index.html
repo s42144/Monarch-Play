@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1" />
-  <title>Exotix Trade | Professional TON Trading</title>
+  <title>Exotix Trade | Professional TON Platform</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%23007AFF%22/><text y=%22.9em%22 font-size=%2290%22 text-anchor=%22middle%22>💎</text></svg>" />
   
-  <!-- Phosphor Icons (Professional Icon Set) -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -28,346 +25,376 @@
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    /* PROFESSIONAL COLOR PALETTE */
     :root{
-      /* Professional Deep Slate & Cyan Theme */
-      --bg-color: #0f172a; /* Slate 900 */
-      --card-bg: rgba(30, 41, 59, 0.7); /* Slate 800 with opacity */
-      --card-border: rgba(148, 163, 184, 0.1); 
+      /* Deep Navy & Cyan Professional Theme */
+      --primary-gradient: linear-gradient(135deg, #0052D4 0%, #4364F7 50%, #6FB1FC 100%);
+      --secondary-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      --warning-gradient: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+      --danger-gradient: linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%);
       
-      --primary-gradient: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); /* Sky to Blue */
-      --secondary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); /* Indigo to Violet */
-      --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%); /* Emerald */
-      --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); /* Amber */
-      --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); /* Red */
+      --dark-bg: linear-gradient(180deg, #050a14 0%, #0a1120 100%);
+      --card-bg: rgba(20, 30, 48, 0.6);
+      --card-border: rgba(64, 169, 255, 0.15);
+      --card-hover: rgba(64, 169, 255, 0.25);
       
-      --text-primary: #f8fafc; 
-      --text-secondary: #94a3b8; 
+      --text-primary: #FFFFFF; 
+      --text-secondary: #94a3b8;
       
-      --accent-blue: #0ea5e9;
-      --accent-green: #10b981;
-      --accent-yellow: #f59e0b;
-      --accent-red: #ef4444;
-      --accent-purple: #8b5cf6;
+      --accent-blue: #38bdf8;
+      --accent-green: #34d399;
+      --accent-yellow: #facc15;
+      --accent-red: #f87171;
+      --accent-purple: #a78bfa;
       
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15); 
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-      --glow: 0 0 20px rgba(14, 165, 233, 0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3); 
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+      --glow: 0 0 15px rgba(56, 189, 248, 0.3);
     }
     
-    html,body{width:100%;height:100%;font-family:'Inter',system-ui,Segoe UI,sans-serif;background:var(--bg-color);color:var(--text-primary);overflow-x:hidden}
-    
-    /* App Container */
-    #app{display:none;min-height:100vh;padding-bottom:90px;background:var(--bg-color);background-attachment:fixed}
+    html,body{width:100%;height:100%;font-family:'Inter',system-ui,Segoe UI,sans-serif;background:var(--dark-bg);color:var(--text-primary);overflow-x:hidden}
+    #app{display:none;min-height:100vh;padding-bottom:90px;background:var(--dark-bg);background-attachment:fixed}
     #main-content{width:100%;max-width:480px;margin:0 auto;padding:0 16px}
 
-    /* Modern Button Styles */
+    /* Buttons 3D effects & Hover states */
     .btn-primary, .btn-claim, .nav-btn, .wallet-item, .task-btn, .modal-close {
       position: relative;
       overflow: hidden;
       transition: all 0.2s ease;
-      border: none;
-      outline: none;
     }
     
-    /* Primary Button */
-    .btn-primary { 
-      width: 100%; padding: 14px; border-radius: 12px; 
-      font-size: 15px; font-weight: 600; color: #fff; 
-      background: var(--primary-gradient); 
-      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
+    /* Subtle shine effect */
+    .btn-primary::after, .btn-claim::after, .wallet-item::after, .task-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(125deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0) 100%);
+      pointer-events: none;
     }
-    .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
-    .btn-primary:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; }
-
-    /* Claim Button */
-    .btn-claim { 
-      width: 100%; padding: 14px; border-radius: 12px; 
-      font-size: 15px; font-weight: 600; color: #fff; 
-      background: var(--success-gradient); 
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-      cursor: pointer;
-      animation: subtle-pulse 2s infinite;
-    }
-    .btn-claim:active { transform: scale(0.98); }
-    .btn-claim:disabled { background: #334155; color: #64748b; cursor: not-allowed; animation: none; box-shadow: none; }
-    
-    @keyframes subtle-pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
 
     /* Loading Screen */
     #loading-screen {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: var(--bg-color);
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: var(--dark-bg);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       z-index: 9999;
     }
     .loading-logo { 
-      font-size: 80px; color: var(--accent-blue); 
+      width: 120px; height: 120px; 
+      background: var(--primary-gradient);
+      border-radius: 24px; 
+      display: flex; align-items: center; justify-content: center;
       margin-bottom: 30px; 
-      animation: float 3s ease-in-out infinite; 
+      box-shadow: var(--glow);
+      animation: float 3s ease-in-out infinite;
+      color: white;
     }
+    .loading-logo svg { width: 60px; height: 60px; }
+    
     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
-    .loading-text { font-size: 24px; font-weight: 800; color: var(--text-primary); margin-bottom: 10px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .loading-subtext { font-size: 14px; color: var(--text-secondary); margin-bottom: 30px; }
+    
+    .loading-text { font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .loading-subtext { font-size: 14px; font-weight: 500; color: var(--text-secondary); margin-bottom: 30px; }
     .loading-spinner { width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.1); border-top-color: var(--accent-blue); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-progress { margin-top: 20px; font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+    .loading-progress { margin-top: 20px; font-size: 12px; color: var(--text-secondary); font-weight: 600; letter-spacing: 0.5px; }
 
-    /* Referral Welcome */
+    /* Referral Welcome Screen */
     #referral-welcome {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: var(--bg-color);
+      background: var(--dark-bg);
       display: none; flex-direction: column; align-items: center; justify-content: center;
       z-index: 9998; padding: 20px;
     }
     .welcome-card {
-      background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 24px;
+      background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 24px;
       padding: 40px 30px; border: 1px solid var(--card-border); box-shadow: var(--shadow-lg);
       text-align: center; max-width: 400px; width: 100%; animation: slideUp 0.5s ease;
     }
     @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-    .welcome-icon { font-size: 64px; margin-bottom: 20px; color: var(--accent-blue); }
-    .welcome-title { font-size: 28px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; }
+    .welcome-icon svg { width: 80px; height: 80px; color: var(--accent-blue); margin-bottom: 20px; }
+    .welcome-title { font-size: 28px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px; }
     .welcome-message { font-size: 16px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; }
-    .referrer-info { background: rgba(14, 165, 233, 0.1); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(14, 165, 233, 0.2); }
+    .referrer-info { background: rgba(56, 189, 248, 0.05); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--card-border); }
     .referrer-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 12px; }
     .referrer-details { display: flex; align-items: center; gap: 12px; justify-content: center; }
-    .referrer-avatar { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent-blue); background: #1e293b; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+    .referrer-avatar { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent-blue); object-fit: cover; }
     .referrer-name { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    .referrer-id { font-size: 12px; color: var(--text-secondary); }
     .welcome-countdown { font-size: 14px; color: var(--accent-blue); font-weight: 600; margin-top: 10px; }
 
     /* Daily Check In Modal */
     #checkin-modal {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
+      background: rgba(5, 10, 20, 0.9); backdrop-filter: blur(10px);
       display: none; align-items: center; justify-content: center;
       z-index: 9999; padding: 20px; overflow-y: auto;
     }
     .checkin-content {
-      background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 24px; padding: 30px;
+      background: var(--card-bg); backdrop-filter: blur(25px); border-radius: 24px; padding: 30px 20px;
       max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;
       border: 1px solid var(--card-border); box-shadow: var(--shadow-lg);
       animation: slideUp 0.3s ease;
     }
-    .checkin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-    .checkin-title { font-size: 24px; font-weight: 800; color: var(--text-primary); text-align: center; flex: 1; }
-    .checkin-close { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
-    .checkin-close:hover { background: rgba(255,255,255,0.2); transform: rotate(90deg); }
+    .checkin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; }
+    .checkin-title { font-size: 28px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; flex: 1; }
+    .checkin-close { width: 36px; height: 36px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+    .checkin-close:hover { background: rgba(255,255,255,0.1); transform: rotate(90deg); }
+    .checkin-streak { text-align: center; margin-bottom: 25px; padding: 20px; background: rgba(56, 189, 248, 0.1); border-radius: 20px; border: 1px solid var(--card-border); position: relative; overflow: hidden; }
+    .checkin-streak-title { font-size: 14px; color: var(--text-secondary); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+    .checkin-streak-value { font-size: 32px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .checkin-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 25px; }
+    .checkin-day { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 10px 5px; text-align: center; position: relative; overflow: hidden; transition: all 0.3s ease; height: 140px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; cursor: pointer; }
+    .checkin-day.claimed { background: rgba(52, 211, 153, 0.1); border-color: rgba(52, 211, 153, 0.3); }
+    .checkin-day.available { background: rgba(56, 189, 248, 0.15); border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); transform: scale(1.05); }
+    .checkin-day-number { font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-top: 5px; }
+    .checkin-day-reward { font-size: 16px; font-weight: 700; color: var(--accent-green); margin-bottom: 5px; }
+    .checkin-day svg { width: 32px; height: 32px; color: var(--text-secondary); opacity: 0.5; transition: 0.3s; }
+    .checkin-day.claimed svg, .checkin-day.available svg { opacity: 1; color: var(--accent-green); }
     
-    .checkin-streak { text-align: center; margin-bottom: 30px; padding: 20px; background: rgba(14, 165, 233, 0.1); border-radius: 20px; border: 1px solid rgba(14, 165, 233, 0.2); }
-    .checkin-streak-title { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
-    .checkin-streak-value { font-size: 36px; font-weight: 800; color: var(--accent-blue); }
-    
-    .checkin-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 30px; }
-    .checkin-day { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 16px; padding: 12px 4px; text-align: center; transition: all 0.3s; height: 140px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; cursor: pointer; }
-    .checkin-day.claimed { background: rgba(16, 185, 129, 0.1); border-color: var(--accent-green); }
-    .checkin-day.available { background: rgba(14, 165, 233, 0.15); border-color: var(--accent-blue); animation: pulse 2s infinite; transform: scale(1.05); }
-    .checkin-day-number { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-    .checkin-day-reward { font-size: 14px; font-weight: 700; color: var(--accent-green); margin-top: 4px; opacity: 0.7; }
-    .checkin-day i { font-size: 24px; color: var(--text-secondary); margin-top: 8px; transition: color 0.3s; }
-    .checkin-day.claimed i { color: var(--accent-green); }
-    .checkin-day.available i { color: var(--accent-blue); }
+    .checkin-calendar { margin-top: 20px; background: rgba(255, 255, 255, 0.03); border-radius: 16px; padding: 15px; border: 1px solid var(--card-border); }
+    .checkin-calendar-title { font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 15px; color: var(--text-primary); }
+    .checkin-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+    .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 12px; font-weight: 600; background: rgba(255, 255, 255, 0.02); color: var(--text-secondary); }
+    .calendar-day.checked-in { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); border: 1px solid rgba(52, 211, 153, 0.2); }
+    .calendar-day.today { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 189, 248, 0.2); font-weight: 800; }
 
-    /* Balance Container */
-    .balance-container { position: fixed; top: 12px; left: 12px; z-index: 1000; }
+    /* TON Balance */
+    .balance-container { position: fixed; top: 12px; left: 12px; right: 12px; display: flex; justify-content: center; gap: 8px; z-index: 1000; pointer-events: none; }
     .ton-balance { 
-      background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); 
-      border-radius: 16px; padding: 8px 16px; border: 1px solid var(--card-border); 
-      box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 10px; 
+      background: rgba(5, 10, 20, 0.85); 
+      backdrop-filter: blur(10px);
+      border-radius: 50px; 
+      padding: 8px 20px; 
+      border: 1px solid var(--card-border); 
+      box-shadow: var(--shadow-md); 
+      display: flex; align-items: center; gap: 10px; 
+      pointer-events: auto;
     }
-    .ton-icon { font-size: 24px; color: var(--accent-blue); }
-    .ton-amount { font-size: 16px; font-weight: 800; color: var(--accent-blue); letter-spacing: 0.5px; }
+    .ton-icon { width: 24px; height: 24px; border-radius: 50%; background: var(--primary-gradient); padding: 4px; }
+    .ton-amount { font-size: 16px; font-weight: 700; color: var(--text-primary); font-family: 'Inter', monospace; }
 
-    /* Sections & Cards */
-    .section-header{text-align:center;padding:20px 0 16px}
-    .section-title{font-size:24px;font-weight:800;color:var(--text-primary)}
-    .section-subtitle{font-size:13px;color:var(--text-secondary)}
-    
-    .card{background:var(--card-bg);backdrop-filter:blur(20px);border-radius:20px;padding:16px;border:1px solid var(--card-border);box-shadow:var(--shadow-md);margin-bottom:16px}
+    /* Sections */
+    .section-header{text-align:center;padding:25px 0 10px}
+    .section-title{font-size:26px;font-weight:800;background:var(--primary-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.5px}
+    .section-subtitle{font-size:13px;color:var(--text-secondary);margin-top:4px;font-weight:500}
 
-    /* Trade Plans */
-    .live-prices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-    .price-card{background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:16px;text-align:center}
-    .price-symbol{font-size:12px;color:var(--text-secondary);font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px}
-    .price-value{font-size:18px;font-weight:800;color:var(--text-primary)}
-    .price-change{font-size:11px;font-weight:700;margin-top:4px;display:inline-block;padding:2px 6px;border-radius:6px}
-    .price-change.positive{color:var(--accent-green); background: rgba(16, 185, 129, 0.1)} 
-    .price-change.negative{color:var(--accent-red); background: rgba(239, 68, 68, 0.1)}
+    /* Cards */
+    .card{background:var(--card-bg);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);border-radius:20px;padding:20px;border:1px solid var(--card-border);box-shadow:var(--shadow-md);margin-bottom:16px;transition: transform 0.2s ease;}
+    .card:hover { border-color: var(--card-hover); }
+
+    /* Buttons */
+    .btn-primary,.btn-claim{width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;transition:.2s;letter-spacing:.5px;position:relative;transform-style:preserve-3d;box-shadow:0 4px 0 rgba(0,0,0,0.3);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .btn-primary{background:var(--primary-gradient);color: white;}
+    .btn-primary:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
+    .btn-primary:disabled{background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);cursor:not-allowed;box-shadow:none;border: 1px solid rgba(255,255,255,0.1); transform: none;}
     
-    .plan{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:16px;margin-bottom:16px; position:relative; overflow:hidden}
-    .plan::before{ content:''; position:absolute; top:0; left:0; width:100%; height:4px; background:var(--primary-gradient); }
+    .btn-claim{background:var(--success-gradient);color:#022c22; animation: glow-green 2s infinite; box-shadow:0 4px 0 rgba(0,0,0,0.3); }
+    .btn-claim:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
+    @keyframes glow-green{0%,100%{box-shadow:0 0 5px rgba(52, 211, 153, 0.2), 0 4px 0 rgba(0,0,0,0.3);}50%{box-shadow:0 0 15px rgba(52, 211, 153, 0.5), 0 4px 0 rgba(0,0,0,0.3);}}
+
+    /* Trade plans */
+    .live-prices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+    .price-card{background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:16px;padding:16px;text-align:center; transition: 0.2s;}
+    .price-card:hover { background: rgba(255,255,255,0.05); border-color: var(--accent-blue); }
+    .price-symbol{font-size:12px;color:var(--text-secondary);font-weight:600; text-transform: uppercase; letter-spacing: 0.5px;}
+    .price-value{font-size:18px;font-weight:800;color:var(--text-primary); margin: 4px 0;}
+    .price-change{font-size:12px;font-weight:600;padding: 2px 8px; border-radius: 4px; display: inline-block;}
+    .price-change.positive{color:var(--accent-green); background: rgba(52, 211, 153, 0.1)} .price-change.negative{color:var(--accent-red); background: rgba(248, 113, 113, 0.1)}
+    
+    .plan{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:16px;margin-bottom:16px; position: relative; overflow: hidden;}
+    .plan::before { content:''; position: absolute; top:0; left:0; width: 4px; height: 100%; background: var(--primary-gradient); opacity: 0.5; }
     
     .plan-h{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-    .plan-ic{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--text-primary)}
-    .plan-tt{font-size:16px;font-weight:800;color:var(--text-primary)}
-    .plan-pr{font-size:13px;color:var(--accent-blue);font-weight:600}
-    
-    .plan-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
-    .g-it{background:rgba(255,255,255,.03);border-radius:12px;padding:12px;text-align:center; border: 1px solid var(--card-border)}
-    .g-l{font-size:11px;color:var(--text-secondary);font-weight:700;text-transform:uppercase; margin-bottom:4px}
-    .g-v{font-size:16px;font-weight:800;color:var(--text-primary)}
+    .plan-ic{width:50px;height:50px;border-radius:14px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center; color: var(--accent-blue); border: 1px solid var(--card-border);}
+    .plan-ic svg{width: 28px; height: 28px; }
+    .plan-tt{font-size:17px;font-weight:800}
+    .plan-pr{font-size:13px;color:var(--accent-blue);font-weight:600; text-transform: uppercase;}
+    .plan-g{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+    .g-it{background:rgba(255,255,255,.04);border-radius:12px;padding:12px;text-align:center; border: 1px solid rgba(255,255,255,0.05)}
+    .g-l{font-size:10px;color:var(--text-secondary);font-weight:700;text-transform:uppercase; letter-spacing: 0.5px;}
+    .g-v{font-size:15px;font-weight:800; color: var(--text-primary); }
 
     .prog{margin:12px 0}
-    .progbar{height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
-    .progfill{height:100%;background:var(--success-gradient);width:0%; border-radius:4px; transition: width 0.5s ease}
-    .progtext{text-align:center;font-size:11px;color:var(--text-secondary);margin-top:6px}
-    .countdown{text-align:center;font-size:12px;color:var(--accent-blue);font-weight:700;margin:8px 0}
+    .progbar{height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+    .progfill{height:100%;background:var(--primary-gradient);width:0%; transition: width 0.5s ease;}
+    .progtext{text-align:center;font-size:11px;color:var(--text-secondary);margin-top:6px; font-weight: 600;}
+    .countdown{text-align:center;font-size:12px;color:var(--accent-blue);font-weight:600;margin:8px 0; background: rgba(56, 189, 248, 0.1); padding: 6px; border-radius: 8px; display: inline-block; width: 100%;}
 
     /* Chart Container */
-    .chart-container{background:rgba(15, 23, 42, 0.5);border-radius:16px;padding:12px;margin-bottom:12px; border: 1px solid var(--card-border)}
-    .chart-title{font-size:12px;font-weight:600;text-align:center;margin-bottom:8px;color:var(--text-secondary)}
+    .chart-container{background:rgba(0,0,0,0.2);border-radius:12px;padding:0;margin:12px 0; overflow: hidden; border: 1px solid var(--card-border); position: relative;}
+    .chart-container iframe { width: 100%; height: 200px; border: none; }
 
     /* Wallet */
     .wallet-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-    .wallet-item{background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:.2s}
-    .wallet-item:active{background:rgba(255,255,255,.08); transform:scale(0.98)}
-    .wallet-ic{font-size:28px;color:var(--accent-blue); margin-bottom:4px}
-    .wallet-label{font-size:13px;font-weight:600;color:var(--text-primary)}
+    .wallet-item{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:.2s;box-shadow:var(--shadow-md); text-align: center;}
+    .wallet-item:hover{background:var(--card-hover); transform: translateY(-2px); box-shadow: var(--shadow-lg);}
+    .wallet-item:active{transform:translateY(0);}
+    .wallet-ic svg { width: 32px; height: 32px; color: var(--accent-blue); margin-bottom: 4px; }
+    .wallet-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
 
-    .input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--card-border);background:rgba(255,255,255,.05);color:#fff;outline:none; font-family:'Inter',sans-serif; font-size:14px; transition: border-color 0.2s}
-    .input:focus{border-color:var(--accent-blue)}
+    .form-label{font-size:12px;color:var(--text-secondary);font-weight:600;margin-bottom:8px;display:block; text-transform: uppercase; letter-spacing: 0.5px;}
+    .input{width:100%;padding:14px;border-radius:12px;border:1px solid var(--card-border);background:rgba(255,255,255,.05);color:#fff;outline:none; font-family: 'Inter', sans-serif; font-size: 15px; transition: 0.2s;}
+    .input:focus { border-color: var(--accent-blue); background: rgba(255,255,255,0.08); }
     
-    .form-label{font-size:12px;color:var(--text-secondary);font-weight:600;margin-bottom:6px;display:block}
+    .row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);padding:12px;border-radius:12px;margin-bottom:8px; border: 1px solid rgba(255,255,255,0.05); word-break:break-all}
+    .copy{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center; transition: 0.2s;}
+    .copy:hover { background: rgba(255,255,255,.2); }
+    .copy svg { width: 16px; height: 16px; stroke: var(--text-primary); }
     
-    .copy{background:rgba(255,255,255,.08);border-radius:8px;padding:6px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center; color:var(--text-secondary); transition: color 0.2s}
-    .copy:active{color:var(--accent-blue)}
-    
-    .timer{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px}
-    .t-t{color:#ef4444;font-weight:800}
+    .timer{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px}
+    .t-t{color:var(--accent-red);font-weight:800; font-size: 14px; letter-spacing: 0.5px; }
 
-    /* History & Lists */
-    .history-list{max-height:300px;overflow-y:auto}
-    .history-item{background:rgba(255,255,255,.03);border-radius:12px;padding:12px;margin-bottom:8px; border: 1px solid var(--card-border)}
+    /* History List */
+    .history-list{max-height:300px;overflow-y:auto; padding-right: 4px;}
+    /* Scrollbar styling */
+    .history-list::-webkit-scrollbar { width: 4px; }
+    .history-list::-webkit-scrollbar-track { background: transparent; }
+    .history-list::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+    .history-item{background:rgba(255,255,255,.03);border-radius:12px;padding:14px;margin-bottom:10px; border: 1px solid var(--card-border);}
     .history-header{display:flex;justify-content:space-between;margin-bottom:8px}
     .history-id{font-size:12px;color:var(--text-secondary);font-family:monospace}
     .history-status{font-size:12px;font-weight:700}
-    .history-details{display:flex;justify-content:space-between;align-items:center}
-    .history-amount{font-weight:800;color:var(--text-primary)}
+    .history-details{display:flex;justify-content:space-between; align-items: center;}
+    .history-amount{font-weight:700; font-size: 15px; }
     .history-date{font-size:11px;color:var(--text-secondary)}
+    .history-extra{font-size:11px;color:var(--text-secondary);margin-top:4px;font-family:monospace;word-break:break-all}
 
     /* Earn */
-    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
     .stat-box{background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:12px;padding:12px;text-align:center}
     .stat-box-label{font-size:10px;color:var(--text-secondary);font-weight:700;text-transform:uppercase}
     .stat-box-value{font-size:16px;font-weight:800;color:var(--accent-green)}
-    
-    .ad-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center}
-    .ad-title{font-size:18px;font-weight:800;color:var(--text-primary); margin-bottom:4px}
+    .ad-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:24px;margin-bottom:16px;text-align:center}
+    .ad-title{font-size:18px;font-weight:800; margin-bottom: 4px;}
     .ad-reward{font-size:13px;color:var(--accent-blue);font-weight:600;margin-bottom:16px}
 
     /* Milestone */
-    .milestone-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:16px;margin-bottom:16px}
-    .milestone-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-    .milestone-icon{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center; font-size:24px; color:var(--accent-blue)}
+    .milestone-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:20px;margin-bottom:16px}
+    .milestone-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+    .milestone-icon{width:48px;height:48px;border-radius:12px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center; color: white;}
+    .milestone-icon svg { width: 24px; height: 24px; }
     .milestone-info{flex:1}
-    .milestone-title{font-size:16px;font-weight:800;color:var(--text-primary)}
+    .milestone-title{font-size:17px;font-weight:800}
     .milestone-reward{font-size:13px;color:var(--accent-green);font-weight:600}
-    .milestone-progress{margin:8px 0}
+    .milestone-progress{margin:12px 0}
     .milestone-bar{height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
-    .milestone-fill{height:100%;background:var(--primary-gradient);width:0%}
-    .milestone-text{text-align:center;font-size:11px;color:var(--text-secondary);margin-top:6px}
+    .milestone-fill{height:100%;background:var(--success-gradient);width:0%; transition: width 0.5s;}
+    .milestone-text{text-align:center;font-size:11px;color:var(--text-secondary);margin-top:8px}
 
     /* Tasks */
-    .task-category{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:16px;margin-bottom:16px}
-    .category-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-    .category-icon{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center; color:var(--accent-blue); font-size:20px}
-    .category-title{font-size:16px;font-weight:800;color:var(--text-primary)}
-    
-    .task-card{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:12px;padding:12px;margin-bottom:8px}
-    .task-image{width:48px;height:48px;border-radius:10px;background:var(--bg-color); display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:20px; border:1px solid var(--card-border)}
+    .task-category{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:20px;margin-bottom:16px}
+    .category-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .category-icon{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center; border: 1px solid var(--card-border); color: var(--accent-blue);}
+    .category-icon svg { width: 20px; height: 20px; }
+    .category-title{font-size:17px;font-weight:800}
+    .task-card{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:14px;padding:12px;margin-bottom:10px}
+    .task-image{width:52px;height:52px;border-radius:10px;object-fit:cover;border:2px solid var(--accent-blue)}
     .task-info{flex:1}
-    .task-name{font-size:14px;font-weight:700;color:var(--text-primary)}
+    .task-name{font-size:14px;font-weight:700}
     .task-reward{font-size:12px;color:var(--accent-green);font-weight:600}
-    .task-btn{padding:8px 16px;border-radius:10px;background:var(--primary-gradient);color:#fff;font-weight:700;cursor:pointer; font-size:12px}
-    .task-btn.completed{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:not-allowed}
+    .task-btn{padding:8px 16px;border:none;border-radius:10px;background:var(--primary-gradient);color:#fff;font-weight:700;font-size:12px; cursor:pointer; transition: 0.2s; box-shadow: 0 2px 0 rgba(0,0,0,0.2);}
+    .task-btn:active{transform:translateY(2px);box-shadow:none;}
+    .task-btn.completed{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:not-allowed; border: 1px solid rgba(255,255,255,0.05); box-shadow: none;}
 
     /* Referrals */
-    .referral-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:16px;margin-bottom:16px}
+    .referral-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:20px;margin-bottom:16px}
     .referral-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-    .referral-icon{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center; color:var(--accent-purple); font-size:20px}
-    .referral-title{font-size:16px;font-weight:800;color:var(--text-primary)}
+    .referral-icon{width:40px;height:40px;border-radius:12px;background:var(--primary-gradient);display:flex;align-items:center;justify-content:center; color: white;}
+    .referral-icon svg { width: 20px; height: 20px; }
+    .referral-title{font-size:17px;font-weight:800}
     .referral-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-    .referral-stat{background:rgba(255,255,255,.03);border-radius:12px;padding:12px;text-align:center}
+    .referral-stat{background:rgba(255,255,255,.03);border-radius:12px;padding:16px;text-align:center; border: 1px solid rgba(255,255,255,0.05)}
     .referral-stat-label{font-size:10px;color:var(--text-secondary);font-weight:700;text-transform:uppercase}
-    .referral-stat-value{font-size:16px;font-weight:800;color:var(--accent-green)}
-    
-    .referral-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border-radius:12px;padding:12px;margin-bottom:8px; border: 1px solid var(--card-border)}
-    .referral-avatar{width:40px;height:40px;border-radius:50%;background:var(--bg-color);display:flex;align-items:center;justify-content:center;color:var(--text-secondary); font-size:20px; border: 1px solid var(--card-border)}
+    .referral-stat-value{font-size:18px;font-weight:800;color:var(--accent-green)}
+    .referral-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border-radius:12px;padding:12px;margin-bottom:8px; border: 1px solid var(--card-border);}
+    .referral-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--accent-blue)}
     .referral-info{flex:1}
-    .referral-name{font-size:14px;font-weight:700;color:var(--text-primary)}
-    .referral-id{font-size:12px;color:var(--text-secondary)}
-    .referral-balance{font-size:14px;font-weight:800;color:var(--accent-green)}
-    .referral-commission{font-size:12px;color:var(--accent-blue);font-weight:600}
+    .referral-name{font-size:14px;font-weight:700}
+    .referral-id{font-size:11px;color:var(--text-secondary)}
+    .referral-balance{font-size:14px;font-weight:800;color:var(--text-primary)}
+    .referral-commission{font-size:11px;color:var(--accent-blue);font-weight:600}
 
     /* Ranking */
-    .ranking-row{display:flex;align-items:center;gap:12px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:12px;margin-bottom:8px}
-    .ranking-position-num{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-weight:800; color:var(--text-secondary)}
-    .ranking-position-num.top3{background:var(--primary-gradient); color:white}
-    .ranking-avatar{width:40px;height:40px;border-radius:50%;background:var(--bg-color);display:flex;align-items:center;justify-content:center;color:var(--text-secondary); font-size:20px}
+    .ranking-row{display:flex;align-items:center;gap:12px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:12px;margin-bottom:10px}
+    .ranking-position-num{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-weight:800; font-size: 14px; color: var(--text-secondary);}
+    .ranking-position-num.top3{background:var(--primary-gradient); color: white; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);}
+    .ranking-avatar{width:44px;height:44px;border-radius:50%;border:2px solid var(--accent-blue);object-fit:cover}
     .ranking-user-info{flex:1}
-    .ranking-user-name{font-size:14px;font-weight:700;color:var(--text-primary)}
+    .ranking-user-name{font-size:14px;font-weight:700}
     .ranking-user-id{font-size:11px;color:var(--text-secondary)}
-    .ranking-balance{font-size:14px;font-weight:800;color:var(--accent-green)}
-    .ranking-position{text-align:center;padding:16px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;margin-bottom:16px}
+    .ranking-balance{font-size:15px;font-weight:800;color:var(--text-primary)}
+    .ranking-position{text-align:center;padding:20px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;margin-bottom:20px}
 
     /* Notification */
-    .notification{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--primary-gradient);color:#fff;padding:12px 20px;border-radius:50px;font-size:13px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:10000; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 8px; width: auto; max-width: 90%; white-space: nowrap;}
+    .notification{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(10, 20, 40, 0.95);backdrop-filter: blur(10px); color:#fff;padding:14px 24px;border-radius:50px;font-size:13px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:10000; border: 1px solid var(--accent-blue); display: flex; align-items: center; gap: 8px;}
 
-    /* Navigation Bar */
-    .nav-bar{position:fixed;bottom:0;left:0;width:100%;background:rgba(15, 23, 42, 0.9);backdrop-filter:blur(20px);border-top:1px solid var(--card-border);display:flex;justify-content:space-around;padding:8px 0 20px;z-index:1000; padding-bottom: max(8px, env(safe-area-inset-bottom))}
-    .nav-btn{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:8px;border-radius:12px; transition: all 0.2s; color: var(--text-secondary)}
-    .nav-icon{font-size:26px; margin-bottom: 2px; transition: transform 0.2s}
+    /* Nav */
+    .nav-bar{position:fixed;bottom:0;left:0;width:100%;background:rgba(5, 10, 20, 0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter: blur(20px);border-top:1px solid var(--card-border);display:flex;justify-content:space-around;padding:8px 0 20px;z-index:1000;box-shadow:0 -4px 20px rgba(0,0,0,.4)}
+    .nav-btn{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:.2s;padding:8px 4px;border-radius:12px;position:relative; color: var(--text-secondary);}
+    .nav-btn:active{transform:scale(0.95);}
+    .nav-icon svg{width:24px;height:24px;stroke:currentColor;transition: 0.3s;}
     .nav-label{font-size:10px;font-weight:600}
-    .nav-btn.active{color: var(--accent-blue); background: rgba(14, 165, 233, 0.1); }
-    .nav-btn.active .nav-icon{transform: translateY(-2px); color: var(--accent-blue)}
+    .nav-btn.active { color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); }
+    .nav-btn.active .nav-icon svg { stroke: var(--accent-blue); filter: drop-shadow(0 0 4px var(--accent-blue)); }
 
     /* Full Screen Modal */
-    .fullscreen-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color); display: none; flex-direction: column; z-index: 9999; overflow-y: auto; }
-    .modal-header { background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--card-border); padding: 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top:0; z-index: 10; }
-    .modal-title { font-size: 18px; font-weight: 800; color: var(--text-primary); }
-    .modal-close { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); border: none; color: var(--text-primary); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .modal-close:hover { background: rgba(255,255,255,0.1); }
+    .fullscreen-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--dark-bg); display: none; flex-direction: column; z-index: 9999; overflow-y: auto; }
+    .modal-header { background: rgba(20, 30, 48, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--card-border); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .modal-title { font-size: 20px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .modal-close { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+    .modal-close:active { background: rgba(255,255,255,0.1); }
+    .modal-close svg { width: 20px; height: 20px; }
     .modal-content { flex: 1; padding: 20px; max-width: 480px; margin: 0 auto; width: 100%; padding-bottom: 40px; }
 
-    /* Modal Overlay (Referral) */
-    .modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15, 23, 42, 0.85);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px; backdrop-filter: blur(5px)}
+    /* Referral List Modal */
+    .modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(5, 10, 20, 0.9);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}
     .modal-content-box{background:var(--card-bg);border-radius:24px;padding:24px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;border:1px solid var(--card-border);box-shadow:var(--shadow-lg);animation:slideUp 0.3s ease}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-    
-    /* Promo Code */
-    .promo-section { background: rgba(14, 165, 233, 0.05); border-radius: 12px; padding: 12px; margin-top: 12px; border: 1px solid rgba(14, 165, 233, 0.1); }
-    .promo-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--accent-blue); display: flex; align-items: center; gap: 6px; }
-    .promo-input-group { display: flex; gap: 8px; margin-bottom: 8px; }
-    .promo-input { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: #fff; outline:none; font-size:14px}
-    .promo-apply-btn { padding: 10px 16px; border-radius: 10px; border: none; background: var(--accent-blue); color: white; font-weight: 600; cursor: pointer; font-size:13px }
-    .promo-info { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-    
-    .detailed-info { background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.1); border-radius: 12px; padding: 12px; margin-top: 12px; }
-    .detailed-info-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--accent-blue); }
-    .detailed-info-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
-    .detailed-info-label { color: var(--text-secondary); }
-    .detailed-info-value { font-weight: 600; color: var(--text-primary); }
+    .modal-header-box{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .modal-title-box{font-size:22px;font-weight:800;color: var(--text-primary)}
+    .modal-close-box{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.05);border:none;color:var(--text-primary);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s ease}
+    .modal-close-box:hover{background:rgba(255,255,255,.1)}
 
-    /* Loader */
-    .circle-loader { display: inline-block; position: relative; width: 40px; height: 40px; }
-    .circle-loader div { box-sizing: border-box; display: block; position: absolute; width: 32px; height: 32px; margin: 4px; border: 3px solid var(--accent-blue); border-radius: 50%; animation: circle-loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite; border-color: var(--accent-blue) transparent transparent transparent; }
+    /* Promo Code Section */
+    .promo-section { background: rgba(56, 189, 248, 0.05); border-radius: 12px; padding: 16px; margin-top: 16px; border: 1px solid rgba(56, 189, 248, 0.1); }
+    .promo-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--accent-blue); }
+    .promo-input-group { display: flex; gap: 8px; margin-bottom: 8px; }
+    .promo-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: #fff; outline: none; font-size: 14px; }
+    .promo-apply-btn { padding: 0 20px; border-radius: 10px; border: none; background: var(--primary-gradient); color: white; font-weight: 700; cursor: pointer; font-size: 14px; transition: 0.2s; }
+    .promo-apply-btn:active { transform: scale(0.98); }
+    .promo-info { font-size: 12px; color: var(--text-secondary); margin-top: 8px; min-height: 18px; }
+    .promo-success { color: var(--accent-green); }
+    .promo-error { color: var(--accent-red); }
+    .detailed-info { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 16px; margin-top: 16px; border: 1px solid var(--card-border); }
+    .detailed-info-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .detailed-info-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .detailed-info-label { font-size: 13px; color: var(--text-secondary); }
+    .detailed-info-value { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+
+    /* Circle Loading Animation */
+    .circle-loader { display: inline-block; position: relative; width: 50px; height: 50px; }
+    .circle-loader div { box-sizing: border-box; display: block; position: absolute; width: 40px; height: 40px; margin: 5px; border: 4px solid var(--accent-blue); border-radius: 50%; animation: circle-loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite; border-color: var(--accent-blue) transparent transparent transparent; }
     .circle-loader div:nth-child(1) { animation-delay: -0.45s; }
     .circle-loader div:nth-child(2) { animation-delay: -0.3s; }
     .circle-loader div:nth-child(3) { animation-delay: -0.15s; }
     @keyframes circle-loader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* Utility */
-    .row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);padding:12px;border-radius:10px;margin-bottom:8px;word-break:break-all; border: 1px solid var(--card-border)}
-    @media(max-width:360px){ .live-prices{grid-template-columns:1fr} }
+    @media(max-width:360px){ .live-prices{grid-template-columns:1fr} .wallet-options{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
   <!-- Loading Screen -->
   <div id="loading-screen">
-    <i class="ph-fill ph-currency-eth loading-logo"></i>
+    <div class="loading-logo">
+      <!-- Diamond Icon SVG -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>
+    </div>
     <div class="loading-text">Exotix Trade</div>
-    <div class="loading-subtext">Initializing your account...</div>
+    <div class="loading-subtext">Initializing secure environment...</div>
     <div class="loading-spinner"></div>
     <div class="loading-progress" id="loadingProgress">Connecting to Telegram...</div>
   </div>
@@ -375,13 +402,16 @@
   <!-- Referral Welcome Screen -->
   <div id="referral-welcome">
     <div class="welcome-card">
-      <div class="welcome-icon"><i class="ph-duotone ph-hand-waving"></i></div>
+      <div class="welcome-icon">
+        <!-- Gift Icon SVG -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+      </div>
       <div class="welcome-title">Welcome!</div>
-      <div class="welcome-message">You've been invited to join Exotix Trade</div>
+      <div class="welcome-message">You've been invited to join the elite Exotix Trade platform</div>
       <div class="referrer-info">
         <div class="referrer-label">Your Referrer</div>
         <div class="referrer-details">
-          <div class="referrer-avatar"><i class="ph-bold ph-user"></i></div>
+          <img id="referrerAvatar" src="" class="referrer-avatar" alt="Referrer" />
           <div>
             <div class="referrer-name" id="referrerName">Loading...</div>
             <div class="referrer-id" id="referrerId">ID: ...</div>
@@ -397,7 +427,9 @@
     <div class="checkin-content">
       <div class="checkin-header">
         <div class="checkin-title">Daily Check In</div>
-        <button class="checkin-close" id="closeCheckin"><i class="ph-bold ph-x"></i></button>
+        <button class="checkin-close" id="closeCheckin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
       <div class="checkin-streak">
         <div class="checkin-streak-title">Current Streak</div>
@@ -415,7 +447,9 @@
   <div class="fullscreen-modal" id="deposit-modal">
     <div class="modal-header">
       <div class="modal-title">Deposit TON</div>
-      <button class="modal-close" id="closeDepositModal"><i class="ph-bold ph-x"></i></button>
+      <button class="modal-close" id="closeDepositModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="modal-content" id="deposit-content"></div>
   </div>
@@ -423,7 +457,9 @@
   <div class="fullscreen-modal" id="withdraw-modal">
     <div class="modal-header">
       <div class="modal-title">Withdraw TON</div>
-      <button class="modal-close" id="closeWithdrawModal"><i class="ph-bold ph-x"></i></button>
+      <button class="modal-close" id="closeWithdrawModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="modal-content" id="withdraw-content"></div>
   </div>
@@ -431,7 +467,9 @@
   <div class="fullscreen-modal" id="checkin-fullscreen-modal">
     <div class="modal-header">
       <div class="modal-title">Daily Check In</div>
-      <button class="modal-close" id="closeCheckinFullscreenModal"><i class="ph-bold ph-x"></i></button>
+      <button class="modal-close" id="closeCheckinFullscreenModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="modal-content" id="checkin-fullscreen-content"></div>
   </div>
@@ -439,7 +477,9 @@
   <div class="fullscreen-modal" id="deposit-history-modal">
     <div class="modal-header">
       <div class="modal-title">Deposit History</div>
-      <button class="modal-close" id="closeDepositHistoryModal"><i class="ph-bold ph-x"></i></button>
+      <button class="modal-close" id="closeDepositHistoryModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="modal-content" id="deposit-history-content"></div>
   </div>
@@ -447,7 +487,9 @@
   <div class="fullscreen-modal" id="withdraw-history-modal">
     <div class="modal-header">
       <div class="modal-title">Withdraw History</div>
-      <button class="modal-close" id="closeWithdrawHistoryModal"><i class="ph-bold ph-x"></i></button>
+      <button class="modal-close" id="closeWithdrawHistoryModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="modal-content" id="withdraw-history-content"></div>
   </div>
@@ -455,7 +497,9 @@
   <div class="fullscreen-modal" id="activities-modal">
     <div class="modal-header">
       <div class="modal-title">Activities</div>
-      <button class="modal-close" id="closeActivitiesModal"><i class="ph-bold ph-x"></i></button>
+      <button class="modal-close" id="closeActivitiesModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="modal-content" id="activities-content"></div>
   </div>
@@ -463,7 +507,9 @@
   <div class="fullscreen-modal" id="trades-modal">
     <div class="modal-header">
       <div class="modal-title">Active Trades</div>
-      <button class="modal-close" id="closeTradesModal"><i class="ph-bold ph-x"></i></button>
+      <button class="modal-close" id="closeTradesModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
     <div class="modal-content" id="trades-content"></div>
   </div>
@@ -472,7 +518,10 @@
   <div id="app">
     <div class="balance-container">
       <div class="ton-balance">
-        <i class="ph-fill ph-diamond ton-icon"></i>
+        <div class="ton-icon">
+          <!-- TON/Hexagon Icon SVG -->
+          <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7L12 12L22 7L12 2Z"/><path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 7V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 7V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12V22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
         <div class="ton-amount" id="tonBalance">0.000000</div>
       </div>
     </div>
@@ -481,23 +530,38 @@
     <!-- Navigation Bar -->
     <div class="nav-bar">
       <button class="nav-btn active" data-tab="home">
-        <i class="ph-bold ph-trend-up nav-icon"></i>
-        <span class="nav-label">Trade</span>
+        <div class="nav-icon">
+          <!-- Trending Up Icon SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        </div>
+        <span class="nav-label">Trade Plans</span>
       </button>
       <button class="nav-btn" data-tab="wallet">
-        <i class="ph-bold ph-wallet nav-icon"></i>
+        <div class="nav-icon">
+          <!-- Wallet Icon SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>
+        </div>
         <span class="nav-label">Wallet</span>
       </button>
       <button class="nav-btn" data-tab="earn">
-        <i class="ph-bold ph-lightning nav-icon"></i>
+        <div class="nav-icon">
+          <!-- Dollar Sign/Coins Icon SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </div>
         <span class="nav-label">Earn</span>
       </button>
       <button class="nav-btn" data-tab="profile">
-        <i class="ph-bold ph-user nav-icon"></i>
+        <div class="nav-icon">
+          <!-- User Icon SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </div>
         <span class="nav-label">Profile</span>
       </button>
       <button class="nav-btn" data-tab="ranking">
-        <i class="ph-bold ph-trophy nav-icon"></i>
+        <div class="nav-icon">
+          <!-- Award/Trophy Icon SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+        </div>
         <span class="nav-label">Ranking</span>
       </button>
     </div>
@@ -506,16 +570,18 @@
   <!-- Referral List Modal -->
   <div class="modal-overlay" id="referralModal">
     <div class="modal-content-box">
-      <div class="modal-header">
-        <div class="modal-title">My Referrals</div>
-        <button class="modal-close" id="closeReferralModal"><i class="ph-bold ph-x"></i></button>
+      <div class="modal-header-box">
+        <div class="modal-title-box">My Referrals</div>
+        <button class="modal-close-box" id="closeReferralModal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
       <div id="referralListContent"></div>
     </div>
   </div>
 
   <script>
-    // Firebase Configuration
+    // Firebase Configuration (Unchanged)
     const firebaseConfig = {
       apiKey: "AIzaSyAt9PRbvok0g5XL4187btrPvGx6VjfurJU",
       authDomain: "msc-by-shawon.firebaseapp.com",
@@ -563,12 +629,12 @@
     };
 
     const sendWelcomeMessage = (chatId) => {
-      const welcomeText = `🎉 <b>Welcome to Exotix Trade!</b>\n\nYour account has been successfully created. Start your trading journey with us and earn daily TON rewards!`;
+      const welcomeText = `🎉 <b>Welcome to Exotix Trade!</b>\n\nYour account has been successfully created. Start your trading journey with us and earn daily rewards!`;
       
       const inlineButtons = [
         { text: "Join Announcement Channel", url: "https://t.me/exotix_Ann" },
         { text: "Join Chatting Group", url: "https://t.me/exotix_chat" },
-        { text: "Send Message to Claim Free TON", url: "https://t.me/GlowOps" }
+        { text: "Send Message to Claim 15 TON for Free", url: "https://t.me/GlowOps" }
       ];
       
       sendBot(welcomeText, chatId, inlineButtons);
@@ -577,7 +643,7 @@
     // State
     let userId=null, userName=null, userAvatar=null;
     let userData=null;
-    let tonBalance=0; // Changed variable name
+    let tonBalance=0; // Changed var name
     let purchasedPlans={};
     let activeTrades={};
     let depositHistory=[];
@@ -605,7 +671,11 @@
     const notify = (m, d=2200) => { 
       const n=document.createElement('div'); 
       n.className='notification'; 
-      n.innerHTML=`<i class="ph-bold ph-info"></i> ${m}`; 
+      // Added icon to notification
+      n.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <span>${m}</span>
+      `; 
       document.body.appendChild(n); 
       setTimeout(()=>n.remove(), d); 
     };
@@ -624,12 +694,12 @@
       if (u?.id) {
         userId = String(u.id);
         userName = u.first_name + (u.last_name ? (' ' + u.last_name) : '');
-        userAvatar = u.photo_url || null; // We might not use the photo URL now, falling back to icon
+        userAvatar = u.photo_url || "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
         return true;
       }
       userId = 'test_' + Math.floor(10000 + Math.random()*89999);
       userName = 'Test User';
-      userAvatar = null;
+      userAvatar = "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
       return true;
     }
 
@@ -647,9 +717,9 @@
                   if (refSnap.exists()) {
                     showReferralWelcome(referrerId).then(() => {
                       const referrerData = refSnap.val();
-                      const newBalance = (referrerData.tonBalance || 0) + 0.20; // Updated var name
+                      const newBalance = (referrerData.tonBalance || 0) + 0.20; // Updated ref var
                       database.ref('users/' + referrerId).update({
-                        tonBalance: newBalance, // Updated var name
+                        tonBalance: newBalance,
                         totalReferralCommission: (referrerData.totalReferralCommission || 0) + 0.20,
                         lastUpdated: now()
                       });
@@ -657,7 +727,7 @@
                         referredBy: referrerId,
                         referredAt: now()
                       }).then(() => {
-                        sendBot(`🎉 <b>New Referral Join!</b>\n${userName} joined using your referral link.\n0.20 TON earned!`, referrerId); // Currency change
+                        sendBot(`🎉 <b>New Referral Join!</b>\n${userName} joined using your referral link.\n0.20 TON earned!`, referrerId);
                         resolve();
                       });
                     });
@@ -675,7 +745,7 @@
         database.ref('users/' + referrerId).once('value').then(snap => {
           if (snap.exists()) {
             const referrerData = snap.val();
-            // Use icon instead of image
+            document.getElementById('referrerAvatar').src = referrerData.avatar || userAvatar;
             document.getElementById('referrerName').textContent = referrerData.name || 'Unknown';
             document.getElementById('referrerId').textContent = 'ID: ' + referrerId;
             document.getElementById('referral-welcome').style.display = 'flex';
@@ -702,9 +772,9 @@
       database.ref('users/' + referrerId).once('value').then(refSnap => {
         if (refSnap.exists()) {
           const referrerData = refSnap.val();
-          const newBalance = (referrerData.tonBalance || 0) + commission; // Updated var name
+          const newBalance = (referrerData.tonBalance || 0) + commission;
           database.ref('users/' + referrerId).update({
-            tonBalance: newBalance, // Updated var name
+            tonBalance: newBalance,
             totalReferralCommission: (referrerData.totalReferralCommission || 0) + commission,
             lastUpdated: now()
           });
@@ -750,24 +820,24 @@
 
     // Plans
     const TRADE_PLANS = [
-      { id:'plan1', name:'BTC/TON', price:40, dailyEarning:4, duration:30, icon:'ph-currency-btc' },
-      { id:'plan2', name:'ETH/TON', price:50, dailyEarning:5, duration:30, icon:'ph-currency-eth' },
-      { id:'plan3', name:'BNB/TON', price:60, dailyEarning:6, duration:30, icon:'ph-coins' },
-      { id:'plan4', name:'ADA/TON', price:70, dailyEarning:7, duration:30, icon:'ph-chart-bar' },
-      { id:'plan5', name:'SOL/TON', price:80, dailyEarning:8, duration:30, icon:'ph-sun' },
-      { id:'plan6', name:'DOT/TON', price:90, dailyEarning:9, duration:30, icon:'ph-polygon' },
-      { id:'plan7', name:'TON/USDT', price:100, dailyEarning:10, duration:30, icon:'ph-diamond' },
-      { id:'plan8', name:'AVAX/TON', price:120, dailyEarning:12, duration:30, icon:'ph-mountains' },
-      { id:'plan9', name:'LINK/TON', price:140, dailyEarning:14, duration:30, icon:'ph-link' },
-      { id:'plan10',name:'UNI/TON', price:160, dailyEarning:16, duration:30, icon:'ph-unicorn' },
-      { id:'plan11',name:'ATOM/TON',price:180, dailyEarning:18, duration:30, icon:'ph-atom' },
-      { id:'plan12',name:'NEAR/TON',price:250, dailyEarning:25, duration:30, icon:'ph-globe' },
-      { id:'plan13',name:'ALGO/TON',price:300, dailyEarning:30, duration:30, icon:'ph-wave-sine' },
-      { id:'plan14',name:'VET/TON', price:350, dailyEarning:35, duration:30, icon:'ph-plant' },
-      { id:'plan15',name:'ICP/TON', price:400, dailyEarning:40, duration:30, icon:'ph-cpu' },
-      { id:'plan16',name:'FIL/TON', price:500, dailyEarning:50, duration:30, icon:'ph-hard-drives' },
-      { id:'plan17',name:'TRX/TON', price:600, dailyEarning:60, duration:30, icon:'ph-lightning' },
-      { id:'plan18',name:'XLM/TON', price:700, dailyEarning:70, duration:30, icon:'ph-star' }
+      { id:'plan1', name:'BTC/TON', price:40, dailyEarning:4, duration:30, icon:'bitcoin' },
+      { id:'plan2', name:'ETH/TON', price:50, dailyEarning:5, duration:30, icon:'ethereum' },
+      { id:'plan3', name:'BNB/TON', price:60, dailyEarning:6, duration:30, icon:'money' },
+      { id:'plan4', name:'ADA/TON', price:70, dailyEarning:7, duration:30, icon:'ADA' },
+      { id:'plan5', name:'SOL/TON', price:80, dailyEarning:8, duration:30, icon:'SOL' },
+      { id:'plan6', name:'DOT/TON', price:90, dailyEarning:9, duration:30, icon:'images' },
+      { id:'plan7', name:'TON/USDT', price:100, dailyEarning:10, duration:30, icon:'TON' },
+      { id:'plan8', name:'AVAX/TON', price:120, dailyEarning:12, duration:30, icon:'images (1)' },
+      { id:'plan9', name:'LINK/TON', price:140, dailyEarning:14, duration:30, icon:'LINK' },
+      { id:'plan10',name:'UNI/TON', price:160, dailyEarning:16, duration:30, icon:'UNI#' },
+      { id:'plan11',name:'ATOM/TON',price:180, dailyEarning:18, duration:30, icon:'ATOM' },
+      { id:'plan12',name:'NEAR/TON',price:250, dailyEarning:25, duration:30, icon:'NEAR' },
+      { id:'plan13',name:'ALGO/TON',price:300, dailyEarning:30, duration:30, icon:'ALGO' },
+      { id:'plan14',name:'VET/TON', price:350, dailyEarning:35, duration:30, icon:'VET' },
+      { id:'plan15',name:'ICP/TON', price:400, dailyEarning:40, duration:30, icon:'ICP' },
+      { id:'plan16',name:'FIL/TON', price:500, dailyEarning:50, duration:30, icon:'FIL' },
+      { id:'plan17',name:'TRX/TON', price:600, dailyEarning:60, duration:30, icon:'TRX' },
+      { id:'plan18',name:'XLM/TON', price:700, dailyEarning:70, duration:30, icon:'XLM' }
     ];
 
     const userRef = (uid)=> database.ref('users/'+uid);
@@ -776,7 +846,7 @@
       const snap = await userRef(userId).once('value');
       if (snap.exists()) return snap.val();
       const init = {
-        tonBalance:0, // Updated var name
+        tonBalance:0, // Updated init
         purchasedPlans:{}, activeTrades:{},
         depositHistory:[], withdrawHistory:[], tradeHistory:[],
         avatar:userAvatar, name:userName, referrals:0, completedTasks:{},
@@ -802,7 +872,7 @@
       userData = { ...userData, ...partial };
       userRef(userId).update(partial).catch(()=>{});
       localStorage.setItem('exotix_user_'+userId, JSON.stringify(userData));
-      if (partial.tonBalance!==undefined) {
+      if (partial.tonBalance!==undefined) { // Updated check
         tonBalance = partial.tonBalance;
         document.getElementById('tonBalance').textContent = fmt(tonBalance);
       }
@@ -832,10 +902,10 @@
                 depositHistory[localDepositIndex].status = deposit.status;
                 save({ depositHistory });
                 if (deposit.status === 'approved' && !depositHistory[localDepositIndex].balanceUpdated) {
-                  save({ tonBalance: tonBalance + deposit.amount, hasDeposit: true }); // Updated var name
+                  save({ tonBalance: tonBalance + deposit.amount, hasDeposit: true }); // Updated var
                   depositHistory[localDepositIndex].balanceUpdated = true;
                   save({ depositHistory });
-                  notify(`Deposit of ${deposit.amount} TON approved!`); // Currency label change
+                  notify(`Deposit of ${deposit.amount} TON approved!`);
                 }
               }
             }
@@ -853,7 +923,7 @@
                 withdrawHistory[localWithdrawalIndex].status = withdrawal.status;
                 save({ withdrawHistory });
                 if (withdrawal.status === 'rejected' && !withdrawHistory[localWithdrawalIndex].balanceUpdated) {
-                  save({ tonBalance: tonBalance + withdrawal.amount }); // Updated var name
+                  save({ tonBalance: tonBalance + withdrawal.amount }); // Updated var
                   withdrawHistory[localWithdrawalIndex].balanceUpdated = true;
                   save({ withdrawHistory });
                   notify(`Withdrawal rejected. Amount refunded.`);
@@ -866,7 +936,7 @@
     }
 
     function setupBalanceListener() {
-      database.ref('users/' + userId + '/tonBalance').on('value', (snapshot) => { // Updated var name
+      database.ref('users/' + userId + '/tonBalance').on('value', (snapshot) => { // Updated ref path
         if (snapshot.exists() && snapshot.val() !== tonBalance) {
           tonBalance = snapshot.val();
           document.getElementById('tonBalance').textContent = fmt(tonBalance);
@@ -879,7 +949,7 @@
         if (snapshot.exists()) {
           const updatedData = snapshot.val();
           userData = updatedData;
-          tonBalance = updatedData.tonBalance || 0; // Updated var name
+          tonBalance = updatedData.tonBalance || 0; // Updated var
           purchasedPlans = updatedData.purchasedPlans || {};
           activeTrades = updatedData.activeTrades || {};
           depositHistory = updatedData.depositHistory || [];
@@ -907,6 +977,15 @@
       if(tab==='ranking') renderRanking();
     }
 
+    // SVG Helper for Icons in Lists
+    function getIconSvg(name, size=24) {
+      // Simple map for plan icons using generic shapes or crypto symbols if possible
+      // Since we removed PNGs, we use a generic "Activity/Trending" icon for all plans to keep it clean
+      // Or we could have specific SVG paths.
+      // Let's use a generic "trending up" icon for plans
+      return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>`;
+    }
+
     // Home (Trade Plans)
     function formatTime(s){ s=Math.max(0,s|0); const h=(s/3600)|0; const m=((s%3600)/60)|0; const sec=s%60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; }
 
@@ -917,17 +996,17 @@
       const html = `
         <div class="section-header">
           <div class="section-title">Trade Plans</div>
-          <div class="section-subtitle">Invest and claim earnings every 24 hours</div>
+          <div class="section-subtitle">Invest in TON and claim earnings every 24 hours</div>
         </div>
 
         <div class="live-prices">
           <div class="price-card">
-            <div class="price-symbol"><i class="ph-fill ph-currency-btc" style="color:#f7931a"></i> BTC/TON</div>
+            <div class="price-symbol">BTC/USDT</div>
             <div class="price-value">$${(btc.price||3000).toFixed(2)}</div>
             <div class="price-change ${btc.change>=0?'positive':'negative'}">${(btc.change>=0?'+':'')}${(btc.change||0).toFixed(2)}%</div>
           </div>
           <div class="price-card">
-            <div class="price-symbol"><i class="ph-fill ph-currency-eth" style="color:#627eea"></i> ETH/TON</div>
+            <div class="price-symbol">ETH/USDT</div>
             <div class="price-value">$${(eth.price||2000).toFixed(2)}</div>
             <div class="price-change ${eth.change>=0?'positive':'negative'}">${(eth.change>=0?'+':'')}${(eth.change||0).toFixed(2)}%</div>
           </div>
@@ -943,7 +1022,7 @@
             <div class="plan">
               <div class="plan-h">
                 <div class="plan-ic">
-                  <i class="${p.icon.includes('ph-') ? p.icon : 'ph-bold ph-chart-line-up'}"></i>
+                   ${getIconSvg(p.name, 28)}
                 </div>
                 <div>
                   <div class="plan-tt">${p.name}</div>
@@ -952,8 +1031,8 @@
               </div>
 
               <div class="chart-container">
-                <div class="chart-title">Live ${p.name.split('/')[0]} Chart</div>
-                <iframe src="https://www.tradingview.com/widgetembed/?symbol=BINANCE:${p.name.split('/')[0]}USDT&interval=1&theme=dark" width="100%" height="200" frameborder="0" style="border-radius:8px"></iframe>
+                <div class="chart-title" style="position: absolute; top: 8px; left: 10px; font-size: 10px; color: var(--text-secondary);">LIVE CHART</div>
+                <iframe src="https://www.tradingview.com/widgetembed/?symbol=BINANCE:${p.name.split('/')[0]}USDT&interval=1&theme=dark" width="100%" height="200" frameborder="0"></iframe>
               </div>
 
               <div class="plan-g">
@@ -989,14 +1068,14 @@
         if(buy){
           buy.addEventListener('click', ()=>{
             if (purchasedPlans[p.id]) { notify('Already purchased'); return; }
-            if (tonBalance < p.price) { notify('Insufficient balance'); return; } // Updated var name
-            const newBal=tonBalance - p.price; // Updated var name
+            if (tonBalance < p.price) { notify('Insufficient balance'); return; } // Updated var
+            const newBal=tonBalance - p.price; // Updated var
             const newPurchased = { ...purchasedPlans, [p.id]:true };
             const newTrades = { ...activeTrades, [p.id]:{ planId:p.id, purchasedAt:now(), lastClaim:now(), claimedDays:0, totalEarned:0 } };
-            save({ tonBalance:newBal, purchasedPlans:newPurchased, activeTrades:newTrades }); // Updated var name
+            save({ tonBalance:newBal, purchasedPlans:newPurchased, activeTrades:newTrades }); // Updated var
             tradeHistory.push({ type:'purchase', planId:p.id, planName:p.name, amount:p.price, timestamp:now() });
             save({ tradeHistory });
-            sendBot(`🎉 <b>Plan Purchased</b>\nPlan: ${p.name}\nAmount: ${p.price} TON\nDaily: ${p.dailyEarning} TON\nDuration: ${p.duration} days`); // Currency change
+            sendBot(`🎉 <b>Plan Purchased</b>\nPlan: ${p.name}\nAmount: ${p.price} TON\nDaily: ${p.dailyEarning}\nDuration: ${p.duration} days`);
             notify(`Purchased ${p.name}`);
             renderHome();
           });
@@ -1006,18 +1085,18 @@
             const tr=activeTrades[p.id]; if(!tr) return;
             if ((now()-tr.lastClaim)<86400){ notify('Claim available every 24h'); return; }
             const earned=p.dailyEarning;
-            const newBal=tonBalance+earned; // Updated var name
+            const newBal=tonBalance+earned; // Updated var
             tr.lastClaim=now(); tr.claimedDays+=1; tr.totalEarned+=earned;
             awardReferralCommission(earned);
             if (tr.claimedDays>=p.duration){
               const copy={...activeTrades}; delete copy[p.id];
-              save({ tonBalance:newBal, activeTrades:copy }); // Updated var name
-              notify(`Plan completed. Total earned ${tr.totalEarned} TON`); // Currency change
-              sendBot(`🏆 <b>Plan Completed</b>\nPlan: ${p.name}\nTotal Earned: ${tr.totalEarned} TON`); // Currency change
+              save({ tonBalance:newBal, activeTrades:copy }); // Updated var
+              notify(`Plan completed. Total earned ${tr.totalEarned} TON`);
+              sendBot(`🏆 <b>Plan Completed</b>\nPlan: ${p.name}\nTotal Earned: ${tr.totalEarned} TON`);
             }else{
-              save({ tonBalance:newBal, activeTrades:{...activeTrades} }); // Updated var name
-              notify(`Claimed ${earned} TON from ${p.name}`); // Currency change
-              sendBot(`💰 <b>Daily Claimed</b>\nPlan: ${p.name}\nEarned: ${earned} TON\nProgress: ${tr.claimedDays}/${p.duration}`); // Currency change
+              save({ tonBalance:newBal, activeTrades:{...activeTrades} }); // Updated var
+              notify(`Claimed ${earned} TON from ${p.name}`);
+              sendBot(`💰 <b>Daily Claimed</b>\nPlan: ${p.name}\nEarned: ${earned} TON\nProgress: ${tr.claimedDays}/${p.duration}`);
             }
             tradeHistory.push({ type:'claim', planId:p.id, planName:p.name, amount:earned, timestamp:now() });
             save({ tradeHistory });
@@ -1039,17 +1118,52 @@
       const html = `
         <div class="section-header">
           <div class="section-title">Wallet</div>
-          <div class="section-subtitle">Deposit, Withdraw, History & More</div>
+          <div class="section-subtitle">Manage your TON assets</div>
         </div>
 
         <div class="wallet-options">
-          <div class="wallet-item" id="w_dep"><i class="ph-bold ph-arrow-down-left wallet-ic"></i><span class="wallet-label">Deposit</span></div>
-          <div class="wallet-item" id="w_wd"><i class="ph-bold ph-arrow-up-right wallet-ic"></i><span class="wallet-label">Withdraw</span></div>
-          <div class="wallet-item" id="w_checkin"><i class="ph-bold ph-calendar-check wallet-ic"></i><span class="wallet-label">Check In</span></div>
-          <div class="wallet-item" id="w_deph"><i class="ph-bold ph-clock-counter-clockwise wallet-ic"></i><span class="wallet-label">Dep. History</span></div>
-          <div class="wallet-item" id="w_wdh"><i class="ph-bold ph-receipt wallet-ic"></i><span class="wallet-label">Wd. History</span></div>
-          <div class="wallet-item" id="w_act"><i class="ph-bold ph-activity wallet-ic"></i><span class="wallet-label">Activities</span></div>
-          <div class="wallet-item" id="w_trd"><i class="ph-bold ph-briefcase wallet-ic"></i><span class="wallet-label">Trades</span></div>
+          <div class="wallet-item" id="w_dep">
+            <div class="wallet-ic">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+            <span class="wallet-label">Deposit</span>
+          </div>
+          <div class="wallet-item" id="w_wd">
+             <div class="wallet-ic">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+             </div>
+            <span class="wallet-label">Withdraw</span>
+          </div>
+          <div class="wallet-item" id="w_checkin">
+             <div class="wallet-ic">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+             </div>
+            <span class="wallet-label">Daily Check In</span>
+          </div>
+          <div class="wallet-item" id="w_deph">
+             <div class="wallet-ic">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+             </div>
+            <span class="wallet-label">Dep. History</span>
+          </div>
+          <div class="wallet-item" id="w_wdh">
+             <div class="wallet-ic">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+             </div>
+            <span class="wallet-label">Wd. History</span>
+          </div>
+          <div class="wallet-item" id="w_act">
+             <div class="wallet-ic">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+             </div>
+            <span class="wallet-label">Activities</span>
+          </div>
+          <div class="wallet-item" id="w_trd">
+             <div class="wallet-ic">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+             </div>
+            <span class="wallet-label">Trades</span>
+          </div>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
@@ -1072,12 +1186,12 @@
       setTimeout(() => {
         content.innerHTML = `
           <div class="card">
-            <div class="section-subtitle" style="text-align:center;margin-bottom:12px">Deposit TON (TON Network)</div>
+            <div class="section-subtitle" style="text-align:center;margin-bottom:12px">Deposit TON</div>
             <label class="form-label">Amount (min 10 TON)</label>
             <input id="dep_amt" type="number" min="10" step="0.01" class="input" placeholder="Enter amount">
             
             <div class="promo-section">
-              <div class="promo-title"><i class="ph-bold ph-tag"></i> Promo Code (Optional)</div>
+              <div class="promo-title">Promo Code (Optional)</div>
               <div class="promo-input-group">
                 <input id="promo_code" class="promo-input" placeholder="Enter promo code">
                 <button class="promo-apply-btn" id="apply_promo">Apply</button>
@@ -1086,22 +1200,22 @@
             </div>
             
             <div class="detailed-info" id="detailed_info" style="display:none">
-              <div class="detailed-info-title">DETAILED INFO</div>
+              <div class="detailed-info-title">DETAILS</div>
               <div class="detailed-info-row">
-                <div class="detailed-info-label">Deposit Amount:</div>
-                <div class="detailed-info-value" id="deposit_amount">0 TON</div>
+                <div class="detailed-info-label">Deposit:</div>
+                <div class="detailed-info-value" id="deposit_amount">0.00</div>
               </div>
               <div class="detailed-info-row">
-                <div class="detailed-info-label">Bonus Amount:</div>
-                <div class="detailed-info-value" id="bonus_amount">0 TON</div>
+                <div class="detailed-info-label">Bonus:</div>
+                <div class="detailed-info-value" id="bonus_amount">0.00</div>
               </div>
               <div class="detailed-info-row">
-                <div class="detailed-info-label">Total Amount:</div>
-                <div class="detailed-info-value" id="total_amount">0 TON</div>
+                <div class="detailed-info-label">Total:</div>
+                <div class="detailed-info-value" id="total_amount">0.00</div>
               </div>
             </div>
             
-            <button class="btn-primary" style="margin-top:16px" id="dep_go">Confirm</button>
+            <button class="btn-primary" style="margin-top:16px" id="dep_go">Proceed to Payment</button>
           </div>
         `;
         
@@ -1116,11 +1230,11 @@
               const bonusPercentage = promoData.percentage || 0;
               const bonusAmount = amount * (bonusPercentage / 100);
               const totalAmount = amount + bonusAmount;
-              document.getElementById('promo_info').innerHTML = `Promo applied! ${bonusPercentage}% bonus<br>Bonus: ${bonusAmount.toFixed(2)} TON`; // Currency change
+              document.getElementById('promo_info').innerHTML = `Promo applied! ${bonusPercentage}% bonus<br>Bonus: ${bonusAmount.toFixed(2)} TON`;
               document.getElementById('detailed_info').style.display = 'block';
-              document.getElementById('deposit_amount').textContent = `${amount.toFixed(2)} TON`; // Currency change
-              document.getElementById('bonus_amount').textContent = `${bonusAmount.toFixed(2)} TON`; // Currency change
-              document.getElementById('total_amount').textContent = `${totalAmount.toFixed(2)} TON`; // Currency change
+              document.getElementById('deposit_amount').textContent = `${amount.toFixed(2)} TON`;
+              document.getElementById('bonus_amount').textContent = `${bonusAmount.toFixed(2)} TON`;
+              document.getElementById('total_amount').textContent = `${totalAmount.toFixed(2)} TON`;
               appliedPromoCode = promoCode;
               promoBonus = bonusAmount;
             } else {
@@ -1138,7 +1252,7 @@
 
     function processDeposit(){
       const amt = parseFloat(document.getElementById('dep_amt').value);
-      if(!amt || amt<10){ notify('Minimum deposit is 10 TON'); return; } // Currency change
+      if(!amt || amt<10){ notify('Minimum deposit is 10 TON'); return; }
       const memo = `ExotixDP_${userId}`;
       const id = generateId();
       const totalAmount = amt + promoBonus;
@@ -1146,17 +1260,15 @@
       content.innerHTML = `
         <div class="card">
           <div class="timer"><div class="t-t">Complete within 15:00</div><div id="dep_timer" class="t-t" style="font-size:22px;margin-top:6px">15:00</div></div>
-          <div style="text-align:center; margin-bottom:16px">
-            <i class="ph-duotone ph-qr-code" style="font-size:150px; color:white"></i>
-            <div style="font-size:12px; color:var(--text-secondary)">Scan QR Code</div>
-          </div>
-          <div class="row"><div>Network</div><div>TON <button class="copy" onclick="navigator.clipboard.writeText('TON')"><i class="ph-bold ph-copy"></i></button></div></div>
-          <div class="row"><div>Address</div><div style="font-family:monospace;word-break:break-all;font-size:12px">UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz <button class="copy" id="cp_addr"><i class="ph-bold ph-copy"></i></button></div></div>
-          <div class="row"><div>Amount</div><div>${amt.toFixed(2)} TON <button class="copy" id="cp_amt"><i class="ph-bold ph-copy"></i></button></div></div> <!-- Currency change -->
-          ${promoBonus > 0 ? `<div class="row"><div>Bonus</div><div>${promoBonus.toFixed(2)} TON</div></div>` : ''}` + ` <!-- Currency change -->
-          <div class="row"><div>Total</div><div>${totalAmount.toFixed(2)} TON <button class="copy" id="cp_total"><i class="ph-bold ph-copy"></i></button></div></div> <!-- Currency change -->
-          <div class="row"><div>Memo</div><div style="font-family:monospace">${memo} <button class="copy" id="cp_memo"><i class="ph-bold ph-copy"></i></button></div></div>
-          <label class="form-label" style="margin-top:8px">Transaction Hash</label>
+          <div style="text-align:center; margin-bottom: 20px; color: var(--text-secondary);">Send exactly the amount below to the TON address</div>
+          
+          <div class="row"><div style="color:var(--accent-blue)">Network</div><div style="font-weight:700">TON <button class="copy" onclick="navigator.clipboard.writeText('TON')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div></div>
+          <div class="row"><div>Address</div><div style="font-family:monospace;font-size:12px;word-break:break-all">UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz <button class="copy" id="cp_addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div></div>
+          <div class="row"><div>Amount</div><div>${amt.toFixed(2)} TON <button class="copy" id="cp_amt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div></div>
+          ${promoBonus > 0 ? `<div class="row"><div style="color:var(--accent-green)">Bonus</div><div style="color:var(--accent-green);font-weight:700">${promoBonus.toFixed(2)} TON</div></div>` : ''}
+          <div class="row"><div>Total</div><div style="font-weight:700; color:var(--accent-blue)">${totalAmount.toFixed(2)} TON <button class="copy" id="cp_total"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div></div>
+          <div class="row"><div>Memo</div><div style="font-family:monospace;color:var(--accent-yellow)">${memo} <button class="copy" id="cp_memo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div></div>
+          <label class="form-label" style="margin-top:12px">Transaction Hash</label>
           <input id="txh" class="input" placeholder="Enter transaction hash">
           <button class="btn-primary" style="margin-top:12px" id="dep_submit">Confirm Transaction</button>
         </div>
@@ -1182,7 +1294,7 @@
         }
         database.ref('admin/deposits').push(depositData).then((ref) => {
           database.ref('admin/deposits/' + ref.key).update({ id: ref.key }).then(() => {
-            sendBot(`💳 <b>Deposit Submitted</b>\nAmount: ${amt.toFixed(2)} TON\nTotal: ${totalAmount.toFixed(2)} TON\nID: ${ref.key}`); // Currency change
+            sendBot(`💳 <b>Deposit Submitted</b>\nAmount: ${amt.toFixed(2)} TON\nTotal: ${totalAmount.toFixed(2)} TON\nID: ${ref.key}`);
             notify('Submitted. Awaiting approval.');
             showDepositHistoryModal();
           });
@@ -1203,10 +1315,10 @@
               ${depositHistory.length?depositHistory.map(d=>`
                 <div class="history-item">
                   <div class="history-header">
-                    <div class="history-id">ID: ${d.id} <button class="copy" onclick="copy('${d.id}')"><i class="ph-bold ph-copy"></i></button></div>
+                    <div class="history-id">ID: ${d.id} <button class="copy" onclick="copy('${d.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div>
                   </div>
                   <div class="history-details">
-                    <div class="history-amount">${d.amount.toFixed(2)} TON${d.bonus ? ` + ${d.bonus.toFixed(2)} bonus` : ''}</div> <!-- Currency change -->
+                    <div class="history-amount">${d.amount.toFixed(2)}${d.bonus ? ` + ${d.bonus.toFixed(2)} bonus` : ''} TON</div>
                     <div class="history-date">${new Date(d.timestamp*1000).toLocaleString()}</div>
                   </div>
                 </div>
@@ -1226,10 +1338,10 @@
       setTimeout(() => {
         content.innerHTML = `
           <div class="card">
-            <div class="section-subtitle" style="text-align:center;margin-bottom:12px">Withdraw TON (TON Network)</div>
+            <div class="section-subtitle" style="text-align:center;margin-bottom:12px">Withdraw TON</div>
             ${!hasDeposit ? `<div style="background:rgba(239,68,68,0.1);border:1px solid var(--accent-red);border-radius:12px;padding:12px;margin-bottom:16px;text-align:center"><div style="color:var(--accent-red);font-weight:700">Deposit Required</div></div>` : ''}
             <label class="form-label">TON Address</label>
-            <input id="wd_addr" class="input" placeholder="Enter your TON wallet">
+            <input id="wd_addr" class="input" placeholder="Enter TON wallet">
             <label class="form-label" style="margin-top:12px">Amount (min 0.10 TON)</label>
             <input id="wd_amt" type="number" min="0.10" step="0.01" class="input" placeholder="Enter amount">
             <button class="btn-primary" style="margin-top:16px" id="wd_go" ${!hasDeposit ? 'disabled' : ''}>${!hasDeposit ? 'Deposit Required' : 'Confirm Withdraw'}</button>
@@ -1240,16 +1352,16 @@
             const addr=document.getElementById('wd_addr').value.trim();
             const amt=parseFloat(document.getElementById('wd_amt').value);
             if(!addr){ notify('Enter address'); return; }
-            if(!amt || amt<0.10){ notify('Minimum 0.10 TON'); return; } // Currency change
-            if(amt>tonBalance){ notify('Insufficient balance'); return; } // Updated var name
+            if(!amt || amt<0.10){ notify('Minimum 0.10 TON'); return; }
+            if(amt>tonBalance){ notify('Insufficient balance'); return; } // Updated var
             const id=generateId();
             const withdrawalData = { id: id, userId: userId, userName: userName, amount: amt, address: addr, status: 'pending', timestamp: now(), balanceUpdated: true };
             withdrawHistory.push(withdrawalData);
-            save({ withdrawHistory, tonBalance: tonBalance - amt }); // Updated var name
+            save({ withdrawHistory, tonBalance: tonBalance - amt }); // Updated var
             database.ref('admin/withdrawals').push(withdrawalData).then((ref) => {
               database.ref('admin/withdrawals/' + ref.key).update({ id: ref.key }).then(() => {
-                sendBot(`💸 <b>Withdrawal Submitted</b>\nAmount: ${amt.toFixed(2)} TON\nID: ${ref.key}`); // Currency change
-                notify(`Withdrawal of ${amt} TON submitted.`); // Currency change
+                sendBot(`💸 <b>Withdrawal Submitted</b>\nAmount: ${amt.toFixed(2)} TON\nID: ${ref.key}`);
+                notify(`Withdrawal of ${amt} TON submitted.`);
                 showWithdrawHistoryModal();
               });
             });
@@ -1274,7 +1386,7 @@
                     <div class="history-id">ID: ${w.id}</div>
                   </div>
                   <div class="history-details">
-                    <div class="history-amount">${w.amount.toFixed(2)} TON</div> <!-- Currency change -->
+                    <div class="history-amount">${w.amount.toFixed(2)} TON</div>
                     <div class="history-date">${new Date(w.timestamp*1000).toLocaleString()}</div>
                   </div>
                 </div>
@@ -1299,11 +1411,11 @@
               ${all.length?all.map(a=>`
                 <div class="history-item">
                   <div class="history-header">
-                    <div class="history-id">${a.type}</div>
+                    <div class="history-id" style="text-transform:capitalize">${a.type}</div>
                     <div class="history-date">${new Date(a.timestamp*1000).toLocaleString()}</div>
                   </div>
                   <div class="history-details">
-                    <div class="history-amount">${a.type==='deposit'?'+':a.type==='withdraw'?'-':''}${(a.amount||0).toFixed(2)} TON</div> <!-- Currency change -->
+                    <div class="history-amount">${a.type==='deposit'?'+':a.type==='withdraw'?'-':''}${(a.amount||0).toFixed(2)} TON</div>
                   </div>
                 </div>
               `).join(''):`<div class="section-subtitle" style="text-align:center">No activities</div>`}
@@ -1331,9 +1443,9 @@
                   <div class="history-item">
                     <div class="history-header">
                       <div class="history-id">${p.name}</div>
-                      <div class="history-amount" style="color:var(--accent-blue)">${p.price} TON</div> <!-- Currency change -->
+                      <div class="history-amount" style="color:var(--accent-blue)">${p.price} TON</div>
                     </div>
-                    <div class="prog" style="margin-top:10px">
+                    <div class="prog" style="margin-top:12px">
                       <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
                       <div class="progtext">Progress: ${t.claimedDays}/${p.duration} days</div>
                     </div>
@@ -1362,8 +1474,8 @@
           daysHtml += `
             <div class="checkin-day ${isClaimed ? 'claimed' : ''} ${isToday ? 'available' : ''}" data-day="${i}" data-reward="${reward}">
               <div class="checkin-day-number">Day ${i}</div>
-              <div class="checkin-day-reward">${reward.toFixed(2)} TON</div> <!-- Currency change -->
-              <i class="ph-fill ph-gift"></i>
+              <div class="checkin-day-reward">${reward.toFixed(2)} TON</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </div>
           `;
         }
@@ -1423,12 +1535,12 @@
       const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
       const newMonthlyCheckIns = { ...(checkInData.monthlyCheckIns || {}), [dateStr]: true };
       const newCheckInData = { lastCheckIn: now(), currentStreak: resetStreak, claimedDays: resetClaimedDays, monthlyCheckIns: newMonthlyCheckIns };
-      database.ref('users/' + userId).update({ tonBalance: tonBalance + reward, checkInData: newCheckInData }); // Updated var name
+      database.ref('users/' + userId).update({ tonBalance: tonBalance + reward, checkInData: newCheckInData }); // Updated var
       awardReferralCommission(reward);
-      tonBalance += reward; // Updated var name
+      tonBalance += reward; // Updated var
       checkInData = newCheckInData;
-      document.getElementById('tonBalance').textContent = fmt(tonBalance); // Updated var name
-      notify(`Checked in Day ${dayNumber}! Earned ${reward.toFixed(2)} TON`); // Currency change
+      document.getElementById('tonBalance').textContent = fmt(tonBalance);
+      notify(`Checked in Day ${dayNumber}! Earned ${reward.toFixed(2)} TON`);
       setTimeout(() => showCheckInFullscreenModal(), 500);
     }
 
@@ -1454,14 +1566,16 @@
         </div>
 
         <div class="ad-card">
-          <div class="ad-title"><i class="ph-duotone ph-television"></i> Watch Advertisement</div>
-          <div class="ad-reward">Earn 0.000106 TON per ad</div> <!-- Currency change -->
+          <div class="ad-title">Watch Advertisement</div>
+          <div class="ad-reward">Earn 0.000106 TON per ad</div>
           <button class="btn-primary" id="watchAd">${adLoading?'Loading...':'Watch Ad'}</button>
         </div>
 
         <div class="milestone-card">
           <div class="milestone-header">
-            <div class="milestone-icon"><i class="ph-duotone ph-target"></i></div>
+            <div class="milestone-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            </div>
             <div class="milestone-info">
               <div class="milestone-title">Milestone Rewards</div>
               <div class="milestone-reward">Complete ads to unlock rewards</div>
@@ -1477,13 +1591,13 @@
             const prog = Math.min((a.lifetime||0)/m.need*100, 100);
             return `
               <div class="milestone-progress">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px">
                   <div style="font-weight:700">${m.label}</div>
-                  <div style="color:var(--accent-green);font-weight:700">${m.amt} TON</div> <!-- Currency change -->
+                  <div style="color:var(--accent-green);font-weight:700">${m.amt} TON</div>
                 </div>
                 <div class="milestone-bar"><div class="milestone-fill" style="width:${prog}%"></div></div>
                 <div class="milestone-text">${a.lifetime||0}/${m.need} ads completed</div>
-                <button class="btn-primary" style="margin-top:8px" id="${m.id}" ${can?'':'disabled'}>${txt}</button>
+                <button class="btn-primary" style="margin-top:12px" id="${m.id}" ${can?'':'disabled'}>${txt}</button>
               </div>
             `;
           }).join('')}
@@ -1496,7 +1610,7 @@
       setTimeout(()=>{
         const ctx=document.getElementById('adChart').getContext('2d');
         new Chart(ctx,{type:'bar',data:{labels:['Today','Yesterday','This Week','This Month'],
-          datasets:[{label:'Ads',data:[a.today||0,a.yesterday||0,a.thisWeek||0,a.thisMonth||0],backgroundColor:['rgba(14, 165, 233, 0.8)','rgba(99, 102, 241, 0.8)','rgba(16, 185, 129, 0.8)','rgba(245, 158, 11, 0.8)'],borderWidth:0,borderRadius:8}]},
+          datasets:[{label:'Ads',data:[a.today||0,a.yesterday||0,a.thisWeek||0,a.thisMonth||0],backgroundColor:['rgba(56, 189, 248, 0.8)','rgba(168, 85, 247, 0.8)','rgba(52, 211, 153, 0.8)','rgba(250, 204, 21, 0.8)'],borderWidth:0,borderRadius:8}]},
           options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'rgba(255, 255, 255, 0.7)'}},y:{beginAtZero:true,grid:{color:'rgba(255, 255, 255, 0.1)'},ticks:{color:'rgba(255, 255, 255, 0.7)'}}}}});
       },50);
 
@@ -1506,15 +1620,15 @@
         if (typeof window.show_10116329==='function'){
           window.show_10116329().then(()=>{
             adLoading=false; document.getElementById('watchAd').textContent='Watch Ad';
-            const tonReward=0.000106; // Currency var name
+            const usdtReward=0.000106;
             const today=todayISO(), ws=weekStartISO(), ms=monthStartISO();
             if (userData.adStats.lastAdDate!==today){ userData.adStats.yesterday=userData.adStats.today; userData.adStats.today=0; userData.adStats.lastAdDate=today; }
             if (userData.adStats.lastWeekReset!==ws){ userData.adStats.thisWeek=0; userData.adStats.lastWeekReset=ws; }
             if (userData.adStats.lastMonthReset!==ms){ userData.adStats.thisMonth=0; userData.adStats.lastMonthReset=ms; }
             userData.adStats.today++; userData.adStats.thisWeek++; userData.adStats.thisMonth++; userData.adStats.lifetime++;
-            awardReferralCommission(tonReward);
-            save({ tonBalance: tonBalance+tonReward, adStats: userData.adStats }); // Updated var name
-            notify(`Earned ${tonReward} TON`); // Currency change
+            awardReferralCommission(usdtReward);
+            save({ tonBalance: tonBalance+usdtReward, adStats: userData.adStats }); // Updated var
+            notify(`Earned ${usdtReward} TON`);
             renderEarn();
           }).catch(()=>{ adLoading=false; document.getElementById('watchAd').textContent='Watch Ad'; notify('Ad failed'); });
         }else{ adLoading=false; document.getElementById('watchAd').textContent='Watch Ad'; notify('Ad service unavailable'); }
@@ -1524,8 +1638,8 @@
         const key=`milestone${need}Claimed`;
         if ((userData.adStats?.lifetime||0)>=need && !userData.milestones?.[key]){
           const ms={...(userData.milestones||{}), [key]:true };
-          save({ tonBalance: tonBalance+amt, milestones: ms }); // Updated var name
-          notify(`Claimed ${amt} TON`); // Currency change
+          save({ tonBalance: tonBalance+amt, milestones: ms }); // Updated var
+          notify(`Claimed ${amt} TON`);
           renderEarn();
         }
       };
@@ -1547,17 +1661,19 @@
             html += `
               <div class="task-category">
                 <div class="category-header">
-                  <div class="category-icon"><i class="ph-duotone ph-list-dashes"></i></div>
+                  <div class="category-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  </div>
                   <div class="category-title">${category}</div>
                 </div>
                 ${categoryTasks.map(id=>{
                   const t=tasks[id]; const done = !!(userData.completedTasks&&userData.completedTasks[id]);
                   return `
                     <div class="task-card">
-                      <div class="task-image"><i class="ph-bold ph-rocket-launch"></i></div>
+                      <img src="${t.photo}" class="task-image" alt="${t.name}">
                       <div class="task-info">
                         <div class="task-name">${t.name}</div>
-                        <div class="task-reward">+${t.amount} TON</div> <!-- Currency change -->
+                        <div class="task-reward">+${t.amount} TON</div>
                       </div>
                       <button class="task-btn ${done?'completed':''}" data-id="${id}">${done?'Done':'Start'}</button>
                     </div>
@@ -1582,8 +1698,8 @@
               userData.completedTasks[id]=true;
               const add=parseFloat(t.amount)||0;
               awardReferralCommission(add);
-              save({ tonBalance: tonBalance+add, completedTasks: userData.completedTasks }); // Updated var name
-              pendingTaskRewards[id]=false; btn.textContent='Done'; notify(`+${add} TON`); // Currency change
+              save({ tonBalance: tonBalance+add, completedTasks: userData.completedTasks }); // Updated var
+              pendingTaskRewards[id]=false; btn.textContent='Done'; notify(`+${add} TON`);
             },15000);
           };
         });
@@ -1599,28 +1715,28 @@
         </div>
 
         <div class="card" style="text-align:center">
-          <div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;margin:0 auto 12px; border: 2px solid var(--accent-blue)">
-             <i class="ph-duotone ph-user" style="font-size:50px; color:var(--text-primary)"></i>
-          </div>
+          <img src="${userData.avatar}" alt="avatar" style="width:100px;height:100px;border-radius:50%;border:3px solid var(--accent-blue);object-fit:cover;box-shadow:0 0 20px rgba(56, 189, 248, 0.3);margin-bottom:12px">
           <div style="font-weight:800;font-size:18px">${userData.name}</div>
-          <div style="margin-top:8px;color:var(--text-secondary);font-size:13px">ID: <span style="color:var(--accent-blue);font-weight:700">${userId}</span> <button class="copy" id="copyUid"><i class="ph-bold ph-copy"></i></button></div>
+          <div style="margin-top:8px;display:flex;justify-content:center;align-items:center;gap:8px"><span class="section-subtitle">ID:</span> <span style="color:var(--text-primary);font-weight:700;font-family:monospace">${userId}</span> <button class="copy" id="copyUid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div>
         </div>
 
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">TON Wallet</div>
+          <div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">TON Wallet</div>
           <input id="tonWallet" class="input" placeholder="Enter your TON wallet" value="${userData.ton||''}">
-          <button class="btn-primary" style="margin-top:12px" id="saveTon">Save</button>
+          <button class="btn-primary" style="margin-top:12px" id="saveTon">Save Wallet</button>
         </div>
 
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">Referral</div>
+          <div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">Referral</div>
           <div class="row"><div>Link</div><div style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px" id="refLink">https://t.me/exotix_trade_bot/app?startapp=${userId}</div></div>
           <button class="btn-primary" style="margin-top:12px" id="copyRef">Copy Link</button>
         </div>
 
         <div class="referral-card">
           <div class="referral-header">
-            <div class="referral-icon"><i class="ph-duotone ph-users-three"></i></div>
+            <div class="referral-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            </div>
             <div class="referral-title">My Referrals</div>
           </div>
           <div class="referral-stats">
@@ -1630,14 +1746,14 @@
             </div>
             <div class="referral-stat">
               <div class="referral-stat-label">Total Earnings</div>
-              <div class="referral-stat-value">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} TON</div> <!-- Currency change -->
+              <div class="referral-stat-value">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} TON</div>
             </div>
           </div>
           <button class="btn-primary" id="viewReferralsBtn">View My Referrals</button>
         </div>
 
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">Redeem Code</div>
+          <div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">Redeem Code</div>
           <input id="redeem" maxlength="8" class="input" placeholder="Enter 8-digit code">
           <button class="btn-primary" style="margin-top:12px" id="redeemGo">Redeem</button>
         </div>
@@ -1648,7 +1764,7 @@
         const w=document.getElementById('tonWallet').value.trim();
         if(w.length<10){ notify('Invalid TON wallet'); return; }
         save({ ton:w });
-        database.ref('admin/tonSubmissions').push({ userId, userName, walletAddress:w, timestamp:now(), balance:tonBalance }); // Updated var name
+        database.ref('admin/tonSubmissions').push({ userId, userName, walletAddress:w, timestamp:now(), balance:tonBalance }); // Updated var
         notify('Wallet saved');
       };
       document.getElementById('copyRef').onclick=()=>copy(document.getElementById('refLink').textContent);
@@ -1660,8 +1776,8 @@
           if (codeData.used >= codeData.maxUsers) { notify('Limit reached'); return; }
           const reward = Math.random() * (0.20 - 0.01) + 0.01;
           database.ref('redeemCodes/' + code).update({ used: codeData.used + 1 });
-          save({ tonBalance: tonBalance + reward }); // Updated var name
-          notify(`Redeemed ${fmt(reward)} TON`); // Currency change
+          save({ tonBalance: tonBalance + reward }); // Updated var
+          notify(`Redeemed ${fmt(reward)} TON`);
           document.getElementById('redeem').value='';
         });
       };
@@ -1682,12 +1798,12 @@
             const commissionFromUser = userData.referralCommissions && userData.referralCommissions[referredUserId] ? userData.referralCommissions[referredUserId] : 0;
             html += `
               <div class="referral-item">
-                <div class="referral-avatar"><i class="ph-bold ph-user"></i></div>
+                <img src="${referredUser.avatar || userAvatar}" class="referral-avatar" alt="${referredUser.name}" />
                 <div class="referral-info">
                   <div class="referral-name">${referredUser.name || 'Unknown'}</div>
                   <div class="referral-id">ID: ${referredUserId}</div>
-                  <div class="referral-balance">${fmt(referredUser.tonBalance || 0)} TON</div> <!-- Currency change -->
-                  <div class="referral-commission">Commission: ${fmt(commissionFromUser)} TON</div> <!-- Currency change -->
+                  <div class="referral-balance">${fmt(referredUser.tonBalance || 0)} TON</div> <!-- Updated var -->
+                  <div class="referral-commission">Commission: ${fmt(commissionFromUser)} TON</div>
                 </div>
               </div>
             `;
@@ -1703,7 +1819,7 @@
       const html=`
         <div class="section-header">
           <div class="section-title">Leaderboard</div>
-          <div class="section-subtitle">Top 50 by TON balance</div> <!-- Currency change -->
+          <div class="section-subtitle">Top 50 by TON balance</div>
         </div>
         <div class="ranking-position">
           <div class="section-subtitle">Your Position</div>
@@ -1713,10 +1829,10 @@
       `;
       document.getElementById('main-content').innerHTML = html;
       if (rankingListener) database.ref('users').off('value', rankingListener);
-      rankingListener = database.ref('users').orderByChild('tonBalance').limitToLast(100); // Updated var name
+      rankingListener = database.ref('users').orderByChild('tonBalance').limitToLast(100); // Updated ref path
       rankingListener.on('value',(snap)=>{
         const arr=[];
-        snap.forEach(ch=>{ const u=ch.val(); arr.push({ id:ch.key, name:u.name||'Unknown', avatar:u.avatar, balance:u.tonBalance||0 }); }); // Updated var name
+        snap.forEach(ch=>{ const u=ch.val(); arr.push({ id:ch.key, name:u.name||'Unknown', avatar:u.avatar||userAvatar, balance:u.tonBalance||0 }); }); // Updated var
         arr.sort((a,b)=>b.balance-a.balance);
         const top=arr.slice(0,50);
         const myPos = arr.findIndex(x=>x.id===userId)+1;
@@ -1724,12 +1840,12 @@
         document.getElementById('rankingList').innerHTML = top.map((u,i)=>`
           <div class="ranking-row">
             <div class="ranking-position-num ${i<3?'top3':''}">${i+1}</div>
-            <div class="ranking-avatar"><i class="ph-bold ph-user"></i></div>
+            <img src="${u.avatar}" class="ranking-avatar">
             <div class="ranking-user-info">
               <div class="ranking-user-name">${u.name}</div>
               <div class="ranking-user-id">ID: ${u.id}</div>
             </div>
-            <div class="ranking-balance">${fmt(u.balance)} TON</div> <!-- Currency change -->
+            <div class="ranking-balance">${fmt(u.balance)} TON</div>
           </div>
         `).join('');
       });
@@ -1762,7 +1878,7 @@
       }catch{
         const loc = localStorage.getItem('exotix_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
-          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, 
+          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, // Updated var
           adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, 
           milestones:{ milestone100Claimed:false, milestone200Claimed:false, milestone500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), 
           referredBy: null, referralCode: null, welcomed: false, checkInData: { lastCheckIn: 0, currentStreak: 0, claimedDays: [], monthlyCheckIns: {} }, hasDeposit: false
@@ -1770,13 +1886,13 @@
         if (userData.checkInData) checkInData = userData.checkInData;
         if (!userData.welcomed) { sendWelcomeMessage(userId); userData.welcomed = true; localStorage.setItem('exotix_user_'+userId, JSON.stringify(userData)); }
       }
-      tonBalance = userData.tonBalance||0; // Updated var name
+      tonBalance = userData.tonBalance||0; // Updated var
       purchasedPlans = userData.purchasedPlans||{};
       activeTrades = userData.activeTrades||{};
       depositHistory = userData.depositHistory||[];
       withdrawHistory = userData.withdrawHistory||[];
       tradeHistory = userData.tradeHistory||[];
-      document.getElementById('tonBalance').textContent = fmt(tonBalance); // Updated var name
+      document.getElementById('tonBalance').textContent = fmt(tonBalance);
 
       processReferral().then(() => {
         updateLoadingProgress('Starting app...');
