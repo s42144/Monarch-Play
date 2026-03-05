@@ -18,13 +18,10 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Firebase v9 Compat -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     :root{
+      /* Professional Color Scheme */
       --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
       --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -49,7 +46,13 @@
     #app{display:none;min-height:100vh;padding-bottom:80px;background:var(--dark-bg);background-attachment:fixed}
     #main-content{width:100%;max-width:480px;margin:0 auto;padding:0 16px}
 
-    /* Buttons 3D effects */
+    /* Lightning Flash Effect */
+    @keyframes lightning {
+      0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(118, 75, 162, 0.8); }
+      100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+    }
+    
     .btn-primary, .btn-claim, .nav-btn, .wallet-item, .task-btn, .modal-close {
       position: relative;
       overflow: hidden;
@@ -69,40 +72,129 @@
     .btn-primary:hover::before, .btn-claim:hover::before, .nav-btn:hover::before, .wallet-item:hover::before, .task-btn:hover::before, .modal-close:hover::before {
       left: 100%;
     }
+    
+    .btn-primary:hover, .btn-claim:hover, .nav-btn:hover, .wallet-item:hover, .task-btn:hover, .modal-close:hover {
+      animation: lightning 1.5s infinite;
+    }
 
     /* Loading Screen */
     #loading-screen {
       position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       background: var(--dark-bg);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       z-index: 9999;
     }
-    .loading-logo { width: 150px; height: 150px; border-radius: 50%; margin-bottom: 30px; animation: float 3s ease-in-out infinite; }
-    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
-    .loading-text { font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; background: var(--secondary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .loading-subtext { font-size: 14px; font-weight: 500; color: var(--text-secondary); margin-bottom: 30px; }
-    .loading-spinner { width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.1); border-top-color: var(--accent-blue); border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-progress { margin-top: 20px; font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+    
+    .loading-logo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 30px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .loading-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      background: var(--secondary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .loading-subtext {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .loading-progress {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
 
     /* Referral Welcome Screen */
     #referral-welcome {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       background: var(--dark-bg);
-      display: none; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 9998; padding: 20px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      padding: 20px;
     }
+    
     .welcome-card {
-      background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 24px;
-      padding: 40px 30px; border: 1px solid var(--card-border); box-shadow: var(--shadow-lg);
-      text-align: center; max-width: 400px; width: 100%; animation: slideUp 0.5s ease;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 40px 30px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      animation: slideUp 0.5s ease;
     }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
     .welcome-icon { font-size: 64px; margin-bottom: 20px; }
-    .welcome-title { font-size: 28px; font-weight: 800; background: var(--secondary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px; }
+    .welcome-title {
+      font-size: 28px;
+      font-weight: 800;
+      background: var(--secondary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
     .welcome-message { font-size: 16px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; }
-    .referrer-info { background: rgba(118, 75, 162, 0.1); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(118, 75, 162, 0.2); }
+    .referrer-info {
+      background: rgba(118, 75, 162, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(118, 75, 162, 0.2);
+    }
     .referrer-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 12px; }
     .referrer-details { display: flex; align-items: center; gap: 12px; }
     .referrer-avatar { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent-purple); }
@@ -112,51 +204,108 @@
 
     /* Daily Check In Modal */
     #checkin-modal {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-      display: none; align-items: center; justify-content: center;
-      z-index: 9999; padding: 20px; overflow-y: auto;
+      display: none;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+      overflow-y: auto;
     }
     .checkin-content {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-      backdrop-filter: blur(20px); border-radius: 24px; padding: 40px 30px;
+      backdrop-filter: blur(20px);
+      border-radius: 24px; padding: 40px 30px;
       max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;
-      border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), var(--glow);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), var(--glow);
       animation: slideUp 0.3s ease;
     }
     .checkin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
-    .checkin-title { font-size: 32px; font-weight: 800; background: var(--secondary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; flex: 1; }
-    .checkin-close { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: var(--text-primary); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+    .checkin-title {
+      font-size: 32px; font-weight: 800;
+      background: var(--secondary-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-align: center; flex: 1;
+    }
+    .checkin-close {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: none; color: var(--text-primary);
+      font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
     .checkin-close:hover { background: rgba(255,255,255,0.2); transform: rotate(90deg); }
-    .checkin-streak { text-align: center; margin-bottom: 30px; padding: 25px; background: rgba(118, 75, 162, 0.15); border-radius: 20px; border: 1px solid rgba(118, 75, 162, 0.3); position: relative; overflow: hidden; }
-    .checkin-streak::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%); animation: rotate 20s linear infinite; }
+    .checkin-streak {
+      text-align: center; margin-bottom: 30px; padding: 25px;
+      background: rgba(118, 75, 162, 0.15); border-radius: 20px;
+      border: 1px solid rgba(118, 75, 162, 0.3); position: relative; overflow: hidden;
+    }
+    .checkin-streak::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+      animation: rotate 20s linear infinite;
+    }
     @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .checkin-streak-title { font-size: 18px; color: var(--text-secondary); margin-bottom: 10px; position: relative; z-index: 1; }
-    .checkin-streak-value { font-size: 36px; font-weight: 800; background: var(--warning-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; z-index: 1; }
+    .checkin-streak-value {
+      font-size: 36px; font-weight: 800;
+      background: var(--warning-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      position: relative; z-index: 1;
+    }
     .checkin-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; margin-bottom: 30px; }
-    .checkin-day { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px 10px; text-align: center; position: relative; overflow: hidden; transition: all 0.3s ease; height: 160px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+    .checkin-day {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 16px 10px; text-align: center;
+      position: relative; overflow: hidden; transition: all 0.3s ease;
+      height: 160px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;
+    }
     .checkin-day.claimed { background: rgba(67, 233, 123, 0.15); border-color: var(--accent-green); }
-    .checkin-day.available { background: rgba(118, 75, 162, 0.2); border-color: var(--accent-purple); animation: pulse 2s infinite; transform: scale(1.05); box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3); }
-    .checkin-day.available:hover { transform: scale(1.08); box-shadow: 0 8px 25px rgba(118, 75, 162, 0.4); }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(118, 75, 162, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(118, 75, 162, 0); } 100% { box-shadow: 0 0 0 0 rgba(118, 75, 162, 0); } }
+    .checkin-day.available {
+      background: rgba(118, 75, 162, 0.2); border-color: var(--accent-purple);
+      animation: pulse 2s infinite; transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(118, 75, 162, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(118, 75, 162, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(118, 75, 162, 0); }
+    }
     .checkin-day-number { font-size: 14px; color: var(--text-secondary); margin-bottom: 5px; font-weight: 600; }
-    .checkin-day-reward { font-size: 20px; font-weight: 800; color: var(--accent-green); margin-bottom: 10px; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
+    .checkin-day-reward {
+      font-size: 20px; font-weight: 800; color: var(--accent-green);
+      margin-bottom: 10px; opacity: 0; transform: translateY(10px); transition: all 0.3s ease;
+    }
     .checkin-day:hover .checkin-day-reward, .checkin-day.claimed .checkin-day-reward { opacity: 1; transform: translateY(0); }
     .checkin-day-icon { width: 40px; height: 40px; margin: 0 auto; opacity: 0.7; transition: all 0.3s ease; }
     .checkin-day:hover .checkin-day-icon, .checkin-day.claimed .checkin-day-icon { opacity: 1; transform: scale(1.1); }
-    .checkin-day-status { position: absolute; top: 5px; right: 5px; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+    .checkin-day-status {
+      position: absolute; top: 5px; right: 5px; font-size: 10px; padding: 2px 6px;
+      border-radius: 4px; font-weight: 600;
+    }
     .checkin-day-status.claimed { background: var(--accent-green); color: white; }
     .checkin-day-status.available { background: var(--accent-purple); color: white; }
     .checkin-calendar { margin-top: 30px; background: rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px; border: 1px solid var(--card-border); }
     .checkin-calendar-title { font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 20px; color: var(--text-primary); }
     .checkin-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-    .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 14px; font-weight: 600; background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); }
+    .calendar-day {
+      aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; font-size: 14px; font-weight: 600;
+      background: rgba(255, 255, 255, 0.05); color: var(--text-secondary);
+    }
     .calendar-day.checked-in { background: rgba(67, 233, 123, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
     .calendar-day.today { background: rgba(118, 75, 162, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
 
-    /* USDT Balance */
-    .balance-container { position: fixed; top: 12px; left: 12px; display: flex; gap: 8px; z-index: 1000; }
-    .usdt-balance { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 16px; padding: 8px 12px; border: 1px solid var(--card-border); box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 8px; }
+    /* Balance */
+    .balance-container {
+      position: fixed; top: 12px; left: 12px; display: flex; gap: 8px; z-index: 1000;
+    }
+    .usdt-balance {
+      background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 16px;
+      padding: 8px 12px; border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 8px;
+    }
     .usdt-icon { width: 22px; height: 22px; border-radius: 50%; }
     .usdt-amount { font-size: 14px; font-weight: 700; color: var(--accent-green); }
 
@@ -194,14 +343,13 @@
     .g-it{background:rgba(255,255,255,.05);border-radius:10px;padding:10px;text-align:center}
     .g-l{font-size:10px;color:var(--text-secondary);font-weight:700;text-transform:uppercase}
     .g-v{font-size:14px;font-weight:800}
-
     .prog{margin:8px 0}
     .progbar{height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
     .progfill{height:100%;background:var(--success-gradient);width:0%}
     .progtext{text-align:center;font-size:11px;color:var(--text-secondary);margin-top:6px}
     .countdown{text-align:center;font-size:12px;color:var(--accent-blue);font-weight:700;margin:8px 0}
 
-    /* Chart Container */
+    /* Chart */
     .chart-container{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:12px;margin-bottom:12px}
     .chart-title{font-size:13px;font-weight:800;text-align:center;margin-bottom:10px;color:var(--accent-blue)}
 
@@ -219,7 +367,7 @@
     .timer{background:rgba(239,68,68,.12);border:2px solid #ef4444;border-radius:12px;padding:12px;text-align:center;margin-bottom:12px}
     .t-t{color:#ef4444;font-weight:800}
 
-    /* History List */
+    /* History */
     .history-list{max-height:300px;overflow-y:auto}
     .history-item{background:rgba(255,255,255,.05);border-radius:10px;padding:12px;margin-bottom:8px}
     .history-header{display:flex;justify-content:space-between;margin-bottom:8px}
@@ -309,44 +457,59 @@
     .nav-btn.active .nav-label{color:var(--accent-purple)}
 
     /* Full Screen Modal */
-    .fullscreen-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--dark-bg); display: none; flex-direction: column; z-index: 9999; overflow-y: auto; }
-    .modal-header { background: var(--card-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--card-border); padding: 16px; display: flex; align-items: center; justify-content: space-between; }
-    .modal-title { font-size: 20px; font-weight: 800; background: var(--secondary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .modal-close { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: var(--text-primary); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; position: relative; transform-style:preserve-3d; box-shadow:0 4px 0 rgba(0,0,0,0.2); }
+    .fullscreen-modal {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: var(--dark-bg); display: none; flex-direction: column;
+      z-index: 9999; overflow-y: auto;
+    }
+    .modal-header {
+      background: var(--card-bg); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-title {
+      font-size: 20px; font-weight: 800;
+      background: var(--secondary-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .modal-close {
+      width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1);
+      border: none; color: var(--text-primary); font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
+      position: relative; transform-style:preserve-3d; box-shadow:0 4px 0 rgba(0,0,0,0.2);
+    }
     .modal-close:active { transform: translateY(4px); box-shadow:0 0 0 rgba(0,0,0,0.2); }
     .modal-content { flex: 1; padding: 20px; max-width: 480px; margin: 0 auto; width: 100%; }
 
-    /* Referral List Modal */
+    /* Modal Overlay (For Lists) */
     .modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(26, 26, 46, 0.8);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}
-    .modal-content{background:var(--dark-bg);border-radius:24px;padding:24px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;border:1px solid var(--card-border);box-shadow:var(--shadow-lg);animation:slideUp 0.3s ease}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-    .modal-title{font-size:24px;font-weight:800;background:var(--secondary-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .modal-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:var(--text-primary);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s ease}
-    .modal-close:hover{background:rgba(255,255,255,.2)}
+    .modal-content-box{background:var(--dark-bg);border-radius:24px;padding:24px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;border:1px solid var(--card-border);box-shadow:var(--shadow-lg);animation:slideUp 0.3s ease}
 
     /* Promo Code Section */
-    .promo-section { background: rgba(118, 75, 162, 0.1); border-radius: 12px; padding: 12px; margin-top: 12px; border: 1px solid rgba(118, 75, 162, 0.2); }
+    .promo-section {
+      background: rgba(118, 75, 162, 0.1); border-radius: 12px; padding: 12px; margin-top: 12px;
+      border: 1px solid rgba(118, 75, 162, 0.2);
+    }
     .promo-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--accent-purple); }
     .promo-input-group { display: flex; gap: 8px; margin-bottom: 8px; }
     .promo-input { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.06); color: #fff; outline: none; }
-    .promo-apply-btn { padding: 10px 16px; border-radius: 10px; border: none; background: var(--accent-purple); color: white; font-weight: 700; cursor: pointer; position: relative; transform-style:preserve-3d; box-shadow:0 4px 0 rgba(0,0,0,0.2); }
+    .promo-apply-btn {
+      padding: 10px 16px; border-radius: 10px; border: none; background: var(--accent-purple);
+      color: white; font-weight: 700; cursor: pointer; position: relative;
+      transform-style:preserve-3d; box-shadow:0 4px 0 rgba(0,0,0,0.2);
+    }
     .promo-apply-btn:active { transform: translateY(4px); box-shadow:0 0 0 rgba(0,0,0,0.2); }
     .promo-info { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
     .promo-success { color: var(--accent-green); }
     .promo-error { color: var(--accent-red); }
-    .detailed-info { background: rgba(118, 75, 162, 0.1); border: 1px solid var(--accent-purple); border-radius: 12px; padding: 12px; margin-top: 12px; }
+    .detailed-info {
+      background: rgba(118, 75, 162, 0.1); border: 1px solid var(--accent-purple);
+      border-radius: 12px; padding: 12px; margin-top: 12px;
+    }
     .detailed-info-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--accent-purple); }
     .detailed-info-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
     .detailed-info-label { font-size: 12px; color: var(--text-secondary); }
     .detailed-info-value { font-size: 12px; font-weight: 700; color: var(--text-primary); }
-
-    /* Circle Loading Animation */
-    .circle-loader { display: inline-block; position: relative; width: 40px; height: 40px; }
-    .circle-loader div { box-sizing: border-box; display: block; position: absolute; width: 32px; height: 32px; margin: 4px; border: 4px solid var(--accent-blue); border-radius: 50%; animation: circle-loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite; border-color: var(--accent-blue) transparent transparent transparent; }
-    .circle-loader div:nth-child(1) { animation-delay: -0.45s; }
-    .circle-loader div:nth-child(2) { animation-delay: -0.3s; }
-    .circle-loader div:nth-child(3) { animation-delay: -0.15s; }
-    @keyframes circle-loader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     @media(max-width:360px){ .live-prices{grid-template-columns:1fr} }
   </style>
@@ -354,7 +517,8 @@
 <body>
   <!-- Loading Screen -->
   <div id="loading-screen">
-    <img src="https://github.com/s42144/exotix-/blob/650f73d8e6ca2989ffe1d084eb74173ce1b46f94/6332479492256894337.jpg?raw=true" class="loading-logo" alt="Exotix Trade" />
+    <img src="https://github.com/s42144/exotix-/blob/650f73d8e6ca2989ffe1d084eb74173ce1b46f94/6332479492256894337.jpg?raw=true" 
+         class="loading-logo" alt="Exotix Trade" />
     <div class="loading-text">Exotix Trade</div>
     <div class="loading-subtext">Initializing your account...</div>
     <div class="loading-spinner"></div>
@@ -388,14 +552,21 @@
         <div class="checkin-title">Daily Check In</div>
         <button class="checkin-close" id="closeCheckin">×</button>
       </div>
+      
       <div class="checkin-streak">
         <div class="checkin-streak-title">Current Streak</div>
         <div class="checkin-streak-value" id="currentStreak">0 days</div>
       </div>
-      <div class="checkin-days" id="checkinDays"></div>
+      
+      <div class="checkin-days" id="checkinDays">
+        <!-- Days will be generated dynamically -->
+      </div>
+      
       <div class="checkin-calendar">
         <div class="checkin-calendar-title">This Month</div>
-        <div class="checkin-calendar-grid" id="checkinCalendar"></div>
+        <div class="checkin-calendar-grid" id="checkinCalendar">
+          <!-- Calendar will be generated dynamically -->
+        </div>
       </div>
     </div>
   </div>
@@ -406,7 +577,9 @@
       <div class="modal-title">Deposit USDT</div>
       <button class="modal-close" id="closeDepositModal">×</button>
     </div>
-    <div class="modal-content" id="deposit-content"></div>
+    <div class="modal-content" id="deposit-content">
+      <!-- Content will be loaded dynamically -->
+    </div>
   </div>
 
   <div class="fullscreen-modal" id="withdraw-modal">
@@ -414,7 +587,9 @@
       <div class="modal-title">Withdraw USDT</div>
       <button class="modal-close" id="closeWithdrawModal">×</button>
     </div>
-    <div class="modal-content" id="withdraw-content"></div>
+    <div class="modal-content" id="withdraw-content">
+      <!-- Content will be loaded dynamically -->
+    </div>
   </div>
 
   <div class="fullscreen-modal" id="checkin-fullscreen-modal">
@@ -422,7 +597,9 @@
       <div class="modal-title">Daily Check In</div>
       <button class="modal-close" id="closeCheckinFullscreenModal">×</button>
     </div>
-    <div class="modal-content" id="checkin-fullscreen-content"></div>
+    <div class="modal-content" id="checkin-fullscreen-content">
+      <!-- Content will be loaded dynamically -->
+    </div>
   </div>
 
   <div class="fullscreen-modal" id="deposit-history-modal">
@@ -430,7 +607,9 @@
       <div class="modal-title">Deposit History</div>
       <button class="modal-close" id="closeDepositHistoryModal">×</button>
     </div>
-    <div class="modal-content" id="deposit-history-content"></div>
+    <div class="modal-content" id="deposit-history-content">
+      <!-- Content will be loaded dynamically -->
+    </div>
   </div>
 
   <div class="fullscreen-modal" id="withdraw-history-modal">
@@ -438,7 +617,9 @@
       <div class="modal-title">Withdraw History</div>
       <button class="modal-close" id="closeWithdrawHistoryModal">×</button>
     </div>
-    <div class="modal-content" id="withdraw-history-content"></div>
+    <div class="modal-content" id="withdraw-history-content">
+      <!-- Content will be loaded dynamically -->
+    </div>
   </div>
 
   <div class="fullscreen-modal" id="activities-modal">
@@ -446,7 +627,9 @@
       <div class="modal-title">Activities</div>
       <button class="modal-close" id="closeActivitiesModal">×</button>
     </div>
-    <div class="modal-content" id="activities-content"></div>
+    <div class="modal-content" id="activities-content">
+      <!-- Content will be loaded dynamically -->
+    </div>
   </div>
 
   <div class="fullscreen-modal" id="trades-modal">
@@ -454,7 +637,9 @@
       <div class="modal-title">Active Trades</div>
       <button class="modal-close" id="closeTradesModal">×</button>
     </div>
-    <div class="modal-content" id="trades-content"></div>
+    <div class="modal-content" id="trades-content">
+      <!-- Content will be loaded dynamically -->
+    </div>
   </div>
 
   <!-- App -->
@@ -494,7 +679,7 @@
 
   <!-- Referral List Modal -->
   <div class="modal-overlay" id="referralModal">
-    <div class="modal-content">
+    <div class="modal-content-box">
       <div class="modal-header">
         <div class="modal-title">My Referrals</div>
         <button class="modal-close" id="closeReferralModal">×</button>
@@ -503,8 +688,13 @@
     </div>
   </div>
 
-  <script>
-    // Firebase Configuration (Updated)
+  <script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+    import { getDatabase, ref, set, update, onValue, push, get, child, remove } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAt9PRbvok0g5XL4187btrPvGx6VjfurJU",
       authDomain: "msc-by-shawon.firebaseapp.com",
@@ -516,53 +706,17 @@
     };
 
     // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
 
     // Telegram WebApp Initialization
     const tg = window.Telegram?.WebApp || { expand:()=>{}, ready:()=>{}, initDataUnsafe:{} };
     tg.expand(); tg.ready();
 
-    // Bot
+    // Bot Token
     const BOT_TOKEN = '8332448822:AAHKhDvougBhBThL6aBl3hGjZbKFGAq7BUs';
     
-    const sendBot = async (msg, chatId = null, inlineButtons = null) => {
-      try {
-        const targetChatId = chatId || userId;
-        const payload = {
-          chat_id: targetChatId,
-          text: msg,
-          parse_mode: 'HTML'
-        };
-        
-        if (inlineButtons && inlineButtons.length > 0) {
-          payload.reply_markup = {
-            inline_keyboard: [inlineButtons]
-          };
-        }
-        
-        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-          method: 'POST', 
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-      } catch (e) { 
-        console.warn('Bot send failed', e); 
-      }
-    };
-
-    const sendWelcomeMessage = (chatId) => {
-      const welcomeText = `🎉 <b>Welcome to Exotix Trade!</b>\n\nYour account has been successfully created. Start your trading journey with us and earn daily rewards!`;
-      
-      const inlineButtons = [
-        { text: "Join Announcement Channel", url: "https://t.me/exotix_Ann" },
-        { text: "Join Chatting Group", url: "https://t.me/exotix_chat" },
-        { text: "Send Message to Claim $15 for Free", url: "https://t.me/GlowOps" }
-      ];
-      
-      sendBot(welcomeText, chatId, inlineButtons);
-    };
-
     // State
     let userId=null, userName=null, userAvatar=null;
     let userData=null;
@@ -587,6 +741,7 @@
       claimedDays: [],
       monthlyCheckIns: {}
     };
+    let imageResources = {};
 
     // Utils
     const now = () => Math.floor(Date.now()/1000);
@@ -601,9 +756,23 @@
     const copy = (t)=> navigator.clipboard.writeText(t).then(()=>notify('Copied!'));
     const generateId = () => 'TXN' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
 
+    // Update Loading Progress
     function updateLoadingProgress(text) {
       const progressEl = document.getElementById('loadingProgress');
       if (progressEl) progressEl.textContent = text;
+    }
+
+    // Load image resources from Firebase
+    function loadImageResources() {
+      get(ref(database, 'admin/imageResources')).then((snapshot) => {
+        if (snapshot.exists()) {
+          imageResources = snapshot.val();
+        }
+      }).catch((error) => { console.error('Error loading image resources:', error); });
+    }
+
+    function getImageUrl(imageKey, fallbackUrl) {
+      return imageResources[imageKey] || fallbackUrl;
     }
 
     // Telegram User
@@ -616,86 +785,154 @@
         userAvatar = u.photo_url || "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
         return true;
       }
+      // Fallback outside Telegram
       userId = 'test_' + Math.floor(10000 + Math.random()*89999);
       userName = 'Test User';
       userAvatar = "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
       return true;
     }
 
+    // Enhanced sendBot function with inline buttons
+    const sendBot = async (msg, chatId = null, inlineButtons = null) => {
+      try {
+        const targetChatId = chatId || userId;
+        const payload = {
+          chat_id: targetChatId,
+          text: msg,
+          parse_mode: 'HTML'
+        };
+        if (inlineButtons && inlineButtons.length > 0) {
+          payload.reply_markup = { inline_keyboard: [inlineButtons] };
+        }
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) { console.warn('Bot send failed', e); }
+    };
+
+    const sendWelcomeMessage = (chatId) => {
+      const welcomeText = `🎉 <b>Welcome to Exotix Trade!</b>\n\nYour account has been successfully created. Start your trading journey with us and earn daily rewards!`;
+      const inlineButtons = [
+        { text: "Join Announcement Channel", url: "https://t.me/exotix_Ann" },
+        { text: "Join Chatting Group", url: "https://t.me/exotix_chat" },
+        { text: "Send Message to Claim $15 for Free", url: "https://t.me/GlowOps" }
+      ];
+      sendBot(welcomeText, chatId, inlineButtons);
+    };
+
     // Process Referral
     function processReferral() {
       return new Promise((resolve) => {
         updateLoadingProgress('Processing referral...');
         const startParam = tg.initDataUnsafe?.start_param;
+        
         if (startParam) {
           let referrerId = startParam;
           if (referrerId && referrerId !== userId) {
-            database.ref('users/' + userId + '/referredBy').once('value').then(snap => {
+            get(ref(database, 'users/' + userId + '/referredBy')).then((snap) => {
               if (!snap.exists()) {
-                database.ref('users/' + referrerId).once('value').then(refSnap => {
+                get(ref(database, 'users/' + referrerId)).then((refSnap) => {
                   if (refSnap.exists()) {
+                    const referrerData = refSnap.val();
                     showReferralWelcome(referrerId).then(() => {
-                      const referrerData = refSnap.val();
                       const newBalance = (referrerData.usdtBalance || 0) + 0.20;
-                      database.ref('users/' + referrerId).update({
+                      update(ref(database, 'users/' + referrerId), {
                         usdtBalance: newBalance,
                         totalReferralCommission: (referrerData.totalReferralCommission || 0) + 0.20,
                         lastUpdated: now()
                       });
-                      database.ref('users/' + userId).update({
-                        referredBy: referrerId,
-                        referredAt: now()
-                      }).then(() => {
-                        sendBot(`🎉 <b>New Referral Join!</b>\n${userName} joined using your referral link.\n$0.20 earned!`, referrerId);
-                        resolve();
+                      
+                      const referralCommissions = referrerData.referralCommissions || {};
+                      referralCommissions[userId] = (referralCommissions[userId] || 0) + 0.20;
+                      update(ref(database, 'users/' + referrerId + '/referralCommissions'), referralCommissions);
+                      
+                      push(ref(database, 'admin/referralLog'), {
+                        referrerId: referrerId,
+                        referrerName: referrerData.name || 'Unknown',
+                        referredUserId: userId,
+                        referredUserName: userName,
+                        timestamp: now(),
+                        reward: 0.20
                       });
                     });
-                  } else resolve();
+                    
+                    update(ref(database, 'users/' + userId), {
+                      referredBy: referrerId,
+                      referredAt: now()
+                    });
+                    
+                    sendBot(`🎉 <b>New Referral Join!</b>\n${userName} joined using your referral link.\n$0.20 earned!`, referrerId);
+                    notify('Welcome! Your referrer earned $0.20 USDT!', 3000);
+                    resolve();
+                  } else { resolve(); }
                 });
-              } else resolve();
+              } else { resolve(); }
             });
-          } else resolve();
-        } else resolve();
+          } else { resolve(); }
+        } else { resolve(); }
       });
     }
 
     function showReferralWelcome(referrerId) {
       return new Promise((resolve) => {
-        database.ref('users/' + referrerId).once('value').then(snap => {
+        get(ref(database, 'users/' + referrerId)).then((snap) => {
           if (snap.exists()) {
             const referrerData = snap.val();
             document.getElementById('referrerAvatar').src = referrerData.avatar || userAvatar;
             document.getElementById('referrerName').textContent = referrerData.name || 'Unknown';
             document.getElementById('referrerId').textContent = 'ID: ' + referrerId;
             document.getElementById('referral-welcome').style.display = 'flex';
+            
             let countdown = 5;
             const countdownEl = document.getElementById('welcomeCountdown');
             const countdownInterval = setInterval(() => {
               countdown--;
-              if (countdown > 0) countdownEl.textContent = `Starting in ${countdown} seconds...`;
-              else {
+              if (countdown > 0) {
+                countdownEl.textContent = `Starting in ${countdown} seconds...`;
+              } else {
                 clearInterval(countdownInterval);
                 document.getElementById('referral-welcome').style.display = 'none';
                 resolve();
               }
             }, 1000);
-          } else resolve();
+          } else { resolve(); }
         });
       });
     }
 
+    // Award Referral Commission
     function awardReferralCommission(earnedAmount) {
       if (!userData.referredBy) return;
       const commission = earnedAmount * 0.2;
       const referrerId = userData.referredBy;
-      database.ref('users/' + referrerId).once('value').then(refSnap => {
+      
+      get(ref(database, 'users/' + referrerId)).then((refSnap) => {
         if (refSnap.exists()) {
           const referrerData = refSnap.val();
           const newBalance = (referrerData.usdtBalance || 0) + commission;
-          database.ref('users/' + referrerId).update({
+          const newTotalCommission = (referrerData.totalReferralCommission || 0) + commission;
+          
+          update(ref(database, 'users/' + referrerId), {
             usdtBalance: newBalance,
-            totalReferralCommission: (referrerData.totalReferralCommission || 0) + commission,
+            totalReferralCommission: newTotalCommission,
             lastUpdated: now()
+          });
+          
+          const referralCommissions = referrerData.referralCommissions || {};
+          referralCommissions[userId] = (referralCommissions[userId] || 0) + commission;
+          update(ref(database, 'users/' + referrerId + '/referralCommissions'), referralCommissions);
+          
+          push(ref(database, 'admin/commissionLog'), {
+            referrerId: referrerId,
+            referrerName: referrerData.name || 'Unknown',
+            referredUserId: userId,
+            referredUserName: userName,
+            amount: commission,
+            earnedAmount: earnedAmount,
+            timestamp: now(),
+            type: 'earning_commission'
           });
         }
       });
@@ -759,11 +996,12 @@
       { id:'plan18',name:'XLM/USDT', price:700, dailyEarning:70, duration:30, icon:'XLM' }
     ];
 
-    const userRef = (uid)=> database.ref('users/'+uid);
+    // DB helpers
+    const userRef = (uid)=> ref(database, 'users/'+uid);
 
     async function loadUser() {
-      const snap = await userRef(userId).once('value');
-      if (snap.exists()) return snap.val();
+      const snapshot = await get(userRef(userId));
+      if (snapshot.exists()) return snapshot.val();
       const init = {
         usdtBalance:0, 
         purchasedPlans:{}, activeTrades:{},
@@ -772,11 +1010,17 @@
         adStats:{ today:0, yesterday:0, thisWeek:0, thisMonth:0, lifetime:0, lastAdDate: todayISO(), lastWeekReset: weekStartISO(), lastMonthReset: monthStartISO() },
         milestones:{ milestone100Claimed:false, milestone200Claimed:false, milestone500Claimed:false },
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
-        referredBy: null, referralCode: null,
-        checkInData: { lastCheckIn: 0, currentStreak: 0, claimedDays: [], monthlyCheckIns: {} },
-        hasDeposit: false
+        referredBy: null, referralCode: null, lastCommissionNotification: 0,
+        checkInData: {
+          lastCheckIn: 0,
+          currentStreak: 0,
+          claimedDays: [],
+          monthlyCheckIns: {}
+        },
+        hasDeposit: false,
+        welcomed: false
       };
-      await userRef(userId).set(init);
+      await set(userRef(userId), init);
       return init;
     }
 
@@ -789,7 +1033,7 @@
 
     function save(partial){
       userData = { ...userData, ...partial };
-      userRef(userId).update(partial).catch(()=>{});
+      update(userRef(userId), partial).catch(()=>{});
       localStorage.setItem('exotix_user_'+userId, JSON.stringify(userData));
       if (partial.usdtBalance!==undefined) {
         usdtBalance = partial.usdtBalance;
@@ -797,21 +1041,41 @@
       }
     }
 
+    // Setup Referral Listener
     function setupReferralListener() {
-      if (referralListener) database.ref('users').off('value', referralListener);
-      referralListener = database.ref('users').orderByChild('referredBy').equalTo(userId);
-      referralListener.on('value', (snapshot) => {
-        referralCount = snapshot.numChildren();
-        let totalCommission = 0;
-        snapshot.forEach(child => {
-          if (userData.referralCommissions && userData.referralCommissions[child.key]) totalCommission += userData.referralCommissions[child.key];
-        });
-        totalReferralCommission = totalCommission;
+      if (referralListener) {
+        // In modular SDK, onValue returns an unsubscribe function, but for simplicity here we assume cleanup logic handles it
+      }
+      const referralQuery = query(ref(database, 'users'), orderByChild('referredBy'), equalTo(userId)); // Note: orderByChild needs index in firebase rules
+      // Fallback or simplified listener structure for this demo context as complex queries require index setup
+      onValue(ref(database, 'users'), (snapshot) => {
+        if (snapshot.exists()) {
+            const users = snapshot.val();
+            let count = 0;
+            let totalCommission = 0;
+            Object.keys(users).forEach(uid => {
+                if (users[uid].referredBy === userId) {
+                    count++;
+                    if (userData.referralCommissions && userData.referralCommissions[uid]) {
+                        totalCommission += userData.referralCommissions[uid];
+                    }
+                }
+            });
+            referralCount = count;
+            totalReferralCommission = totalCommission;
+
+            const referralCountEl = document.querySelector('.referral-stat-value');
+            const referralEarningsEl = document.querySelectorAll('.referral-stat-value')[1];
+            
+            if (referralCountEl) referralCountEl.textContent = count;
+            if (referralEarningsEl) referralEarningsEl.textContent = fmt((count * 0.20) + totalCommission);
+        }
       });
     }
 
+    // Setup Status Listeners
     function setupStatusListeners() {
-      database.ref('admin/deposits').on('value', (snapshot) => {
+      onValue(ref(database, 'admin/deposits'), (snapshot) => {
         if (snapshot.exists()) {
           const deposits = snapshot.val();
           Object.entries(deposits).forEach(([key, deposit]) => {
@@ -820,11 +1084,24 @@
               if (localDepositIndex !== -1 && depositHistory[localDepositIndex].status !== deposit.status) {
                 depositHistory[localDepositIndex].status = deposit.status;
                 save({ depositHistory });
-                if (deposit.status === 'approved' && !depositHistory[localDepositIndex].balanceUpdated) {
-                  save({ usdtBalance: usdtBalance + deposit.amount, hasDeposit: true });
-                  depositHistory[localDepositIndex].balanceUpdated = true;
-                  save({ depositHistory });
-                  notify(`Deposit of $${deposit.amount} approved!`);
+                
+                if (deposit.status === 'approved') {
+                  if (!depositHistory[localDepositIndex].balanceUpdated) {
+                    save({ usdtBalance: usdtBalance + deposit.amount });
+                    depositHistory[localDepositIndex].balanceUpdated = true;
+                    save({ depositHistory });
+                    save({ hasDeposit: true });
+                    notify(`Deposit of $${deposit.amount} approved!`);
+                    sendBot(`✅ <b>Deposit Approved</b>\nAmount: $${deposit.amount} USDT\nNew balance: $${fmt(usdtBalance + deposit.amount)} USDT`);
+                  }
+                } else if (deposit.status === 'rejected') {
+                  notify(`Deposit of $${deposit.amount} rejected!`);
+                  sendBot(`❌ <b>Deposit Rejected</b>\nAmount: $${deposit.amount} USDT\nReason: ${deposit.reason || 'Not specified'}`);
+                }
+                
+                if (document.querySelector('.nav-btn.active').dataset.tab === 'wallet') {
+                    const currentContent = document.getElementById('deposit-content').innerHTML;
+                    if (currentContent && currentContent.includes('Deposit History')) showDepositHistoryModal();
                 }
               }
             }
@@ -832,7 +1109,7 @@
         }
       });
       
-      database.ref('admin/withdrawals').on('value', (snapshot) => {
+      onValue(ref(database, 'admin/withdrawals'), (snapshot) => {
         if (snapshot.exists()) {
           const withdrawals = snapshot.val();
           Object.entries(withdrawals).forEach(([key, withdrawal]) => {
@@ -841,11 +1118,23 @@
               if (localWithdrawalIndex !== -1 && withdrawHistory[localWithdrawalIndex].status !== withdrawal.status) {
                 withdrawHistory[localWithdrawalIndex].status = withdrawal.status;
                 save({ withdrawHistory });
-                if (withdrawal.status === 'rejected' && !withdrawHistory[localWithdrawalIndex].balanceUpdated) {
-                  save({ usdtBalance: usdtBalance + withdrawal.amount });
-                  withdrawHistory[localWithdrawalIndex].balanceUpdated = true;
-                  save({ withdrawHistory });
-                  notify(`Withdrawal rejected. Amount refunded.`);
+                
+                if (withdrawal.status === 'approved') {
+                  notify(`Withdrawal of $${withdrawal.amount} approved!`);
+                  sendBot(`✅ <b>Withdrawal Approved</b>\nAmount: $${withdrawal.amount} USDT`);
+                } else if (withdrawal.status === 'rejected') {
+                  if (!withdrawHistory[localWithdrawalIndex].balanceUpdated) {
+                    save({ usdtBalance: usdtBalance + withdrawal.amount });
+                    withdrawHistory[localWithdrawalIndex].balanceUpdated = true;
+                    save({ withdrawHistory });
+                    notify(`Withdrawal of $${withdrawal.amount} rejected. Amount refunded.`);
+                    sendBot(`❌ <b>Withdrawal Rejected</b>\nAmount: $${withdrawal.amount} USDT\nReason: ${withdrawal.reason || 'Not specified'}\nAmount refunded to balance.`);
+                  }
+                }
+                
+                if (document.querySelector('.nav-btn.active').dataset.tab === 'wallet') {
+                    const currentContent = document.getElementById('withdraw-content').innerHTML;
+                    if (currentContent && currentContent.includes('Withdraw History')) showWithdrawHistoryModal();
                 }
               }
             }
@@ -854,34 +1143,12 @@
       });
     }
 
+    // Setup Real-time Balance Listener
     function setupBalanceListener() {
-      database.ref('users/' + userId + '/usdtBalance').on('value', (snapshot) => {
+      onValue(ref(database, 'users/' + userId + '/usdtBalance'), (snapshot) => {
         if (snapshot.exists() && snapshot.val() !== usdtBalance) {
           usdtBalance = snapshot.val();
           document.getElementById('usdtBalance').textContent = fmt(usdtBalance);
-        }
-      });
-    }
-
-    function setupUserDataListener() {
-      database.ref('users/' + userId).on('value', (snapshot) => {
-        if (snapshot.exists()) {
-          const updatedData = snapshot.val();
-          userData = updatedData;
-          usdtBalance = updatedData.usdtBalance || 0;
-          purchasedPlans = updatedData.purchasedPlans || {};
-          activeTrades = updatedData.activeTrades || {};
-          depositHistory = updatedData.depositHistory || [];
-          withdrawHistory = updatedData.withdrawHistory || [];
-          tradeHistory = updatedData.tradeHistory || [];
-          checkInData = updatedData.checkInData || { lastCheckIn: 0, currentStreak: 0, claimedDays: [], monthlyCheckIns: {} };
-          document.getElementById('usdtBalance').textContent = fmt(usdtBalance);
-          const activeTab = document.querySelector('.nav-btn.active').dataset.tab;
-          if (activeTab === 'home') renderHome();
-          if (activeTab === 'wallet') renderWallet();
-          if (activeTab === 'earn') renderEarn();
-          if (activeTab === 'profile') renderProfile();
-          if (activeTab === 'ranking') renderRanking();
         }
       });
     }
@@ -898,30 +1165,6 @@
 
     // Home (Trade Plans)
     function formatTime(s){ s=Math.max(0,s|0); const h=(s/3600)|0; const m=((s%3600)/60)|0; const sec=s%60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; }
-
-    function getIconPath(iconName) {
-      const iconPaths = {
-        'bitcoin': 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/bitcoin.png',
-        'ethereum': 'a21e4200f019c08e41e0df1150845c048a548eda/ethereum.png',
-        'money': 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/money.png',
-        'ADA': 'e7f6eec9bf7824e3ff41e66e77e14b711361d780/ADA.png',
-        'SOL': 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/SOL.webp',
-        'images': 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/images.png',
-        'TON': '76ccee51eaaff076a5be449f03426720b5ea8b14/TON.png',
-        'images (1)': '2a92878ba871080d95116374cedeb7c1b0b75545/images%20(1).png',
-        'LINK': 'a21e4200f019c08e41e0df1150845c048a548eda/LINK.png',
-        'UNI#': 'a21e4200f019c08e41e0df1150845c048a548eda/UNI%23.png',
-        'ATOM': 'a21e4200f019c08e41e0df1150845c048a548eda/ATOM.png',
-        'NEAR': 'a21e4200f019c08e41e0df1150845c048a548eda/NEAR.png',
-        'ALGO': 'a21e4200f019c08e41e0df1150845c048a548eda/ALGO.png',
-        'VET': 'a21e4200f019c08e41e0df1150845c048a548eda/VET.png',
-        'ICP': 'a21e4200f019c08e41e0df1150845c048a548eda/ICP.png',
-        'FIL': 'a21e4200f019c08e41e0df1150845c048a548eda/FIL.png',
-        'TRX': 'a21e4200f019c08e41e0df1150845c048a548eda/TRX.png',
-        'XLM': 'a21e4200f019c08e41e0df1150845c048a548eda/XLM.png'
-      };
-      return iconPaths[iconName] || 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/bitcoin.png';
-    }
 
     function renderHome(){
       const btc = cryptoPrices.BTC||{price:3000,change:0};
@@ -951,12 +1194,13 @@
           const tr = activeTrades[p.id];
           const canClaim = tr ? (now()-tr.lastClaim)>=86400 : false;
           const prog = tr ? (tr.claimedDays/p.duration*100) : 0;
+          const cryptoPrice = cryptoPrices[p.name.split('/')[0]] || {price: 100, change: 0};
 
           return `
             <div class="plan">
               <div class="plan-h">
                 <div class="plan-ic">
-                  <img src="https://github.com/s42144/exotix-/blob/${getIconPath(p.icon)}?raw=true" alt="${p.name}" />
+                  <img src="${getImageUrl(p.icon, `https://github.com/s42144/exotix-/blob/${getIconPath(p.icon)}?raw=true`)}" alt="${p.name}" />
                 </div>
                 <div>
                   <div class="plan-tt">${p.name}</div>
@@ -996,6 +1240,7 @@
       `;
       document.getElementById('main-content').innerHTML = html;
 
+      // Bind
       TRADE_PLANS.forEach(p=>{
         const buy=document.getElementById(`buy_${p.id}`);
         const claim=document.getElementById(`claim_${p.id}`);
@@ -1022,6 +1267,7 @@
             const newBal=usdtBalance+earned;
             tr.lastClaim=now(); tr.claimedDays+=1; tr.totalEarned+=earned;
             awardReferralCommission(earned);
+            
             if (tr.claimedDays>=p.duration){
               const copy={...activeTrades}; delete copy[p.id];
               save({ usdtBalance:newBal, activeTrades:copy });
@@ -1039,12 +1285,37 @@
         }
       });
 
+      // Countdowns
       setInterval(()=>{
         Object.values(activeTrades).forEach(tr=>{
           const el=document.getElementById(`cd_${tr.planId}`); if(!el) return;
           el.textContent = `Next claim in: ${formatTime(86400-(now()-tr.lastClaim))}`;
         });
       },1000);
+    }
+
+    function getIconPath(iconName) {
+      const iconPaths = {
+        'bitcoin': 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/bitcoin.png',
+        'ethereum': 'a21e4200f019c08e41e0df1150845c048a548eda/ethereum.png',
+        'money': 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/money.png',
+        'ADA': 'e7f6eec9bf7824e3ff41e66e77e14b711361d780/ADA.png',
+        'SOL': 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/SOL.webp',
+        'images': 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/images.png',
+        'TON': '76ccee51eaaff076a5be449f03426720b5ea8b14/TON.png',
+        'images (1)': '2a92878ba871080d95116374cedeb7c1b0b75545/images%20(1).png',
+        'LINK': 'a21e4200f019c08e41e0df1150845c048a548eda/LINK.png',
+        'UNI#': 'a21e4200f019c08e41e0df1150845c048a548eda/UNI%23.png',
+        'ATOM': 'a21e4200f019c08e41e0df1150845c048a548eda/ATOM.png',
+        'NEAR': 'a21e4200f019c08e41e0df1150845c048a548eda/NEAR.png',
+        'ALGO': 'a21e4200f019c08e41e0df1150845c048a548eda/ALGO.png',
+        'VET': 'a21e4200f019c08e41e0df1150845c048a548eda/VET.png',
+        'ICP': 'a21e4200f019c08e41e0df1150845c048a548eda/ICP.png',
+        'FIL': 'a21e4200f019c08e41e0df1150845c048a548eda/FIL.png',
+        'TRX': 'a21e4200f019c08e41e0df1150845c048a548eda/TRX.png',
+        'XLM': 'a21e4200f019c08e41e0df1150845c048a548eda/XLM.png'
+      };
+      return iconPaths[iconName] || 'b664bfe02b4b6ad4a01630e7ef0d11591eec6633/bitcoin.png';
     }
 
     // Wallet
@@ -1056,13 +1327,13 @@
         </div>
 
         <div class="wallet-options">
-          <div class="wallet-item" id="w_dep"><img src="https://github.com/s42144/exotix-/blob/55716b0c008098f802c57e8c2a72d2839882d9a6/wallet.png?raw=true" class="wallet-ic" alt="Deposit">Deposit</div>
-          <div class="wallet-item" id="w_wd"><img src="https://i.postimg.cc/0yHFM9nV/withdraw.png?raw=true" class="wallet-ic" alt="Withdraw">Withdraw</div>
-          <div class="wallet-item" id="w_checkin"><img src="https://i.postimg.cc/0jbJNdyF/check-in.png?raw=true" class="wallet-ic" alt="Daily Check In">Daily Check In</div>
-          <div class="wallet-item" id="w_deph"><img src="https://github.com/s42144/exotix-/blob/fb47587bd76a06af6c816e1421c6b9ca862192cf/history.png?raw=true" class="wallet-ic" alt="Deposit History">Deposit History</div>
-          <div class="wallet-item" id="w_wdh"><img src="https://github.com/s42144/exotix-/blob/fb47587bd76a06af6c816e1421c6b9ca862192cf/history.png?raw=true" class="wallet-ic" alt="Withdraw History">Withdraw History</div>
-          <div class="wallet-item" id="w_act"><img src="https://github.com/s42144/exotix-/blob/b827cb1714a241f36d4d03a1dacbce5ce15bf795/process.png?raw=true" class="wallet-ic" alt="Activities">Activities</div>
-          <div class="wallet-item" id="w_trd"><img src="https://github.com/s42144/exotix-/blob/fb47587bd76a06af6c816e1421c6b9ca862192cf/trade.png?raw=true" class="wallet-ic" alt="Trades">Trades</div>
+          <div class="wallet-item" id="w_dep"><img src="${getImageUrl('wallet', 'https://github.com/s42144/exotix-/blob/55716b0c008098f802c57e8c2a72d2839882d9a6/wallet.png?raw=true')}" class="wallet-ic" alt="Deposit">Deposit</div>
+          <div class="wallet-item" id="w_wd"><img src="${getImageUrl('top-up', 'https://i.postimg.cc/0yHFM9nV/withdraw.png?raw=true')}" class="wallet-ic" alt="Withdraw">Withdraw</div>
+          <div class="wallet-item" id="w_checkin"><img src="${getImageUrl('check-in', 'https://i.postimg.cc/0jbJNdyF/check-in.png?raw=true')}" class="wallet-ic" alt="Daily Check In">Daily Check In</div>
+          <div class="wallet-item" id="w_deph"><img src="${getImageUrl('history', 'https://github.com/s42144/exotix-/blob/fb47587bd76a06af6c816e1421c6b9ca862192cf/history.png?raw=true')}" class="wallet-ic" alt="Deposit History">Deposit History</div>
+          <div class="wallet-item" id="w_wdh"><img src="${getImageUrl('history', 'https://github.com/s42144/exotix-/blob/fb47587bd76a06af6c816e1421c6b9ca862192cf/history.png?raw=true')}" class="wallet-ic" alt="Withdraw History">Withdraw History</div>
+          <div class="wallet-item" id="w_act"><img src="${getImageUrl('process', 'https://github.com/s42144/exotix-/blob/b827cb1714a241f36d4d03a1dacbce5ce15bf795/process.png?raw=true')}" class="wallet-ic" alt="Activities">Activities</div>
+          <div class="wallet-item" id="w_trd"><img src="${getImageUrl('trade', 'https://github.com/s42144/exotix-/blob/fb47587bd76a06af6c816e1421c6b9ca862192cf/trade.png?raw=true')}" class="wallet-ic" alt="Trades">Trades</div>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
@@ -1079,7 +1350,7 @@
     function showDepositModal() {
       const modal = document.getElementById('deposit-modal');
       const content = document.getElementById('deposit-content');
-      content.innerHTML = '<div class="circle-loader"><div></div><div></div><div></div></div>';
+      content.innerHTML = '<div style="color:white;text-align:center">Loading...</div>';
       modal.style.display = 'flex';
       
       setTimeout(() => {
@@ -1100,18 +1371,9 @@
             
             <div class="detailed-info" id="detailed_info" style="display:none">
               <div class="detailed-info-title">DETAILED INFO</div>
-              <div class="detailed-info-row">
-                <div class="detailed-info-label">Deposit Amount:</div>
-                <div class="detailed-info-value" id="deposit_amount">$0.00</div>
-              </div>
-              <div class="detailed-info-row">
-                <div class="detailed-info-label">Bonus Amount:</div>
-                <div class="detailed-info-value" id="bonus_amount">$0.00</div>
-              </div>
-              <div class="detailed-info-row">
-                <div class="detailed-info-label">Total Amount:</div>
-                <div class="detailed-info-value" id="total_amount">$0.00</div>
-              </div>
+              <div class="detailed-info-row"><div class="detailed-info-label">Deposit Amount:</div><div class="detailed-info-value" id="deposit_amount">$0.00</div></div>
+              <div class="detailed-info-row"><div class="detailed-info-label">Bonus Amount:</div><div class="detailed-info-value" id="bonus_amount">$0.00</div></div>
+              <div class="detailed-info-row"><div class="detailed-info-label">Total Amount:</div><div class="detailed-info-value" id="total_amount">$0.00</div></div>
             </div>
             
             <button class="btn-primary" style="margin-top:10px" id="dep_go">Confirm</button>
@@ -1121,15 +1383,18 @@
         document.getElementById('apply_promo').onclick = () => {
           const promoCode = document.getElementById('promo_code').value.trim();
           const amount = parseFloat(document.getElementById('dep_amt').value) || 0;
-          if (!promoCode) { document.getElementById('promo_info').textContent = 'Please enter a promo code'; return; }
-          database.ref('promoCodes/' + promoCode).once('value').then(snap => {
+          if (!promoCode) { document.getElementById('promo_info').textContent = 'Please enter a promo code'; document.getElementById('promo_info').className = 'promo-info promo-error'; return; }
+          get(ref(database, 'promoCodes/' + promoCode)).then((snap) => {
             if (snap.exists()) {
               const promoData = snap.val();
-              if (promoData.used >= promoData.maxUsers) { document.getElementById('promo_info').textContent = 'Limit reached'; return; }
+              if (promoData.used >= promoData.maxUsers) {
+                 document.getElementById('promo_info').textContent = 'This promo code has reached its maximum usage limit'; document.getElementById('promo_info').className = 'promo-info promo-error'; return;
+              }
               const bonusPercentage = promoData.percentage || 0;
               const bonusAmount = amount * (bonusPercentage / 100);
               const totalAmount = amount + bonusAmount;
-              document.getElementById('promo_info').innerHTML = `Promo applied! ${bonusPercentage}% bonus<br>Bonus: $${bonusAmount.toFixed(2)}`;
+              document.getElementById('promo_info').innerHTML = `Promo code applied! You get ${bonusPercentage}% bonus<br>Bonus: $${bonusAmount.toFixed(2)}`;
+              document.getElementById('promo_info').className = 'promo-info promo-success';
               document.getElementById('detailed_info').style.display = 'block';
               document.getElementById('deposit_amount').textContent = `$${amount.toFixed(2)}`;
               document.getElementById('bonus_amount').textContent = `$${bonusAmount.toFixed(2)}`;
@@ -1137,13 +1402,11 @@
               appliedPromoCode = promoCode;
               promoBonus = bonusAmount;
             } else {
-              document.getElementById('promo_info').textContent = 'Invalid promo code';
-              document.getElementById('detailed_info').style.display = 'none';
-              appliedPromoCode = null; promoBonus = 0;
+              document.getElementById('promo_info').textContent = 'Invalid promo code'; document.getElementById('promo_info').className = 'promo-info promo-error';
+              document.getElementById('detailed_info').style.display = 'none'; appliedPromoCode = null; promoBonus = 0;
             }
           });
         };
-        
         document.getElementById('dep_amt').oninput = () => { if (appliedPromoCode) document.getElementById('apply_promo').click(); };
         document.getElementById('dep_go').onclick = processDeposit;
       }, 500);
@@ -1156,16 +1419,17 @@
       const id = generateId();
       const totalAmount = amt + promoBonus;
       const content = document.getElementById('deposit-content');
+      
       content.innerHTML = `
         <div class="card">
           <div class="timer"><div class="t-t">Complete within 15:00</div><div id="dep_timer" class="t-t" style="font-size:22px;margin-top:6px">15:00</div></div>
-          <img src="https://i.postimg.cc/g2mgknm3/Screenshot-2025-10-17-16-28-28-211-com-ton-keeper-edit.jpg" alt="QR" style="width:200px;height:200px;border-radius:12px;border:2px solid var(--accent-blue);display:block;margin:0 auto 10px">
-          <div class="row"><div>Network</div><div>TON <button class="copy" onclick="navigator.clipboard.writeText('TON')"><img src="https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true" alt="Copy"></button></div></div>
-          <div class="row"><div>Address</div><div style="font-family:monospace;word-break:break-all">UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz <button class="copy" id="cp_addr"><img src="https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true" alt="Copy"></button></div></div>
-          <div class="row"><div>Amount</div><div>$${amt.toFixed(2)} <button class="copy" id="cp_amt"><img src="https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true" alt="Copy"></button></div></div>
-          ${promoBonus > 0 ? `<div class="row"><div>Bonus</div><div>$${promoBonus.toFixed(2)}</div></div>` : ''}
-          <div class="row"><div>Total</div><div>$${totalAmount.toFixed(2)} <button class="copy" id="cp_total"><img src="https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true" alt="Copy"></button></div></div>
-          <div class="row"><div>Memo</div><div style="font-family:monospace">${memo} <button class="copy" id="cp_memo"><img src="https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true" alt="Copy"></button></div></div>
+          <img src="${getImageUrl('qr', 'https://i.postimg.cc/g2mgknm3/Screenshot-2025-10-17-16-28-28-211-com-ton-keeper-edit.jpg')}" alt="QR" style="width:200px;height:200px;border-radius:12px;border:2px solid var(--accent-blue);display:block;margin:0 auto 10px">
+          <div class="row"><div>Network</div><div>TON <button class="copy" onclick="navigator.clipboard.writeText('TON')"><img src="${getImageUrl('copy', 'https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true')}" alt="Copy"></button></div></div>
+          <div class="row"><div>Address</div><div style="font-family:monospace;word-break:break-all">UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz <button class="copy" id="cp_addr"><img src="${getImageUrl('copy', 'https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true')}" alt="Copy"></button></div></div>
+          <div class="row"><div>Amount</div><div>$${amt.toFixed(2)} <button class="copy" id="cp_amt"><img src="${getImageUrl('copy', 'https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true')}" alt="Copy"></button></div></div>
+          ${promoBonus > 0 ? `<div class="row"><div>Bonus</div><div>$${promoBonus.toFixed(2)} (from promo code)</div></div>` : ''}
+          <div class="row"><div>Total Amount</div><div>$${totalAmount.toFixed(2)} <button class="copy" id="cp_total"><img src="${getImageUrl('copy', 'https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true')}" alt="Copy"></button></div></div>
+          <div class="row"><div>Memo</div><div style="font-family:monospace">${memo} <button class="copy" id="cp_memo"><img src="${getImageUrl('copy', 'https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true')}" alt="Copy"></button></div></div>
           <label class="form-label" style="margin-top:8px">Transaction Hash</label>
           <input id="txh" class="input" placeholder="Enter transaction hash">
           <button class="btn-primary" style="margin-top:10px" id="dep_submit">Confirm Transaction</button>
@@ -1183,28 +1447,30 @@
         const tx = document.getElementById('txh').value.trim();
         if(!tx){ notify('Enter transaction hash'); return; }
         const depositData = { id: id, userId: userId, userName: userName, amount: amt, bonus: promoBonus, totalAmount: totalAmount, promoCode: appliedPromoCode, txHash: tx, memo: memo, status: 'pending', timestamp: now(), balanceUpdated: false };
-        depositHistory.push(depositData);
-        save({ depositHistory, hasDeposit: true });
+        depositHistory.push(depositData); save({ depositHistory }); save({ hasDeposit: true });
+        
         if (appliedPromoCode) {
-          database.ref('promoCodes/' + appliedPromoCode).once('value').then(snap => {
-            if (snap.exists()) database.ref('promoCodes/' + appliedPromoCode).update({ used: snap.val().used + 1 });
+          get(ref(database, 'promoCodes/' + appliedPromoCode)).then((snap) => {
+            if (snap.exists()) { update(ref(database, 'promoCodes/' + appliedPromoCode), { used: snap.val().used + 1 }); }
           });
         }
-        database.ref('admin/deposits').push(depositData).then((ref) => {
-          database.ref('admin/deposits/' + ref.key).update({ id: ref.key }).then(() => {
-            sendBot(`💳 <b>Deposit Submitted</b>\nAmount: $${amt.toFixed(2)}\nTotal: $${totalAmount.toFixed(2)}\nID: ${ref.key}`);
-            notify('Submitted. Awaiting approval.');
-            showDepositHistoryModal();
-          });
-        });
+        
+        const newRef = push(ref(database, 'admin/deposits'));
+        set(newRef, depositData).then(() => {
+          update(newRef, { id: newRef.key });
+          sendBot(`💳 <b>Deposit Submitted</b>\nAmount: $${amt.toFixed(2)} USDT\nBonus: $${promoBonus.toFixed(2)} USDT\nTotal: $${totalAmount.toFixed(2)} USDT\nStatus: Pending\nTX: ${tx}\nID: ${newRef.key}`);
+          notify('Submitted. Awaiting approval.');
+          showDepositHistoryModal();
+        }).catch(error => { console.error(error); notify('Error submitting deposit.'); });
       };
     }
 
     function showDepositHistoryModal() {
       const modal = document.getElementById('deposit-history-modal');
       const content = document.getElementById('deposit-history-content');
-      content.innerHTML = '<div class="circle-loader"><div></div><div></div><div></div></div>';
+      content.innerHTML = '<div style="color:white;text-align:center">Loading...</div>';
       modal.style.display = 'flex';
+      
       setTimeout(() => {
         content.innerHTML = `
           <div class="card">
@@ -1212,13 +1478,10 @@
             <div class="history-list">
               ${depositHistory.length?depositHistory.map(d=>`
                 <div class="history-item">
-                  <div class="history-header">
-                    <div class="history-id">ID: ${d.id} <button class="copy" onclick="copy('${d.id}')"><img src="https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true" alt="Copy"></button></div>
-                  </div>
-                  <div class="history-details">
-                    <div class="history-amount">$${d.amount.toFixed(2)}${d.bonus ? ` + $${d.bonus.toFixed(2)} bonus` : ''}</div>
-                    <div class="history-date">${new Date(d.timestamp*1000).toLocaleString()}</div>
-                  </div>
+                  <div class="history-header"><div class="history-id">ID: ${d.id} <button class="copy" onclick="copy('${d.id}')"><img src="${getImageUrl('copy', '...')}" alt="Copy"></button></div></div>
+                  <div class="history-details"><div class="history-amount">$${d.amount.toFixed(2)}${d.bonus ? ` + $${d.bonus.toFixed(2)} bonus` : ''}</div><div class="history-date">${new Date(d.timestamp*1000).toLocaleString()}</div></div>
+                  ${d.promoCode ? `<div class="history-extra">Promo Code: ${d.promoCode}</div>` : ''}
+                  ${d.txHash ? `<div class="history-extra">TX: ${d.txHash}</div>` : ''}
                 </div>
               `).join(''):`<div class="section-subtitle" style="text-align:center">No deposits yet</div>`}
             </div>
@@ -1231,38 +1494,43 @@
       const modal = document.getElementById('withdraw-modal');
       const content = document.getElementById('withdraw-content');
       const hasDeposit = userData.hasDeposit || depositHistory.length > 0;
-      content.innerHTML = '<div class="circle-loader"><div></div><div></div><div></div></div>';
+      content.innerHTML = '<div style="color:white;text-align:center">Loading...</div>';
       modal.style.display = 'flex';
+      
       setTimeout(() => {
         content.innerHTML = `
           <div class="card">
             <div class="section-subtitle" style="text-align:center;margin-bottom:8px">Withdraw USDT (TON)</div>
-            ${!hasDeposit ? `<div style="background:rgba(239,68,68,0.1);border:1px solid var(--accent-red);border-radius:12px;padding:12px;margin-bottom:16px;text-align:center"><div style="color:var(--accent-red);font-weight:700">Deposit Required</div></div>` : ''}
+            ${!hasDeposit ? `<div style="background:rgba(239,68,68,0.1);border:1px solid var(--accent-red);border-radius:12px;padding:12px;margin-bottom:16px;text-align:center"><div style="color:var(--accent-red);font-weight:700;margin-bottom:8px">Deposit Required</div><div style="color:var(--text-secondary);font-size:13px">You need to make at least one deposit before you can withdraw funds.</div></div>` : ''}
             <label class="form-label">TON Address</label>
             <input id="wd_addr" class="input" placeholder="Enter TON wallet">
             <label class="form-label" style="margin-top:8px">Amount (min $0.10)</label>
             <input id="wd_amt" type="number" min="0.10" step="0.01" class="input" placeholder="Enter amount">
+            <label class="form-label" style="margin-top:8px">Memo/Comment (optional)</label>
+            <input id="wd_memo" class="input" placeholder="Enter memo">
             <button class="btn-primary" style="margin-top:10px" id="wd_go" ${!hasDeposit ? 'disabled' : ''}>${!hasDeposit ? 'Deposit Required' : 'Confirm Withdraw'}</button>
           </div>
         `;
+        
         if (hasDeposit) {
           document.getElementById('wd_go').onclick = async ()=>{
             const addr=document.getElementById('wd_addr').value.trim();
             const amt=parseFloat(document.getElementById('wd_amt').value);
+            const memo=document.getElementById('wd_memo').value.trim();
             if(!addr){ notify('Enter address'); return; }
             if(!amt || amt<0.10){ notify('Minimum $0.10'); return; }
             if(amt>usdtBalance){ notify('Insufficient balance'); return; }
             const id=generateId();
-            const withdrawalData = { id: id, userId: userId, userName: userName, amount: amt, address: addr, status: 'pending', timestamp: now(), balanceUpdated: true };
-            withdrawHistory.push(withdrawalData);
-            save({ withdrawHistory, usdtBalance: usdtBalance - amt });
-            database.ref('admin/withdrawals').push(withdrawalData).then((ref) => {
-              database.ref('admin/withdrawals/' + ref.key).update({ id: ref.key }).then(() => {
-                sendBot(`💸 <b>Withdrawal Submitted</b>\nAmount: $${amt.toFixed(2)}\nID: ${ref.key}`);
-                notify(`Withdrawal of $${amt} submitted.`);
-                showWithdrawHistoryModal();
-              });
-            });
+            const withdrawalData = { id: id, userId: userId, userName: userName, amount: amt, address: addr, memo: memo, status: 'pending', timestamp: now(), balanceUpdated: true };
+            withdrawHistory.push(withdrawalData); save({ withdrawHistory }); save({ usdtBalance: usdtBalance - amt });
+            
+            const newRef = push(ref(database, 'admin/withdrawals'));
+            set(newRef, withdrawalData).then(() => {
+              update(newRef, { id: newRef.key });
+              sendBot(`💸 <b>Withdrawal Submitted</b>\nAmount: $${amt.toFixed(2)} USDT\nStatus: Pending\nAddress: ${addr}\nID: ${newRef.key}`);
+              notify(`Withdrawal of $${amt} submitted. Amount deducted from balance.`);
+              showWithdrawHistoryModal();
+            }).catch(error => { console.error(error); notify('Error submitting withdrawal.'); save({ usdtBalance: usdtBalance + amt }); });
           };
         }
       }, 500);
@@ -1271,8 +1539,9 @@
     function showWithdrawHistoryModal() {
       const modal = document.getElementById('withdraw-history-modal');
       const content = document.getElementById('withdraw-history-content');
-      content.innerHTML = '<div class="circle-loader"><div></div><div></div><div></div></div>';
+      content.innerHTML = '<div style="color:white;text-align:center">Loading...</div>';
       modal.style.display = 'flex';
+      
       setTimeout(() => {
         content.innerHTML = `
           <div class="card">
@@ -1280,13 +1549,9 @@
             <div class="history-list">
               ${withdrawHistory.length?withdrawHistory.map(w=>`
                 <div class="history-item">
-                  <div class="history-header">
-                    <div class="history-id">ID: ${w.id}</div>
-                  </div>
-                  <div class="history-details">
-                    <div class="history-amount">$${w.amount.toFixed(2)}</div>
-                    <div class="history-date">${new Date(w.timestamp*1000).toLocaleString()}</div>
-                  </div>
+                  <div class="history-header"><div class="history-id">ID: ${w.id} <button class="copy" onclick="copy('${w.id}')"><img src="${getImageUrl('copy', '...')}" alt="Copy"></button></div></div>
+                  <div class="history-details"><div class="history-amount">$${w.amount.toFixed(2)}</div><div class="history-date">${new Date(w.timestamp*1000).toLocaleString()}</div></div>
+                  <div class="history-extra">To: ${w.address}</div>
                 </div>
               `).join(''):`<div class="section-subtitle" style="text-align:center">No withdrawals yet</div>`}
             </div>
@@ -1298,8 +1563,9 @@
     function showActivitiesModal(){
       const modal = document.getElementById('activities-modal');
       const content = document.getElementById('activities-content');
-      content.innerHTML = '<div class="circle-loader"><div></div><div></div><div></div></div>';
+      content.innerHTML = '<div style="color:white;text-align:center">Loading...</div>';
       modal.style.display = 'flex';
+      
       setTimeout(() => {
         const all=[...depositHistory.map(x=>({...x,type:'deposit'})),...withdrawHistory.map(x=>({...x,type:'withdraw'})),...tradeHistory.map(x=>({...x,type:'trade'}))].sort((a,b)=>b.timestamp-a.timestamp);
         content.innerHTML = `
@@ -1308,13 +1574,8 @@
             <div class="history-list">
               ${all.length?all.map(a=>`
                 <div class="history-item">
-                  <div class="history-header">
-                    <div class="history-id">${a.type}</div>
-                    <div class="history-date">${new Date(a.timestamp*1000).toLocaleString()}</div>
-                  </div>
-                  <div class="history-details">
-                    <div class="history-amount">${a.type==='deposit'?'+':a.type==='withdraw'?'-':''}$${(a.amount||0).toFixed(2)}</div>
-                  </div>
+                  <div class="history-header"><div class="history-id">${a.type}</div><div class="history-date">${new Date(a.timestamp*1000).toLocaleString()}</div></div>
+                  <div class="history-details"><div class="history-amount">${a.type==='deposit'?'+':a.type==='withdraw'?'-':''}$${(a.amount||0).toFixed? (a.amount||0).toFixed(2) : a.amount}</div></div>
                 </div>
               `).join(''):`<div class="section-subtitle" style="text-align:center">No activities</div>`}
             </div>
@@ -1326,8 +1587,9 @@
     function showTradesModal(){
       const modal = document.getElementById('trades-modal');
       const content = document.getElementById('trades-content');
-      content.innerHTML = '<div class="circle-loader"><div></div><div></div><div></div></div>';
+      content.innerHTML = '<div style="color:white;text-align:center">Loading...</div>';
       modal.style.display = 'flex';
+      
       setTimeout(() => {
         const list=Object.values(activeTrades);
         content.innerHTML = `
@@ -1339,14 +1601,8 @@
                 const prog=(t.claimedDays/p.duration*100);
                 return `
                   <div class="history-item">
-                    <div class="history-header">
-                      <div class="history-id">${p.name}</div>
-                      <div class="history-amount" style="color:var(--accent-blue)">$${p.price}</div>
-                    </div>
-                    <div class="prog" style="margin-top:10px">
-                      <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
-                      <div class="progtext">Progress: ${t.claimedDays}/${p.duration} days</div>
-                    </div>
+                    <div class="history-header"><div class="history-id">${p.name}</div><div class="history-amount" style="color:var(--accent-blue)">$${p.price}</div></div>
+                    <div class="prog" style="margin-top:10px"><div class="progbar"><div class="progfill" style="width:${prog}%"></div></div><div class="progtext">Progress: ${t.claimedDays}/${p.duration} days</div></div>
                     <div class="countdown">Next claim in: ${formatTime(86400-(now()-t.lastClaim))}</div>
                   </div>
                 `;
@@ -1361,23 +1617,27 @@
     function showCheckInFullscreenModal() {
       const modal = document.getElementById('checkin-fullscreen-modal');
       const content = document.getElementById('checkin-fullscreen-content');
-      content.innerHTML = '<div class="circle-loader"><div></div><div></div><div></div></div>';
+      content.innerHTML = '<div style="color:white;text-align:center">Loading...</div>';
       modal.style.display = 'flex';
+      
       setTimeout(() => {
         let daysHtml = '';
         for (let i = 1; i <= 7; i++) {
-          const reward = i * 0.10;
+          const reward = i * 0.10; 
           const isClaimed = checkInData.claimedDays.includes(i);
           const isToday = canCheckInToday() && !isClaimed && i === (checkInData.currentStreak % 7) + 1;
           daysHtml += `
             <div class="checkin-day ${isClaimed ? 'claimed' : ''} ${isToday ? 'available' : ''}" data-day="${i}" data-reward="${reward}">
               <div class="checkin-day-number">Day ${i}</div>
               <div class="checkin-day-reward">$${reward.toFixed(2)}</div>
-              <img src="https://github.com/s42144/exotix-/blob/905718398cb21a62c6fdf857cdd51b8cb4c0774c/USDT-Ton-Wallet.png?raw=true" class="checkin-day-icon" alt="USDT">
+              <img src="${getImageUrl('USDT-Ton-Wallet', 'https://github.com/s42144/exotix-/blob/905718398cb21a62c6fdf857cdd51b8cb4c0774c/USDT-Ton-Wallet.png?raw=true')}" class="checkin-day-icon" alt="USDT">
+              ${isClaimed ? '<div class="checkin-day-status claimed">Claimed</div>' : ''}
+              ${isToday ? '<div class="checkin-day-status available">Available</div>' : ''}
             </div>
           `;
         }
-        
+
+        // Calendar
         const nowDate = new Date();
         const year = nowDate.getFullYear();
         const month = nowDate.getMonth();
@@ -1395,15 +1655,9 @@
         content.innerHTML = `
           <div class="checkin-content">
             <div class="checkin-header"><div class="checkin-title">Daily Check In</div></div>
-            <div class="checkin-streak">
-              <div class="checkin-streak-title">Current Streak</div>
-              <div class="checkin-streak-value">${checkInData.currentStreak} days</div>
-            </div>
-            <div class="checkin-days">${daysHtml}</div>
-            <div class="checkin-calendar">
-              <div class="checkin-calendar-title">This Month</div>
-              <div class="checkin-calendar-grid">${calendarHtml}</div>
-            </div>
+            <div class="checkin-streak"><div class="checkin-streak-title">Current Streak</div><div class="checkin-streak-value" id="currentStreak">${checkInData.currentStreak} days</div></div>
+            <div class="checkin-days" id="checkinDays">${daysHtml}</div>
+            <div class="checkin-calendar"><div class="checkin-calendar-title">This Month</div><div class="checkin-calendar-grid" id="checkinCalendar">${calendarHtml}</div></div>
           </div>
         `;
         
@@ -1411,7 +1665,8 @@
           day.addEventListener('click', function() {
             const dayNumber = parseInt(this.dataset.day);
             const reward = parseFloat(this.dataset.reward);
-            claimCheckIn(dayNumber, reward);
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => { this.style.transform = ''; claimCheckIn(dayNumber, reward); }, 200);
           });
         });
       }, 500);
@@ -1424,22 +1679,36 @@
     }
     
     function claimCheckIn(dayNumber, reward) {
-      if (!canCheckInToday()) { notify('Already checked in today'); return; }
+      if (!canCheckInToday()) { notify('You have already checked in today'); return; }
       const newClaimedDays = [...checkInData.claimedDays, dayNumber];
       const newStreak = checkInData.currentStreak + 1;
       const resetStreak = newStreak % 7 === 0 ? 0 : newStreak;
       const resetClaimedDays = newStreak % 7 === 0 ? [] : newClaimedDays;
+      
       const today = new Date();
       const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
       const newMonthlyCheckIns = { ...(checkInData.monthlyCheckIns || {}), [dateStr]: true };
+      
       const newCheckInData = { lastCheckIn: now(), currentStreak: resetStreak, claimedDays: resetClaimedDays, monthlyCheckIns: newMonthlyCheckIns };
-      database.ref('users/' + userId).update({ usdtBalance: usdtBalance + reward, checkInData: newCheckInData });
-      awardReferralCommission(reward);
-      usdtBalance += reward;
+      
+      update(ref(database, 'users/' + userId + '/checkInData'), newCheckInData);
       checkInData = newCheckInData;
+      
+      const newBalance = usdtBalance + reward;
+      // Removed EXV rewards
+      update(ref(database, 'users/' + userId), { usdtBalance: newBalance, checkInData: newCheckInData });
+      
+      awardReferralCommission(reward);
+      
+      const transaction = { type: 'checkin', amount: reward, day: dayNumber, timestamp: now() };
+      const newTradeHistory = [...tradeHistory, transaction];
+      update(ref(database, 'users/' + userId + '/tradeHistory'), newTradeHistory);
+      
+      usdtBalance = newBalance; tradeHistory = newTradeHistory;
       document.getElementById('usdtBalance').textContent = fmt(usdtBalance);
+      
       notify(`Checked in Day ${dayNumber}! Earned $${reward.toFixed(2)} USDT`);
-      setTimeout(() => showCheckInFullscreenModal(), 500);
+      setTimeout(() => { showCheckInFullscreenModal(); }, 500);
     }
 
     // Earn
@@ -1471,13 +1740,8 @@
 
         <div class="milestone-card">
           <div class="milestone-header">
-            <div class="milestone-icon">
-              <img src="https://github.com/s42144/exotix-/blob/496a65565dee1e8f41c9b1cf90a82966bca0ce27/goals.gif?raw=true" alt="Milestone" />
-            </div>
-            <div class="milestone-info">
-              <div class="milestone-title">Milestone Rewards</div>
-              <div class="milestone-reward">Complete ads to unlock rewards</div>
-            </div>
+            <div class="milestone-icon"><img src="${getImageUrl('goals', '...')}" alt="Milestone" /></div>
+            <div class="milestone-info"><div class="milestone-title">Milestone Rewards</div><div class="milestone-reward">Complete ads to unlock rewards</div></div>
           </div>
           ${[
             {id:'m100', need:100, amt:0.00213, label:'100 Ads'},
@@ -1489,10 +1753,7 @@
             const prog = Math.min((a.lifetime||0)/m.need*100, 100);
             return `
               <div class="milestone-progress">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-                  <div style="font-weight:700">${m.label}</div>
-                  <div style="color:var(--accent-green);font-weight:700">${m.amt} USDT</div>
-                </div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><div style="font-weight:700">${m.label}</div><div style="color:var(--accent-green);font-weight:700">${m.amt} USDT</div></div>
                 <div class="milestone-bar"><div class="milestone-fill" style="width:${prog}%"></div></div>
                 <div class="milestone-text">${a.lifetime||0}/${m.need} ads completed</div>
                 <button class="btn-primary" style="margin-top:8px" id="${m.id}" ${can?'':'disabled'}>${txt}</button>
@@ -1500,11 +1761,11 @@
             `;
           }).join('')}
         </div>
-
         <div id="tasksList"></div>
       `;
       document.getElementById('main-content').innerHTML = html;
 
+      // Chart
       setTimeout(()=>{
         const ctx=document.getElementById('adChart').getContext('2d');
         new Chart(ctx,{type:'bar',data:{labels:['Today','Yesterday','This Week','This Month'],
@@ -1512,6 +1773,7 @@
           options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'rgba(255, 255, 255, 0.7)'}},y:{beginAtZero:true,grid:{color:'rgba(255, 255, 255, 0.1)'},ticks:{color:'rgba(255, 255, 255, 0.7)'}}}}});
       },50);
 
+      // Watch ad
       document.getElementById('watchAd').onclick = ()=>{
         if (adLoading) return;
         adLoading = true; document.getElementById('watchAd').textContent='Loading...';
@@ -1519,6 +1781,7 @@
           window.show_10116329().then(()=>{
             adLoading=false; document.getElementById('watchAd').textContent='Watch Ad';
             const usdtReward=0.000106;
+            // Removed EXV Reward
             const today=todayISO(), ws=weekStartISO(), ms=monthStartISO();
             if (userData.adStats.lastAdDate!==today){ userData.adStats.yesterday=userData.adStats.today; userData.adStats.today=0; userData.adStats.lastAdDate=today; }
             if (userData.adStats.lastWeekReset!==ws){ userData.adStats.thisWeek=0; userData.adStats.lastWeekReset=ws; }
@@ -1528,10 +1791,11 @@
             save({ usdtBalance: usdtBalance+usdtReward, adStats: userData.adStats });
             notify(`Earned ${usdtReward} USDT`);
             renderEarn();
-          }).catch(()=>{ adLoading=false; document.getElementById('watchAd').textContent='Watch Ad'; notify('Ad failed'); });
+          }).catch(()=>{ adLoading=false; document.getElementById('watchAd').textContent='Watch Ad'; notify('Ad failed. Try again'); });
         }else{ adLoading=false; document.getElementById('watchAd').textContent='Watch Ad'; notify('Ad service unavailable'); }
       };
 
+      // Milestones
       const setMilestone=(need,amt)=>{
         const key=`milestone${need}Claimed`;
         if ((userData.adStats?.lifetime||0)>=need && !userData.milestones?.[key]){
@@ -1541,16 +1805,16 @@
           renderEarn();
         }
       };
-      document.getElementById('m100')?.addEventListener('click', ()=>setMilestone(100,0.00213));
-      document.getElementById('m200')?.addEventListener('click', ()=>setMilestone(200,0.016));
-      document.getElementById('m500')?.addEventListener('click', ()=>setMilestone(500,0.0213));
+      const b100=document.getElementById('m100'); if(b100) b100.onclick=()=>setMilestone(100,0.00213);
+      const b200=document.getElementById('m200'); if(b200) b200.onclick=()=>setMilestone(200,0.016);
+      const b500=document.getElementById('m500'); if(b500) b500.onclick==>setMilestone(500,0.0213);
 
       loadTasks();
     }
 
     function loadTasks(){
-      database.ref('tasks').once('value').then(s=>{
-        const tasks=s.exists()?s.val():{};
+      get(ref(database, 'tasks')).then((snapshot)=>{
+        const tasks=snapshot.exists()?snapshot.val():{};
         const categories = ['Project', 'Partner', 'Advertise'];
         let html='';
         categories.forEach(category=>{
@@ -1558,21 +1822,13 @@
           if(categoryTasks.length > 0){
             html += `
               <div class="task-category">
-                <div class="category-header">
-                  <div class="category-icon">
-                    <img src="https://github.com/s42144/exotix-/blob/29dc0282b344b026c4f18acde308b3779badd1a1/model.gif?raw=true" alt="${category}" />
-                  </div>
-                  <div class="category-title">${category}</div>
-                </div>
+                <div class="category-header"><div class="category-icon"><img src="${getImageUrl('...')}" alt="${category}" /></div><div class="category-title">${category}</div></div>
                 ${categoryTasks.map(id=>{
                   const t=tasks[id]; const done = !!(userData.completedTasks&&userData.completedTasks[id]);
                   return `
                     <div class="task-card">
                       <img src="${t.photo}" class="task-image" alt="${t.name}">
-                      <div class="task-info">
-                        <div class="task-name">${t.name}</div>
-                        <div class="task-reward">+${t.amount} USDT</div>
-                      </div>
+                      <div class="task-info"><div class="task-name">${t.name}</div><div class="task-reward">+${t.amount} USDT</div></div>
                       <button class="task-btn ${done?'completed':''}" data-id="${id}">${done?'Done':'Start'}</button>
                     </div>
                   `;
@@ -1611,45 +1867,33 @@
           <div class="section-title">Profile</div>
           <div class="section-subtitle">Account settings and referrals</div>
         </div>
-
         <div class="card" style="text-align:center">
           <img src="${userData.avatar}" alt="avatar" style="width:110px;height:110px;border-radius:50%;border:4px solid var(--accent-purple);object-fit:cover;box-shadow:0 8px 24px rgba(0,0,0,.3);margin-bottom:8px">
           <div style="font-weight:800">${userData.name}</div>
-          <div style="margin-top:6px"><span class="section-subtitle">ID:</span> <span style="color:var(--accent-purple);font-weight:800">${userId}</span> <button class="copy" id="copyUid"><img src="https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/copy%20(1).gif?raw=true" alt="Copy"></button></div>
+          <div style="margin-top:6px"><span class="section-subtitle">ID:</span> <span style="color:var(--accent-purple);font-weight:800">${userId}</span> <button class="copy" id="copyUid"><img src="${getImageUrl('copy', '...')}" alt="Copy"></button></div>
         </div>
-
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">TON Wallet</div>
           <input id="tonWallet" class="input" placeholder="Enter your TON wallet" value="${userData.ton||''}">
           <button class="btn-primary" style="margin-top:10px" id="saveTon">Save</button>
         </div>
-
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">Referral</div>
           <div class="row"><div>Link</div><div style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="refLink">https://t.me/exotix_trade_bot/app?startapp=${userId}</div></div>
           <button class="btn-primary" style="margin-top:10px" id="copyRef">Copy Link</button>
         </div>
-
         <div class="referral-card">
           <div class="referral-header">
-            <div class="referral-icon">
-              <img src="https://github.com/s42144/exotix-/blob/13c543e32ffe13e350713106bd03d3986ecc9c37/referral.gif?raw=true" alt="Referrals" />
-            </div>
+            <div class="referral-icon"><img src="${getImageUrl('referral', '...')}" alt="Referrals" /></div>
             <div class="referral-title">My Referrals</div>
           </div>
           <div class="referral-stats">
-            <div class="referral-stat">
-              <div class="referral-stat-label">Refer Count</div>
-              <div class="referral-stat-value">${referralCount||0}</div>
-            </div>
-            <div class="referral-stat">
-              <div class="referral-stat-label">Total Earnings</div>
-              <div class="referral-stat-value">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} USDT</div>
-            </div>
+            <div class="referral-stat"><div class="referral-stat-label">Refer Count</div><div class="referral-stat-value">${referralCount||0}</div></div>
+            <div class="referral-stat"><div class="referral-stat-label">Total Earnings</div><div class="referral-stat-value">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} USDT</div></div>
           </div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;text-align:center">Earn $0.20 for each referral + 20% of their total earnings</div>
           <button class="btn-primary" id="viewReferralsBtn">View My Referrals</button>
         </div>
-
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">Redeem Code</div>
           <input id="redeem" maxlength="8" class="input" placeholder="Enter 8-digit code">
@@ -1662,18 +1906,18 @@
         const w=document.getElementById('tonWallet').value.trim();
         if(w.length<10){ notify('Invalid TON wallet'); return; }
         save({ ton:w });
-        database.ref('admin/tonSubmissions').push({ userId, userName, walletAddress:w, timestamp:now(), balance:usdtBalance });
+        push(ref(database, 'admin/tonSubmissions'), { userId, userName, walletAddress:w, timestamp:now(), balance:usdtBalance });
         notify('Wallet saved');
       };
       document.getElementById('copyRef').onclick=()=>copy(document.getElementById('refLink').textContent);
       document.getElementById('redeemGo').onclick=()=>{
         const code=document.getElementById('redeem').value.trim(); if(code.length!==8){ notify('Enter valid 8-digit code'); return; }
-        database.ref('redeemCodes/'+code).once('value').then(s=>{
+        get(ref(database, 'redeemCodes/'+code)).then((s)=>{
           if(!s.exists()){ notify('Invalid or used'); return; }
           const codeData = s.val();
-          if (codeData.used >= codeData.maxUsers) { notify('Limit reached'); return; }
+          if (codeData.used >= codeData.maxUsers) { notify('This code has reached its maximum usage limit'); return; }
           const reward = Math.random() * (0.20 - 0.01) + 0.01;
-          database.ref('redeemCodes/' + code).update({ used: codeData.used + 1 });
+          update(ref(database, 'redeemCodes/' + code), { used: codeData.used + 1 });
           save({ usdtBalance: usdtBalance + reward });
           notify(`Redeemed ${fmt(reward)} USDT`);
           document.getElementById('redeem').value='';
@@ -1685,30 +1929,33 @@
     function showReferralList() {
       const modal = document.getElementById('referralModal');
       const content = document.getElementById('referralListContent');
-      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snapshot => {
-        if (snapshot.numChildren() === 0) {
-          content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary);">No referrals yet.</div>';
-        } else {
-          let html = '';
-          snapshot.forEach(child => {
-            const referredUser = child.val();
-            const referredUserId = child.key;
-            const commissionFromUser = userData.referralCommissions && userData.referralCommissions[referredUserId] ? userData.referralCommissions[referredUserId] : 0;
-            html += `
-              <div class="referral-item">
-                <img src="${referredUser.avatar || userAvatar}" class="referral-avatar" alt="${referredUser.name}" />
-                <div class="referral-info">
-                  <div class="referral-name">${referredUser.name || 'Unknown'}</div>
-                  <div class="referral-id">ID: ${referredUserId}</div>
-                  <div class="referral-balance">${fmt(referredUser.usdtBalance || 0)} USDT</div>
-                  <div class="referral-commission">Commission: ${fmt(commissionFromUser)} USDT</div>
-                </div>
-              </div>
-            `;
-          });
-          content.innerHTML = html;
+      get(ref(database, 'users')).then((snapshot) => {
+        if (snapshot.exists()) {
+            const users = snapshot.val();
+            let html = '';
+            let count = 0;
+            Object.keys(users).forEach(uid => {
+                if (users[uid].referredBy === userId) {
+                    count++;
+                    const referredUser = users[uid];
+                    const commissionFromUser = userData.referralCommissions && userData.referralCommissions[uid] ? userData.referralCommissions[uid] : 0;
+                    html += `
+                      <div class="referral-item">
+                        <img src="${referredUser.avatar || userAvatar}" class="referral-avatar" alt="${referredUser.name}" />
+                        <div class="referral-info">
+                          <div class="referral-name">${referredUser.name || 'Unknown'}</div>
+                          <div class="referral-id">ID: ${uid}</div>
+                          <div class="referral-balance">${fmt(referredUser.usdtBalance || 0)} USDT</div>
+                          <div class="referral-commission">Commission: ${fmt(commissionFromUser)} USDT</div>
+                        </div>
+                      </div>
+                    `;
+                }
+            });
+            referralCount = count;
+            content.innerHTML = html || '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary);font-size:14px">You haven\'t referred anyone yet.</div>';
+            modal.style.display = 'flex';
         }
-        modal.style.display = 'flex';
       });
     }
 
@@ -1726,11 +1973,13 @@
         <div id="rankingList"></div>
       `;
       document.getElementById('main-content').innerHTML = html;
-      if (rankingListener) database.ref('users').off('value', rankingListener);
-      rankingListener = database.ref('users').orderByChild('usdtBalance').limitToLast(100);
-      rankingListener.on('value',(snap)=>{
+      // Note: limitToLast is not directly available in get, requires query. simplified here.
+      onValue(ref(database, 'users'), (snap)=>{
         const arr=[];
-        snap.forEach(ch=>{ const u=ch.val(); arr.push({ id:ch.key, name:u.name||'Unknown', avatar:u.avatar||userAvatar, balance:u.usdtBalance||0 }); });
+        snap.forEach(ch=>{
+          const u=ch.val();
+          arr.push({ id:ch.key, name:u.name||'Unknown', avatar:u.avatar||userAvatar, balance:u.usdtBalance||0 });
+        });
         arr.sort((a,b)=>b.balance-a.balance);
         const top=arr.slice(0,50);
         const myPos = arr.findIndex(x=>x.id===userId)+1;
@@ -1739,21 +1988,17 @@
           <div class="ranking-row">
             <div class="ranking-position-num ${i<3?'top3':''}">${i+1}</div>
             <img src="${u.avatar}" class="ranking-avatar">
-            <div class="ranking-user-info">
-              <div class="ranking-user-name">${u.name}</div>
-              <div class="ranking-user-id">ID: ${u.id}</div>
-            </div>
+            <div class="ranking-user-info"><div class="ranking-user-name">${u.name}</div><div class="ranking-user-id">ID: ${u.id}</div></div>
             <div class="ranking-balance">${fmt(u.balance)} USDT</div>
           </div>
         `).join('');
       });
     }
 
-    // Modal Close Events
+    // Modal Closes
     document.getElementById('closeReferralModal').addEventListener('click', () => { document.getElementById('referralModal').style.display = 'none'; });
-    document.getElementById('referralModal').addEventListener('click', (e) => { if (e.target.id === 'referralModal') document.getElementById('referralModal').style.display = 'none'; });
     document.getElementById('closeCheckin').addEventListener('click', () => { document.getElementById('checkin-modal').style.display = 'none'; });
-    document.getElementById('checkin-modal').addEventListener('click', (e) => { if (e.target.id === 'checkin-modal') document.getElementById('checkin-modal').style.display = 'none'; });
+    
     document.getElementById('closeDepositModal').addEventListener('click', () => { document.getElementById('deposit-modal').style.display = 'none'; });
     document.getElementById('closeWithdrawModal').addEventListener('click', () => { document.getElementById('withdraw-modal').style.display = 'none'; });
     document.getElementById('closeCheckinFullscreenModal').addEventListener('click', () => { document.getElementById('checkin-fullscreen-modal').style.display = 'none'; });
@@ -1769,40 +2014,61 @@
     async function bootstrap(){
       getTelegramUserData();
       await loadCryptoPrices();
+      loadImageResources();
       try{
-        userData = await loadUser();
-        if (userData.checkInData) checkInData = userData.checkInData;
-        if (!userData.welcomed) { sendWelcomeMessage(userId); save({ welcomed: true }); }
-      }catch{
+        const snapshot = await get(userRef(userId));
+        userData = snapshot.exists() ? snapshot.val() : null;
+        
+        if (userData) {
+            if (userData.checkInData) checkInData = userData.checkInData;
+        } else {
+             const init = {
+                usdtBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[],
+                avatar:userAvatar, name:userName, referrals:0, completedTasks:{},
+                adStats:{ today:0, yesterday:0, thisWeek:0, thisMonth:0, lifetime:0, lastAdDate: todayISO(), lastWeekReset: weekStartISO(), lastMonthReset: monthStartISO() },
+                milestones:{ milestone100Claimed:false, milestone200Claimed:false, milestone500Claimed:false },
+                referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, referralCode: null, lastCommissionNotification: 0,
+                checkInData: { lastCheckIn: 0, currentStreak: 0, claimedDays: [], monthlyCheckIns: {} }, hasDeposit: false, welcomed: false
+            };
+            await set(userRef(userId), init);
+            userData = init;
+        }
+        
+        if (!userData.welcomed) {
+          sendWelcomeMessage(userId);
+          update(ref(database, 'users/' + userId), { welcomed: true });
+        }
+      }catch(e){
+        console.error(e);
         const loc = localStorage.getItem('exotix_user_'+userId);
-        userData = loc ? JSON.parse(loc) : { 
-          usdtBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, 
-          adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, 
-          milestones:{ milestone100Claimed:false, milestone200Claimed:false, milestone500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), 
-          referredBy: null, referralCode: null, welcomed: false, checkInData: { lastCheckIn: 0, currentStreak: 0, claimedDays: [], monthlyCheckIns: {} }, hasDeposit: false
-        };
-        if (userData.checkInData) checkInData = userData.checkInData;
+        userData = loc ? JSON.parse(loc) : { usdtBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone100Claimed:false, milestone200Claimed:false, milestone500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, referralCode: null, welcomed: false, lastCommissionNotification: 0, checkInData: { lastCheckIn: 0, currentStreak: 0, claimedDays: [], monthlyCheckIns: {} }, hasDeposit: false };
         if (!userData.welcomed) { sendWelcomeMessage(userId); userData.welcomed = true; localStorage.setItem('exotix_user_'+userId, JSON.stringify(userData)); }
       }
+      
       usdtBalance = userData.usdtBalance||0;
       purchasedPlans = userData.purchasedPlans||{};
       activeTrades = userData.activeTrades||{};
       depositHistory = userData.depositHistory||[];
       withdrawHistory = userData.withdrawHistory||[];
       tradeHistory = userData.tradeHistory||[];
+      
       document.getElementById('usdtBalance').textContent = fmt(usdtBalance);
 
       processReferral().then(() => {
         updateLoadingProgress('Starting app...');
-        setTimeout(() => { document.getElementById('loading-screen').style.display = 'none'; document.getElementById('app').style.display = 'block'; }, 1000);
+        setTimeout(() => {
+          document.getElementById('loading-screen').style.display = 'none';
+          document.getElementById('app').style.display = 'block';
+        }, 1000);
+        
         setupReferralListener();
         setupStatusListeners();
         setupBalanceListener();
-        setupUserDataListener();
         showTab('home');
         setInterval(loadCryptoPrices, 30000);
       });
     }
+
     bootstrap();
   </script>
 </body>
