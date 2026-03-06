@@ -12,7 +12,7 @@
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Monetag SDK -->
+  <!-- Monetag SDK (Kept for reference, but logic relies on timer now) -->
   <script src='//libtl.com/sdk.js' data-zone='10116329' data-sdk='show_10116329'></script>
 
   <!-- Chart.js -->
@@ -115,49 +115,6 @@
     }
     
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Telegram Duck Loader Overlay */
-    .ad-loader-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(11, 14, 17, 0.95);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      z-index: 10000;
-      display: none;
-    }
-    
-    .duck-container {
-      position: relative;
-      width: 120px; height: 120px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    
-    .duck-spinner {
-      width: 100%; height: 100%;
-      border: 4px solid var(--bg-input);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      position: absolute;
-    }
-    
-    .duck-emoji {
-      font-size: 48px;
-      z-index: 2;
-      animation: duckBounce 1s infinite ease-in-out;
-    }
-    
-    @keyframes duckBounce {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(10deg); }
-    }
-    
-    .ad-loader-text {
-      margin-top: 20px;
-      font-size: 16px; font-weight: 600;
-      color: var(--text-secondary);
-    }
 
     /* Balance Display (TON Only) */
     .balance-container {
@@ -439,22 +396,6 @@
     .copy:hover { border-color: var(--primary); }
     .copy img { width: 14px; height: 14px; filter: brightness(0) invert(1); }
 
-    /* History List */
-    .history-list { max-height: 60vh; overflow-y: auto; padding-right: 4px; }
-    .history-item {
-      background: var(--bg-input);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    
-    .history-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
-    .history-id { font-size: 12px; color: var(--text-secondary); font-family: monospace; opacity: 0.7; }
-    .history-details { display: flex; justify-content: space-between; align-items: center; }
-    .history-amount { font-weight: 800; color: var(--primary); font-size: 16px; }
-    .history-date { font-size: 12px; color: var(--text-secondary); text-align: right; }
-    .history-extra { font-size: 11px; color: var(--text-muted); margin-top: 8px; font-family: monospace; word-break: break-all; opacity: 0.7; }
-
     /* Earn Section */
     .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
     .stat-box {
@@ -675,7 +616,7 @@
     .modal-content {
       flex: 1;
       padding: 20px;
-      max-width: 480px;
+      max-width: 600px;
       margin: 0 auto;
       width: 100%;
     }
@@ -744,6 +685,171 @@
       margin: 16px auto;
     }
 
+    /* PROFESSIONAL UI UPGRADES */
+    
+    /* Modern Redeem Section */
+    .redeem-professional {
+      background: linear-gradient(135deg, #2B3139 0%, #1E2329 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .redeem-professional::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(252, 213, 53, 0.05) 0%, transparent 70%);
+    }
+
+    .redeem-input-group {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .redeem-input {
+      flex: 1;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: monospace;
+      letter-spacing: 2px;
+      text-align: center;
+      outline: none;
+      text-transform: uppercase;
+    }
+    
+    .redeem-input:focus { border-color: var(--primary); }
+
+    .redeem-btn {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 0 24px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: .2s;
+      white-space: nowrap;
+    }
+    
+    .redeem-btn:hover { background: var(--primary-hover); }
+
+    /* Modern History/Activity Items */
+    .modern-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modern-list-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modern-list-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--text-muted);
+    }
+
+    .modern-list-item.type-deposit::before { background: var(--accent-green); }
+    .modern-list-item.type-withdraw::before { background: var(--accent-red); }
+    .modern-list-item.type-claim::before { background: var(--primary); }
+    .modern-list-item.type-plan::before { background: var(--accent-blue); }
+
+    .mli-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--bg-input);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mli-icon img { width: 20px; height: 20px; }
+
+    .mli-content { flex: 1; min-width: 0; }
+    
+    .mli-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .mli-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mli-amount {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .mli-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    
+    .mli-val.green { color: var(--accent-green); }
+    .mli-val.red { color: var(--accent-red); }
+
+    .mli-status {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--bg-input);
+      color: var(--text-secondary);
+      font-weight: 700;
+      margin-top: 4px;
+      display: inline-block;
+    }
+    
+    .mli-status.success { background: rgba(14, 203, 129, 0.1); color: var(--accent-green); }
+    .mli-status.pending { background: rgba(252, 213, 53, 0.1); color: var(--primary); }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5; }
+
     @media(max-width:360px){
       .live-prices{grid-template-columns:1fr}
     }
@@ -756,15 +862,6 @@
     <div class="loading-text">BlockOrbit</div>
     <div class="loading-subtext">Initializing...</div>
     <div class="loading-spinner"></div>
-  </div>
-
-  <!-- Ad Loading Overlay (Duck Animation) -->
-  <div class="ad-loader-overlay" id="adLoader">
-    <div class="duck-container">
-      <div class="duck-spinner"></div>
-      <div class="duck-emoji">🦆</div>
-    </div>
-    <div class="ad-loader-text">Loading Advertisement...</div>
   </div>
 
   <!-- App -->
@@ -998,7 +1095,8 @@
         adStats:{ today:0, yesterday:0, thisWeek:0, thisMonth:0, lifetime:0, lastAdDate: todayISO(), lastWeekReset: weekStartISO(), lastMonthReset: monthStartISO() },
         milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false },
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
-        referredBy: null, welcomed: false, withdrawCount: 0
+        referredBy: null, welcomed: false,
+        withdrawalCount: 0 // Added for new withdrawal rule
       };
       await userRef(userId).set(init);
       return init;
@@ -1218,7 +1316,7 @@
           </div>
 
           <div class="wallet-menu-item" id="w_trd">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" class="wmi-icon" alt="Trades">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" class="wmi-icon" alt="Trades">
             <div class="wmi-text">Active Trades</div>
             <div class="wmi-arrow">›</div>
           </div>
@@ -1329,25 +1427,42 @@
     function showDepositHistoryModal() {
       const modal = document.getElementById('deposit-history-modal');
       const content = document.getElementById('deposit-history-content');
-      content.innerHTML = `
-        <div class="card">
-          <div class="section-title" style="font-size:18px;margin-bottom:16px">Deposit History</div>
-          <div class="history-list">
-            ${depositHistory.length?depositHistory.map(d=>`
-              <div class="history-item">
-                <div class="history-header">
-                  <div class="history-id">ID: ${d.id}</div>
-                  <div class="history-date">${new Date(d.timestamp*1000).toLocaleString()}</div>
-                </div>
-                <div class="history-details">
-                  <div class="history-amount">+${d.amount} TON</div>
-                </div>
-                <div class="history-extra">TX: ${d.txHash}</div>
-              </div>
-            `).join(''):`<div class="section-subtitle" style="text-align:center;padding:40px 0">No deposits yet</div>`}
+      
+      let html = '<div class="section-header"><div class="section-title">Deposit History</div></div>';
+      
+      if (depositHistory.length === 0) {
+        html += `
+          <div class="empty-state">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+            <div>No deposits found</div>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        html += '<div class="modern-list-container">';
+        depositHistory.forEach(d => {
+          html += `
+            <div class="modern-list-item type-deposit">
+              <div class="mli-icon">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwRUNIODEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSI1IiB4Mj0iMTIiIHkyPSIxOSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjE5IDEyIDEyIDE5IDUgMTIiPjwvcG9seWxpbmU+PC9zdmc+" alt="In">
+              </div>
+              <div class="mli-content">
+                <div class="mli-title">Deposit</div>
+                <div class="mli-sub">
+                  <span>ID: ${d.id}</span>
+                  <span>•</span>
+                  <span>${new Date(d.timestamp*1000).toLocaleDateString()}</span>
+                </div>
+              </div>
+              <div class="mli-amount">
+                <div class="mli-val green">+${d.amount} TON</div>
+                <div class="mli-status success">Completed</div>
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+      }
+      content.innerHTML = html;
       modal.style.display = 'flex';
     }
 
@@ -1355,15 +1470,24 @@
       const modal = document.getElementById('withdraw-modal');
       const content = document.getElementById('withdraw-content');
       
-      // Logic: First withdraw is free. Second requires deposit.
-      const withdrawCount = userData.withdrawCount || 0;
       const hasDeposit = userData.hasDeposit || depositHistory.length > 0;
-      const canWithdraw = withdrawCount < 1 || hasDeposit;
+      const withdrawalCount = userData.withdrawalCount || 0;
+      const isFirstFree = withdrawalCount < 1;
+
+      // Logic: If count > 0 AND !hasDeposit, then block.
+      const allowWithdraw = isFirstFree || hasDeposit;
       
+      let warningMsg = '';
+      if (!isFirstFree && !hasDeposit) {
+        warningMsg = `<div style="color:var(--accent-red);text-align:center;margin-bottom:16px;padding:12px;background:rgba(246,70,93,0.1);border-radius:8px;font-size:13px">⚠️ Deposit required for 2nd withdrawal</div>`;
+      } else if (isFirstFree) {
+        warningMsg = `<div style="color:var(--primary);text-align:center;margin-bottom:16px;padding:12px;background:rgba(252,213,53,0.1);border-radius:8px;font-size:13px">🎁 First withdrawal is free!</div>`;
+      }
+
       content.innerHTML = `
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">Withdraw TON</div>
-          ${!canWithdraw ? `<div style="color:var(--accent-red);text-align:center;margin-bottom:16px;padding:12px;background:rgba(246,70,93,0.1);border-radius:8px">You have used your free withdrawal. Please deposit to withdraw again.</div>` : ''}
+          ${warningMsg}
           <div class="form-group">
             <label class="form-label">TON Address</label>
             <input id="wd_addr" class="input" placeholder="Enter your TON wallet address">
@@ -1372,12 +1496,12 @@
             <label class="form-label">Amount (min 0.01 TON)</label>
             <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="Enter amount">
           </div>
-          <button class="btn-primary" id="wd_go" ${!canWithdraw ? 'disabled' : ''}>${!canWithdraw ? 'Deposit Required' : 'Withdraw'}</button>
+          <button class="btn-primary" id="wd_go" ${!allowWithdraw ? 'disabled' : ''}>${!allowWithdraw ? 'Deposit Required' : 'Withdraw'}</button>
         </div>
       `;
       modal.style.display = 'flex';
       
-      if (canWithdraw) {
+      if (allowWithdraw) {
         document.getElementById('wd_go').onclick = async ()=>{
           const addr=document.getElementById('wd_addr').value.trim();
           const amt=parseFloat(document.getElementById('wd_amt').value);
@@ -1386,12 +1510,15 @@
           if(amt>tonBalance){ notify('Insufficient balance'); return; }
           const id=generateId();
           
+          // Increment withdrawal count
+          const newCount = (userData.withdrawalCount || 0) + 1;
+          
           withdrawHistory.push({ id, amount:amt, address:addr, timestamp:now() });
-          
-          // Increment withdraw count
-          const newWithdrawCount = withdrawCount + 1;
-          
-          save({ withdrawHistory, tonBalance: tonBalance - amt, withdrawCount: newWithdrawCount });
+          save({ 
+            withdrawHistory, 
+            tonBalance: tonBalance - amt,
+            withdrawalCount: newCount 
+          });
           database.ref('admin/withdrawals').push({ id, userId, userName, amount:amt, address:addr, status:'pending', timestamp:now() });
           
           sendBot(`💸 <b>Withdrawal Submitted</b>\nAmount: ${amt} TON\nAddress: ${addr}`);
@@ -1404,50 +1531,92 @@
     function showWithdrawHistoryModal() {
       const modal = document.getElementById('withdraw-history-modal');
       const content = document.getElementById('withdraw-history-content');
-      content.innerHTML = `
-        <div class="card">
-          <div class="section-title" style="font-size:18px;margin-bottom:16px">Withdraw History</div>
-          <div class="history-list">
-            ${withdrawHistory.length?withdrawHistory.map(w=>`
-              <div class="history-item">
-                <div class="history-header">
-                  <div class="history-id">ID: ${w.id}</div>
-                  <div class="history-date">${new Date(w.timestamp*1000).toLocaleString()}</div>
-                </div>
-                <div class="history-details">
-                  <div class="history-amount">-${w.amount} TON</div>
-                </div>
-                <div class="history-extra">To: ${w.address}</div>
-              </div>
-            `).join(''):`<div class="section-subtitle" style="text-align:center;padding:40px 0">No withdrawals yet</div>`}
+      
+      let html = '<div class="section-header"><div class="section-title">Withdraw History</div></div>';
+      
+      if (withdrawHistory.length === 0) {
+        html += `
+          <div class="empty-state">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <div>No withdrawals found</div>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        html += '<div class="modern-list-container">';
+        withdrawHistory.forEach(w => {
+          html += `
+            <div class="modern-list-item type-withdraw">
+              <div class="mli-icon">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGNjQ2NUQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIxOSIgeDI9IjEyIiB5Mj0iNSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjUgMTIgMTIgNSAxOSAxMiI+PC9wb2x5bGluZT48L3N2Zz4=" alt="Out">
+              </div>
+              <div class="mli-content">
+                <div class="mli-title">Withdrawal</div>
+                <div class="mli-sub">
+                  <span>ID: ${w.id}</span>
+                  <span>•</span>
+                  <span>${new Date(w.timestamp*1000).toLocaleDateString()}</span>
+                </div>
+              </div>
+              <div class="mli-amount">
+                <div class="mli-val red">-${w.amount} TON</div>
+                <div class="mli-status pending">Pending</div>
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+      }
+      content.innerHTML = html;
       modal.style.display = 'flex';
     }
 
     function showActivitiesModal(){
       const modal = document.getElementById('activities-modal');
       const content = document.getElementById('activities-content');
-      const all=[...depositHistory.map(x=>({...x,type:'Deposit'})),...withdrawHistory.map(x=>({...x,type:'Withdraw'})),...tradeHistory.map(x=>({...x,type:x.type==='purchase'?'Plan Purchase':'Daily Claim'}))].sort((a,b)=>b.timestamp-a.timestamp);
-      content.innerHTML = `
-        <div class="card">
-          <div class="section-title" style="font-size:18px;margin-bottom:16px">Activities</div>
-          <div class="history-list">
-            ${all.length?all.map(a=>`
-              <div class="history-item">
-                <div class="history-header">
-                  <div class="history-id">${a.type}</div>
-                  <div class="history-date">${new Date(a.timestamp*1000).toLocaleString()}</div>
-                </div>
-                <div class="history-details">
-                  <div class="history-amount" style="color:${a.type==='Deposit'||a.type==='Daily Claim'?'var(--accent-green)':'var(--accent-red)'}">${a.type==='Deposit'||a.type==='Daily Claim'?'+':'-'}${a.amount} TON</div>
+      const all=[...depositHistory.map(x=>({...x,type:'deposit', subtype:'Deposit'})),...withdrawHistory.map(x=>({...x,type:'withdraw', subtype:'Withdraw'})),...tradeHistory.map(x=>({...x,type:x.type==='purchase'?'plan':'claim', subtype:x.type==='purchase'?'Plan Purchase':'Daily Claim'}))].sort((a,b)=>b.timestamp-a.timestamp);
+      
+      let html = '<div class="section-header"><div class="section-title">Activities</div></div>';
+
+      if (all.length === 0) {
+        html += `
+          <div class="empty-state">
+             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <div>No recent activities</div>
+          </div>
+        `;
+      } else {
+        html += '<div class="modern-list-container">';
+        all.forEach(a => {
+          const isDeposit = a.type === 'deposit';
+          const isClaim = a.type === 'claim';
+          const colorClass = isDeposit || isClaim ? 'green' : 'red';
+          const typeIcon = isDeposit ? 'Deposit' : (a.type === 'withdraw' ? 'Withdraw' : a.subtype);
+          const iconSvg = isDeposit 
+            ? 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwRUNIODEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSI1IiB4Mj0iMTIiIHkyPSIxOSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjE5IDEyIDEyIDE5IDUgMTIiPjwvcG9seWxpbmU+PC9zdmc+'
+            : (a.type === 'withdraw' ? 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGNjQ2NUQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIxOSIgeDI9IjEyIiB5Mj0iNSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjUgMTIgMTIgNSAxOSAxMiI+PC9wb2x5bGluZT48L3N2Zz4=' : 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGQzQ1MzUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==');
+
+          html += `
+            <div class="modern-list-item ${isDeposit ? 'type-deposit' : (a.type === 'withdraw' ? 'type-withdraw' : 'type-claim')}">
+              <div class="mli-icon">
+                <img src="data:image/svg+xml;base64,${iconSvg}" alt="icon">
+              </div>
+              <div class="mli-content">
+                <div class="mli-title">${typeIcon}</div>
+                <div class="mli-sub">
+                  <span>${new Date(a.timestamp*1000).toLocaleDateString()}</span>
+                  <span>•</span>
+                  <span>${new Date(a.timestamp*1000).toLocaleTimeString()}</span>
                 </div>
               </div>
-            `).join(''):`<div class="section-subtitle" style="text-align:center;padding:40px 0">No activities yet</div>`}
-          </div>
-        </div>
-      `;
+              <div class="mli-amount">
+                <div class="mli-val ${colorClass}">${isDeposit || isClaim ? '+':'-'}${a.amount} TON</div>
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+      }
+      content.innerHTML = html;
       modal.style.display = 'flex';
     }
 
@@ -1455,30 +1624,46 @@
       const modal = document.getElementById('trades-modal');
       const content = document.getElementById('trades-content');
       const list=Object.values(activeTrades);
-      content.innerHTML = `
-        <div class="card">
-          <div class="section-title" style="font-size:18px;margin-bottom:16px">Active Trades</div>
-          <div class="history-list">
-            ${list.length?list.map(t=>{
-              const p=TRADE_PLANS.find(pp=>pp.id===t.planId);
-              const prog=(t.claimedDays/p.duration*100);
-              return `
-                <div class="history-item">
-                  <div class="history-header">
-                    <div class="history-id">${p.name}</div>
-                    <div class="history-amount" style="color:var(--primary)">${p.price} TON</div>
-                  </div>
-                  <div class="prog" style="margin-top:12px">
-                    <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
-                    <div class="progtext">Progress: ${t.claimedDays}/${p.duration} days</div>
-                  </div>
-                  <div class="countdown">Next claim in: ${formatTime(86400-(now()-t.lastClaim))}</div>
-                </div>
-              `;
-            }).join(''): `<div class="section-subtitle" style="text-align:center;padding:40px 0">No active trades</div>`}
+      
+      let html = '<div class="section-header"><div class="section-title">Active Trades</div></div>';
+
+      if (list.length === 0) {
+         html += `
+          <div class="empty-state">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <div>No active trades</div>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        html += '<div class="modern-list-container">';
+        list.forEach(t => {
+          const p=TRADE_PLANS.find(pp=>pp.id===t.planId);
+          const prog=(t.claimedDays/p.duration*100);
+          html += `
+            <div class="modern-list-item type-plan">
+              <div class="mli-icon">
+                 <div style="font-weight:bold;color:var(--primary)">${p.icon}</div>
+              </div>
+              <div class="mli-content">
+                <div class="mli-title">${p.name}</div>
+                <div class="mli-sub">
+                  <span>Cost: ${p.price} TON</span>
+                </div>
+                <div class="prog" style="margin-top:8px; margin-bottom:0">
+                  <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
+                </div>
+                <div class="progtext" style="text-align:left; font-size:10px; margin-top:4px">${t.claimedDays}/${p.duration} days</div>
+              </div>
+              <div class="mli-amount">
+                 <div class="mli-val" style="font-size:14px; color:var(--primary)">${p.dailyEarning}/d</div>
+                 <div class="mli-status pending">Active</div>
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+      }
+      content.innerHTML = html;
       modal.style.display = 'flex';
     }
 
@@ -1498,8 +1683,8 @@
 
         <div class="ad-card">
           <div class="ad-title">Watch Advertisement</div>
-          <div class="ad-reward">Earn 0.0001 TON per ad</div>
-          <button class="btn-primary" id="watchAd">${adLoading?'Loading...':'Watch Ad'}</button>
+          <div class="ad-reward">Earn 0.0001 TON after 10 seconds</div>
+          <button class="btn-primary" id="watchAd">${adLoading?'Processing...':'Watch Ad'}</button>
         </div>
 
         <div class="milestone-card">
@@ -1539,36 +1724,35 @@
       document.getElementById('watchAd').onclick = ()=>{
         if (adLoading) return;
         adLoading = true; 
-        document.getElementById('watchAd').textContent='Loading...';
-        
-        // Show Duck Loader
-        const loader = document.getElementById('adLoader');
-        if(loader) loader.style.display = 'flex';
+        const btn = document.getElementById('watchAd');
+        btn.textContent = 'Please wait...';
+        btn.disabled = true;
 
-        // Check if SDK function exists
-        if (typeof window.show_10116329==='function'){
-          // Wrap in Promise.resolve in case SDK doesn't return standard promise
-          Promise.resolve(window.show_10116329()).then(()=>{
-            // Success
-            adLoading=false; 
-            if(loader) loader.style.display = 'none';
-            document.getElementById('watchAd').textContent='Watch Ad';
+        // 10 Second Timer Logic
+        let secondsLeft = 10;
+        
+        const countdown = setInterval(() => {
+          secondsLeft--;
+          btn.textContent = `Wait ${secondsLeft}s...`;
+          
+          if (secondsLeft <= 0) {
+            clearInterval(countdown);
+            // Process Reward
+            const reward = 0.0001;
+            const today = todayISO(), ws = weekStartISO(), ms = monthStartISO();
             
-            const reward=0.0001; 
-            const today=todayISO(), ws=weekStartISO(), ms=monthStartISO();
-            
-            if (userData.adStats.lastAdDate!==today){ 
-              userData.adStats.yesterday=userData.adStats.today; 
-              userData.adStats.today=0; 
-              userData.adStats.lastAdDate=today; 
+            if (userData.adStats.lastAdDate !== today) { 
+              userData.adStats.yesterday = userData.adStats.today; 
+              userData.adStats.today = 0; 
+              userData.adStats.lastAdDate = today; 
             }
-            if (userData.adStats.lastWeekReset!==ws){ 
-              userData.adStats.thisWeek=0; 
-              userData.adStats.lastWeekReset=ws; 
+            if (userData.adStats.lastWeekReset !== ws) { 
+              userData.adStats.thisWeek = 0; 
+              userData.adStats.lastWeekReset = ws; 
             }
-            if (userData.adStats.lastMonthReset!==ms){ 
-              userData.adStats.thisMonth=0; 
-              userData.adStats.lastMonthReset=ms; 
+            if (userData.adStats.lastMonthReset !== ms) { 
+              userData.adStats.thisMonth = 0; 
+              userData.adStats.lastMonthReset = ms; 
             }
             
             userData.adStats.today++; 
@@ -1587,24 +1771,16 @@
             document.getElementById('tonBalance').textContent = fmt(tonBalance);
             
             awardReferralCommission(reward);
-            notify(`Earned ${reward} TON`);
+            notify(`Earned ${reward} TON!`);
             
             sendBot(`📺 <b>Ad Watched</b>\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
             
-            renderEarn();
-          }).catch((err)=>{
-            console.error('Ad error:', err);
-            adLoading=false; 
-            if(loader) loader.style.display = 'none';
-            document.getElementById('watchAd').textContent='Watch Ad';
-            notify('Ad interaction failed or closed.');
-          });
-        }else{
-          adLoading=false; 
-          if(loader) loader.style.display = 'none';
-          document.getElementById('watchAd').textContent='Watch Ad';
-          notify('Ad service unavailable.');
-        }
+            adLoading = false;
+            btn.textContent = 'Watch Ad';
+            btn.disabled = false;
+            renderEarn(); // Refresh UI to show updated stats
+          }
+        }, 1000);
       };
 
       const setMilestone=(need,amt)=>{
@@ -1695,7 +1871,7 @@
           <div style="margin-top:8px;padding:8px 12px;background:var(--bg-input);border-radius:8px;display:inline-flex;align-items:center;gap:8px">
             <span class="section-subtitle">ID:</span> 
             <span style="color:var(--primary);font-weight:800">${userId}</span> 
-            <button class="copy" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+            <button class="copy" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
           </div>
         </div>
 
@@ -1729,10 +1905,17 @@
           <button class="btn-primary" id="viewReferralsBtn">View My Referrals</button>
         </div>
 
-        <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">Redeem Code</div>
-          <input id="redeem" maxlength="8" class="input" placeholder="Enter 8-digit code">
-          <button class="btn-primary" style="margin-top:12px" id="redeemGo">Redeem</button>
+        <!-- Professional Redeem Section -->
+        <div class="redeem-professional">
+          <div style="position:relative;z-index:1">
+            <div style="font-size:18px;font-weight:800;color:var(--text-main);margin-bottom:4px">Redeem Code</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px">Enter an 8-digit code to claim bonus</div>
+            
+            <div class="redeem-input-group">
+              <input id="redeem" maxlength="8" class="redeem-input" placeholder="XXXXXXXX">
+              <button class="redeem-btn" id="redeemGo">Redeem</button>
+            </div>
+          </div>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
@@ -1796,7 +1979,7 @@
       }catch{
         const loc = localStorage.getItem('blockorbit_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
-          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0
+          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawalCount: 0
         };
       }
       tonBalance = userData.tonBalance||0;
