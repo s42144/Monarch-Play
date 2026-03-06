@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1" />
   <title>BlockOrbit | Professional Trading Platform</title>
-  <link rel="icon" href="https://i.postimg.cc/6qxHW6rX/download.png" />
+  <link rel="icon" href="https://i.postimg.cc/pVwtddgY/1000060090-Picsart-Background-Remover.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -84,6 +84,7 @@
       border-radius: 50%;
       margin-bottom: 30px;
       animation: pulse 2s infinite;
+      object-fit: cover;
     }
     
     @keyframes pulse {
@@ -526,21 +527,9 @@
     .history-amount.positive { color: var(--accent-green); }
     .history-amount.negative { color: var(--accent-red); }
     
+    /* Status removed per request */
     .history-status {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-    
-    .history-status.pending {
-      background: rgba(252, 213, 53, 0.15);
-      color: var(--primary);
-    }
-    
-    .history-status.completed {
-      background: rgba(14, 203, 129, 0.15);
-      color: var(--accent-green);
+      display: none;
     }
     
     .history-details-row {
@@ -1005,7 +994,7 @@
 <body>
   <!-- Loading Screen -->
   <div id="loading-screen">
-    <img src="https://i.postimg.cc/6qxHW6rX/download.png" class="loading-logo" alt="BlockOrbit" />
+    <img src="https://i.postimg.cc/pVwtddgY/1000060090-Picsart-Background-Remover.png" class="loading-logo" alt="BlockOrbit" />
     <div class="loading-text">BlockOrbit</div>
     <div class="loading-subtext">Initializing...</div>
     <div class="loading-spinner"></div>
@@ -1604,7 +1593,6 @@
                 </div>
                 <div class="history-amount-row">
                   <div class="history-amount positive">+${d.amount} TON</div>
-                  <div class="history-status pending">Pending</div>
                 </div>
                 <div class="history-details-row">
                   <div class="history-detail-label">Transaction ID</div>
@@ -1708,7 +1696,6 @@
                 </div>
                 <div class="history-amount-row">
                   <div class="history-amount negative">-${w.amount} TON</div>
-                  <div class="history-status pending">Pending</div>
                 </div>
                 <div class="history-details-row">
                   <div class="history-detail-label">Transaction ID</div>
@@ -1981,6 +1968,11 @@
       if (btn) btn.textContent = 'Watch Ad';
       
       const reward = 0.0001;
+      
+      // Fix: Update global variables immediately
+      tonBalance = Number(tonBalance) + reward;
+      userData.tonBalance = tonBalance;
+      
       const today = todayISO();
       const ws = weekStartISO();
       const ms = monthStartISO();
@@ -2006,17 +1998,15 @@
       userData.adStats.thisMonth++; 
       userData.adStats.lifetime++;
       
-      // Calculate new balance
-      const newBalance = tonBalance + reward;
-      
-      // Save everything
+      // Save everything to DB and LocalStorage
       save({ 
-        tonBalance: newBalance, 
+        tonBalance: tonBalance, 
         adStats: userData.adStats 
       });
       
-      // Update local state
-      tonBalance = newBalance;
+      // Force update UI element explicitly just in case
+      const balEl = document.getElementById('tonBalance');
+      if(balEl) balEl.textContent = fmt(tonBalance);
       
       // Award referral commission
       awardReferralCommission(reward);
@@ -2111,7 +2101,7 @@
           <div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">Referral Program</div>
           <div class="row" style="margin-bottom:12px">
             <div style="font-size:12px;color:var(--text-secondary)">Link</div>
-            <div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-family:monospace" id="refLink">https://t.me/blockorbit_bot/app?startapp=${userId}</div>
+            <div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-family:monospace" id="refLink">https://t.me/BlockOrbit_Bot/open</div>
           </div>
           <button class="btn-primary" id="copyRef">Copy Referral Link</button>
         </div>
