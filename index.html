@@ -12,7 +12,7 @@
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Monetag SDK (Kept for reference, but logic relies on timer now) -->
+  <!-- Monetag SDK -->
   <script src='//libtl.com/sdk.js' data-zone='10116329' data-sdk='show_10116329'></script>
 
   <!-- Chart.js -->
@@ -25,8 +25,7 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     :root{
-      /* Professional Exchange Color Scheme (Dark Mode with Gold Accents) */
-      --primary: #FCD535; /* Binance Gold */
+      --primary: #FCD535;
       --primary-hover: #e0c030;
       --bg-main: #0B0E11;
       --bg-card: #1E2329;
@@ -116,7 +115,7 @@
     
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Balance Display (TON Only) */
+    /* Balance Display */
     .balance-container {
       position: fixed;
       top: 12px;
@@ -396,6 +395,469 @@
     .copy:hover { border-color: var(--primary); }
     .copy img { width: 14px; height: 14px; filter: brightness(0) invert(1); }
 
+    /* History List - Professional */
+    .history-container {
+      min-height: 100%;
+      padding-bottom: 20px;
+    }
+    
+    .history-header-section {
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-main) 100%);
+      padding: 24px 20px;
+      margin: -20px -20px 20px -20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .history-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    
+    .history-main-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    
+    .history-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .history-stat-card {
+      background: var(--bg-input);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .history-stat-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .history-stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 6px;
+    }
+    
+    .history-list {
+      max-height: calc(100vh - 280px);
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    
+    .history-item {
+      background: var(--bg-input);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s;
+    }
+    
+    .history-item:hover {
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+    
+    .history-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .history-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    
+    .history-type-badge.deposit {
+      background: rgba(14, 203, 129, 0.15);
+      color: var(--accent-green);
+    }
+    
+    .history-type-badge.withdraw {
+      background: rgba(246, 70, 93, 0.15);
+      color: var(--accent-red);
+    }
+    
+    .history-type-badge.claim {
+      background: rgba(252, 213, 53, 0.15);
+      color: var(--primary);
+    }
+    
+    .history-type-badge.purchase {
+      background: rgba(30, 136, 229, 0.15);
+      color: var(--accent-blue);
+    }
+    
+    .history-timestamp {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    .history-amount-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .history-amount {
+      font-size: 22px;
+      font-weight: 800;
+    }
+    
+    .history-amount.positive { color: var(--accent-green); }
+    .history-amount.negative { color: var(--accent-red); }
+    
+    .history-status {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    
+    .history-status.pending {
+      background: rgba(252, 213, 53, 0.15);
+      color: var(--primary);
+    }
+    
+    .history-status.completed {
+      background: rgba(14, 203, 129, 0.15);
+      color: var(--accent-green);
+    }
+    
+    .history-details-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-top: 1px dashed var(--border-color);
+      margin-top: 8px;
+    }
+    
+    .history-detail-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .history-detail-value {
+      font-size: 12px;
+      color: var(--text-main);
+      font-weight: 600;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: monospace;
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+      z-index: 10000;
+      animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+      from { top: 0px; opacity: 0; }
+      to { top: 20px; opacity: 1; }
+    }
+
+    /* Nav */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 10px;
+      z-index: 1000;
+      box-shadow: 0 -4px 16px rgba(0,0,0,.2);
+    }
+    
+    .nav-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 12px;
+      transition: .2s;
+    }
+    
+    .nav-icon { width: 24px; height: 24px; object-fit: contain; filter: grayscale(100%) brightness(.7); transition: all 0.2s; }
+    .nav-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); transition: all 0.2s; }
+    
+    .nav-btn.active .nav-icon { filter: none; }
+    .nav-btn.active .nav-label { color: var(--primary); }
+
+    /* Full Screen Modal */
+    .fullscreen-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--bg-main);
+      display: none;
+      flex-direction: column;
+      z-index: 9999;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--text-main); }
+    
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: var(--bg-input);
+      border: none;
+      color: var(--text-main);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-close:hover { background: var(--text-muted); }
+    
+    .modal-content {
+      flex: 1;
+      padding: 20px;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    
+    .modal-content-box {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Timer */
+    .timer {
+      background: rgba(246, 70, 93, 0.1);
+      border: 1px solid var(--accent-red);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .t-t { color: var(--accent-red); font-weight: 800; }
+
+    /* Chart Container */
+    .chart-container {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .chart-title { font-size: 12px; font-weight: 800; text-align: center; margin-bottom: 8px; color: var(--text-secondary); }
+
+    /* QR Code */
+    .qr-container {
+      background: #fff;
+      padding: 16px;
+      border-radius: 16px;
+      display: inline-block;
+      margin: 16px auto;
+    }
+
+    /* Redeem Section */
+    .redeem-section {
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(252, 213, 53, 0.05) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    
+    .redeem-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .redeem-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .redeem-title-group {
+      flex: 1;
+    }
+    
+    .redeem-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    
+    .redeem-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    
+    .redeem-input-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    
+    .redeem-input {
+      width: 100%;
+      padding: 18px 20px;
+      padding-right: 60px;
+      border-radius: 14px;
+      border: 2px dashed var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-main);
+      outline: none;
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      text-align: center;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    
+    .redeem-input:focus {
+      border-color: var(--primary);
+      border-style: solid;
+      box-shadow: 0 0 20px rgba(252, 213, 53, 0.2);
+    }
+    
+    .redeem-input::placeholder {
+      letter-spacing: 4px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .redeem-char-count {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    
+    .redeem-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      color: #0B0E11;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .redeem-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(252, 213, 53, 0.3);
+    }
+    
+    .redeem-btn:disabled {
+      background: var(--text-muted);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     /* Earn Section */
     .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
     .stat-box {
@@ -511,344 +973,29 @@
     .referral-balance { font-size: 14px; font-weight: 800; color: var(--primary); }
     .referral-commission { font-size: 12px; color: var(--accent-blue); font-weight: 700; }
 
-    /* Notification */
-    .notification {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--primary);
-      color: #000;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 800;
-      box-shadow: 0 8px 24px rgba(0,0,0,.3);
-      z-index: 10000;
-      animation: slideDown 0.3s ease;
-    }
-    
-    @keyframes slideDown {
-      from { top: 0px; opacity: 0; }
-      to { top: 20px; opacity: 1; }
-    }
-
-    /* Nav */
-    .nav-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: var(--bg-card);
-      border-top: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 0 10px;
-      z-index: 1000;
-      box-shadow: 0 -4px 16px rgba(0,0,0,.2);
-    }
-    
-    .nav-btn {
-      flex: 1;
-      background: none;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 12px;
-      transition: .2s;
-    }
-    
-    .nav-icon { width: 24px; height: 24px; object-fit: contain; filter: grayscale(100%) brightness(.7); transition: all 0.2s; }
-    .nav-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); transition: all 0.2s; }
-    
-    .nav-btn.active .nav-icon { filter: none; }
-    .nav-btn.active .nav-label { color: var(--primary); }
-
-    /* Full Screen Modal */
-    .fullscreen-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: var(--bg-main);
-      display: none;
-      flex-direction: column;
-      z-index: 9999;
-      overflow-y: auto;
-    }
-    
-    .modal-header {
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border-color);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    
-    .modal-title { font-size: 18px; font-weight: 800; color: var(--text-main); }
-    
-    .modal-close {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background: var(--bg-input);
-      border: none;
-      color: var(--text-main);
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-    
-    .modal-close:hover { background: var(--text-muted); }
-    
-    .modal-content {
-      flex: 1;
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    /* Modal Overlay */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
-    }
-    
-    .modal-content-box {
-      background: var(--bg-card);
-      border-radius: 16px;
-      padding: 24px;
-      max-width: 480px;
-      width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow);
-      animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from { transform: translateY(50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* Timer */
-    .timer {
-      background: rgba(246, 70, 93, 0.1);
-      border: 1px solid var(--accent-red);
-      border-radius: 12px;
-      padding: 14px;
-      text-align: center;
-      margin-bottom: 16px;
-    }
-    .t-t { color: var(--accent-red); font-weight: 800; }
-
-    /* Chart Container */
-    .chart-container {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-    .chart-title { font-size: 12px; font-weight: 800; text-align: center; margin-bottom: 8px; color: var(--text-secondary); }
-
-    /* QR Code */
-    .qr-container {
-      background: #fff;
-      padding: 16px;
-      border-radius: 16px;
-      display: inline-block;
-      margin: 16px auto;
-    }
-
-    /* PROFESSIONAL UI UPGRADES */
-    
-    /* Modern Redeem Section */
-    .redeem-professional {
-      background: linear-gradient(135deg, #2B3139 0%, #1E2329 100%);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .redeem-professional::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(252, 213, 53, 0.05) 0%, transparent 70%);
-    }
-
-    .redeem-input-group {
-      display: flex;
-      gap: 8px;
-      margin: 16px 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    .redeem-input {
-      flex: 1;
-      background: var(--bg-main);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-family: monospace;
-      letter-spacing: 2px;
-      text-align: center;
-      outline: none;
-      text-transform: uppercase;
-    }
-    
-    .redeem-input:focus { border-color: var(--primary); }
-
-    .redeem-btn {
-      background: var(--primary);
-      color: #000;
-      border: none;
-      padding: 0 24px;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 14px;
-      cursor: pointer;
-      transition: .2s;
-      white-space: nowrap;
-    }
-    
-    .redeem-btn:hover { background: var(--primary-hover); }
-
-    /* Modern History/Activity Items */
-    .modern-list-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .modern-list-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .modern-list-item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: var(--text-muted);
-    }
-
-    .modern-list-item.type-deposit::before { background: var(--accent-green); }
-    .modern-list-item.type-withdraw::before { background: var(--accent-red); }
-    .modern-list-item.type-claim::before { background: var(--primary); }
-    .modern-list-item.type-plan::before { background: var(--accent-blue); }
-
-    .mli-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: var(--bg-input);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .mli-icon img { width: 20px; height: 20px; }
-
-    .mli-content { flex: 1; min-width: 0; }
-    
-    .mli-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-main);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .mli-sub {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .mli-amount {
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    .mli-val {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-    
-    .mli-val.green { color: var(--accent-green); }
-    .mli-val.red { color: var(--accent-red); }
-
-    .mli-status {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      background: var(--bg-input);
-      color: var(--text-secondary);
-      font-weight: 700;
-      margin-top: 4px;
-      display: inline-block;
-    }
-    
-    .mli-status.success { background: rgba(14, 203, 129, 0.1); color: var(--accent-green); }
-    .mli-status.pending { background: rgba(252, 213, 53, 0.1); color: var(--primary); }
-
+    /* Empty State */
     .empty-state {
       text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
+      padding: 60px 20px;
     }
-    .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.5; }
+    
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .empty-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
 
     @media(max-width:360px){
       .live-prices{grid-template-columns:1fr}
@@ -1048,7 +1195,7 @@
           BTC:{ price:d.bitcoin?.usd||30000, change:d.bitcoin?.usd_24h_change||0 },
           ETH:{ price:d.ethereum?.usd||2000, change:d.ethereum?.usd_24h_change||0 },
           BNB:{ price:d.binancecoin?.usd||300, change:d.binancecoin?.usd_24h_change||0 },
-          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24h_change||0 },
+          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24hr_change||0 },
           SOL:{ price:d.solana?.usd||100, change:d.solana?.usd_24h_change||0 },
           DOT:{ price:d.polkadot?.usd||7, change:d.polkadot?.usd_24h_change||0 },
           TON:{ price:d['the-open-network']?.usd||2.5, change:d['the-open-network']?.usd_24h_change||0 },
@@ -1095,8 +1242,7 @@
         adStats:{ today:0, yesterday:0, thisWeek:0, thisMonth:0, lifetime:0, lastAdDate: todayISO(), lastWeekReset: weekStartISO(), lastMonthReset: monthStartISO() },
         milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false },
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
-        referredBy: null, welcomed: false,
-        withdrawalCount: 0 // Added for new withdrawal rule
+        referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
       };
       await userRef(userId).set(init);
       return init;
@@ -1230,7 +1376,7 @@
             save({ tonBalance:newBal, purchasedPlans:newPurchased, activeTrades:newTrades });
             tradeHistory.push({ type:'purchase', planId:p.id, planName:p.name, amount:p.price, timestamp:now() });
             save({ tradeHistory });
-            sendBot(`🎉 <b>Plan Purchased</b>\nPlan: ${p.name}\nAmount: ${p.price} TON`);
+            sendBot(`Plan Purchased\nPlan: ${p.name}\nAmount: ${p.price} TON`);
             notify(`Purchased ${p.name}`);
             renderHome();
           });
@@ -1249,11 +1395,11 @@
               const copy={...activeTrades}; delete copy[p.id];
               save({ tonBalance:newBal, activeTrades:copy });
               notify(`Plan completed. Total earned ${tr.totalEarned} TON`);
-              sendBot(`🏆 <b>Plan Completed</b>\nPlan: ${p.name}\nTotal Earned: ${tr.totalEarned} TON`);
+              sendBot(`Plan Completed\nPlan: ${p.name}\nTotal Earned: ${tr.totalEarned} TON`);
             }else{
               save({ tonBalance:newBal, activeTrades:{...activeTrades} });
               notify(`Claimed ${earned} TON from ${p.name}`);
-              sendBot(`💰 <b>Daily Claimed</b>\nPlan: ${p.name}\nEarned: ${earned} TON`);
+              sendBot(`Daily Claimed\nPlan: ${p.name}\nEarned: ${earned} TON`);
             }
             tradeHistory.push({ type:'claim', planId:p.id, planName:p.name, amount:earned, timestamp:now() });
             save({ tradeHistory });
@@ -1316,7 +1462,7 @@
           </div>
 
           <div class="wallet-menu-item" id="w_trd">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" class="wmi-icon" alt="Trades">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" class="wmi-icon" alt="Trades">
             <div class="wmi-text">Active Trades</div>
             <div class="wmi-arrow">›</div>
           </div>
@@ -1418,7 +1564,7 @@
         depositHistory.push({ id, amount:amt, txHash:tx, timestamp:now() });
         save({ depositHistory, hasDeposit:true });
         database.ref('admin/deposits').push({ id, userId, userName, amount:amt, txHash:tx, status:'pending', timestamp:now() });
-        sendBot(`💳 <b>Deposit Submitted</b>\nAmount: ${amt} TON\nTX: ${tx}`);
+        sendBot(`Deposit Submitted\nAmount: ${amt} TON\nTX: ${tx}`);
         notify('Submitted successfully!');
         showDepositHistoryModal();
       };
@@ -1427,42 +1573,58 @@
     function showDepositHistoryModal() {
       const modal = document.getElementById('deposit-history-modal');
       const content = document.getElementById('deposit-history-content');
+      const totalDeposited = depositHistory.reduce((sum, d) => sum + d.amount, 0);
       
-      let html = '<div class="section-header"><div class="section-title">Deposit History</div></div>';
-      
-      if (depositHistory.length === 0) {
-        html += `
-          <div class="empty-state">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-            <div>No deposits found</div>
-          </div>
-        `;
-      } else {
-        html += '<div class="modern-list-container">';
-        depositHistory.forEach(d => {
-          html += `
-            <div class="modern-list-item type-deposit">
-              <div class="mli-icon">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwRUNIODEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSI1IiB4Mj0iMTIiIHkyPSIxOSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjE5IDEyIDEyIDE5IDUgMTIiPjwvcG9seWxpbmU+PC9zdmc+" alt="In">
+      content.innerHTML = `
+        <div class="history-container">
+          <div class="history-header-section">
+            <div class="history-title-row">
+              <div class="history-main-title">Deposit History</div>
+            </div>
+            <div class="history-stats-grid">
+              <div class="history-stat-card">
+                <div class="history-stat-label">Total Deposits</div>
+                <div class="history-stat-value">${depositHistory.length}</div>
               </div>
-              <div class="mli-content">
-                <div class="mli-title">Deposit</div>
-                <div class="mli-sub">
-                  <span>ID: ${d.id}</span>
-                  <span>•</span>
-                  <span>${new Date(d.timestamp*1000).toLocaleDateString()}</span>
-                </div>
-              </div>
-              <div class="mli-amount">
-                <div class="mli-val green">+${d.amount} TON</div>
-                <div class="mli-status success">Completed</div>
+              <div class="history-stat-card">
+                <div class="history-stat-label">Total Amount</div>
+                <div class="history-stat-value">${totalDeposited.toFixed(2)} TON</div>
               </div>
             </div>
-          `;
-        });
-        html += '</div>';
-      }
-      content.innerHTML = html;
+          </div>
+          
+          <div class="history-list">
+            ${depositHistory.length ? depositHistory.map(d=>`
+              <div class="history-item">
+                <div class="history-item-header">
+                  <div class="history-type-badge deposit">
+                    <span>Deposit</span>
+                  </div>
+                  <div class="history-timestamp">${new Date(d.timestamp*1000).toLocaleString()}</div>
+                </div>
+                <div class="history-amount-row">
+                  <div class="history-amount positive">+${d.amount} TON</div>
+                  <div class="history-status pending">Pending</div>
+                </div>
+                <div class="history-details-row">
+                  <div class="history-detail-label">Transaction ID</div>
+                  <div class="history-detail-value">${d.id}</div>
+                </div>
+                <div class="history-details-row">
+                  <div class="history-detail-label">TX Hash</div>
+                  <div class="history-detail-value">${d.txHash}</div>
+                </div>
+              </div>
+            `).join('') : `
+              <div class="empty-state">
+                <div class="empty-icon">📥</div>
+                <div class="empty-title">No Deposits Yet</div>
+                <div class="empty-text">Your deposit history will appear here</div>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
       modal.style.display = 'flex';
     }
 
@@ -1470,24 +1632,14 @@
       const modal = document.getElementById('withdraw-modal');
       const content = document.getElementById('withdraw-content');
       
-      const hasDeposit = userData.hasDeposit || depositHistory.length > 0;
-      const withdrawalCount = userData.withdrawalCount || 0;
-      const isFirstFree = withdrawalCount < 1;
-
-      // Logic: If count > 0 AND !hasDeposit, then block.
-      const allowWithdraw = isFirstFree || hasDeposit;
+      // Allow first withdrawal without deposit, subsequent require deposit
+      const withdrawCount = userData.withdrawCount || 0;
+      const hasDeposit = userData.hasDeposit || false;
+      const canWithdraw = withdrawCount === 0 || hasDeposit;
       
-      let warningMsg = '';
-      if (!isFirstFree && !hasDeposit) {
-        warningMsg = `<div style="color:var(--accent-red);text-align:center;margin-bottom:16px;padding:12px;background:rgba(246,70,93,0.1);border-radius:8px;font-size:13px">⚠️ Deposit required for 2nd withdrawal</div>`;
-      } else if (isFirstFree) {
-        warningMsg = `<div style="color:var(--primary);text-align:center;margin-bottom:16px;padding:12px;background:rgba(252,213,53,0.1);border-radius:8px;font-size:13px">🎁 First withdrawal is free!</div>`;
-      }
-
       content.innerHTML = `
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">Withdraw TON</div>
-          ${warningMsg}
           <div class="form-group">
             <label class="form-label">TON Address</label>
             <input id="wd_addr" class="input" placeholder="Enter your TON wallet address">
@@ -1496,12 +1648,12 @@
             <label class="form-label">Amount (min 0.01 TON)</label>
             <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="Enter amount">
           </div>
-          <button class="btn-primary" id="wd_go" ${!allowWithdraw ? 'disabled' : ''}>${!allowWithdraw ? 'Deposit Required' : 'Withdraw'}</button>
+          <button class="btn-primary" id="wd_go" ${!canWithdraw ? 'disabled' : ''}>Withdraw</button>
         </div>
       `;
       modal.style.display = 'flex';
       
-      if (allowWithdraw) {
+      if (canWithdraw) {
         document.getElementById('wd_go').onclick = async ()=>{
           const addr=document.getElementById('wd_addr').value.trim();
           const amt=parseFloat(document.getElementById('wd_amt').value);
@@ -1510,18 +1662,12 @@
           if(amt>tonBalance){ notify('Insufficient balance'); return; }
           const id=generateId();
           
-          // Increment withdrawal count
-          const newCount = (userData.withdrawalCount || 0) + 1;
-          
+          const newWithdrawCount = (withdrawCount || 0) + 1;
           withdrawHistory.push({ id, amount:amt, address:addr, timestamp:now() });
-          save({ 
-            withdrawHistory, 
-            tonBalance: tonBalance - amt,
-            withdrawalCount: newCount 
-          });
+          save({ withdrawHistory, tonBalance: tonBalance - amt, withdrawCount: newWithdrawCount });
           database.ref('admin/withdrawals').push({ id, userId, userName, amount:amt, address:addr, status:'pending', timestamp:now() });
           
-          sendBot(`💸 <b>Withdrawal Submitted</b>\nAmount: ${amt} TON\nAddress: ${addr}`);
+          sendBot(`Withdrawal Submitted\nAmount: ${amt} TON\nAddress: ${addr}`);
           notify(`Withdrawal of ${amt} TON submitted`);
           showWithdrawHistoryModal();
         };
@@ -1531,92 +1677,128 @@
     function showWithdrawHistoryModal() {
       const modal = document.getElementById('withdraw-history-modal');
       const content = document.getElementById('withdraw-history-content');
+      const totalWithdrawn = withdrawHistory.reduce((sum, w) => sum + w.amount, 0);
       
-      let html = '<div class="section-header"><div class="section-title">Withdraw History</div></div>';
-      
-      if (withdrawHistory.length === 0) {
-        html += `
-          <div class="empty-state">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-            <div>No withdrawals found</div>
-          </div>
-        `;
-      } else {
-        html += '<div class="modern-list-container">';
-        withdrawHistory.forEach(w => {
-          html += `
-            <div class="modern-list-item type-withdraw">
-              <div class="mli-icon">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGNjQ2NUQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIxOSIgeDI9IjEyIiB5Mj0iNSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjUgMTIgMTIgNSAxOSAxMiI+PC9wb2x5bGluZT48L3N2Zz4=" alt="Out">
+      content.innerHTML = `
+        <div class="history-container">
+          <div class="history-header-section">
+            <div class="history-title-row">
+              <div class="history-main-title">Withdraw History</div>
+            </div>
+            <div class="history-stats-grid">
+              <div class="history-stat-card">
+                <div class="history-stat-label">Total Withdrawals</div>
+                <div class="history-stat-value">${withdrawHistory.length}</div>
               </div>
-              <div class="mli-content">
-                <div class="mli-title">Withdrawal</div>
-                <div class="mli-sub">
-                  <span>ID: ${w.id}</span>
-                  <span>•</span>
-                  <span>${new Date(w.timestamp*1000).toLocaleDateString()}</span>
-                </div>
-              </div>
-              <div class="mli-amount">
-                <div class="mli-val red">-${w.amount} TON</div>
-                <div class="mli-status pending">Pending</div>
+              <div class="history-stat-card">
+                <div class="history-stat-label">Total Amount</div>
+                <div class="history-stat-value">${totalWithdrawn.toFixed(2)} TON</div>
               </div>
             </div>
-          `;
-        });
-        html += '</div>';
-      }
-      content.innerHTML = html;
+          </div>
+          
+          <div class="history-list">
+            ${withdrawHistory.length ? withdrawHistory.map(w=>`
+              <div class="history-item">
+                <div class="history-item-header">
+                  <div class="history-type-badge withdraw">
+                    <span>Withdrawal</span>
+                  </div>
+                  <div class="history-timestamp">${new Date(w.timestamp*1000).toLocaleString()}</div>
+                </div>
+                <div class="history-amount-row">
+                  <div class="history-amount negative">-${w.amount} TON</div>
+                  <div class="history-status pending">Pending</div>
+                </div>
+                <div class="history-details-row">
+                  <div class="history-detail-label">Transaction ID</div>
+                  <div class="history-detail-value">${w.id}</div>
+                </div>
+                <div class="history-details-row">
+                  <div class="history-detail-label">Destination</div>
+                  <div class="history-detail-value">${w.address}</div>
+                </div>
+              </div>
+            `).join('') : `
+              <div class="empty-state">
+                <div class="empty-icon">📤</div>
+                <div class="empty-title">No Withdrawals Yet</div>
+                <div class="empty-text">Your withdrawal history will appear here</div>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
       modal.style.display = 'flex';
     }
 
     function showActivitiesModal(){
       const modal = document.getElementById('activities-modal');
       const content = document.getElementById('activities-content');
-      const all=[...depositHistory.map(x=>({...x,type:'deposit', subtype:'Deposit'})),...withdrawHistory.map(x=>({...x,type:'withdraw', subtype:'Withdraw'})),...tradeHistory.map(x=>({...x,type:x.type==='purchase'?'plan':'claim', subtype:x.type==='purchase'?'Plan Purchase':'Daily Claim'}))].sort((a,b)=>b.timestamp-a.timestamp);
+      const all=[...depositHistory.map(x=>({...x,type:'Deposit', badgeType:'deposit'})),...withdrawHistory.map(x=>({...x,type:'Withdraw', badgeType:'withdraw'})),...tradeHistory.map(x=>({...x,type:x.type==='purchase'?'Plan Purchase':'Daily Claim', badgeType:x.type==='purchase'?'purchase':'claim'}))].sort((a,b)=>b.timestamp-a.timestamp);
       
-      let html = '<div class="section-header"><div class="section-title">Activities</div></div>';
-
-      if (all.length === 0) {
-        html += `
-          <div class="empty-state">
-             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <div>No recent activities</div>
-          </div>
-        `;
-      } else {
-        html += '<div class="modern-list-container">';
-        all.forEach(a => {
-          const isDeposit = a.type === 'deposit';
-          const isClaim = a.type === 'claim';
-          const colorClass = isDeposit || isClaim ? 'green' : 'red';
-          const typeIcon = isDeposit ? 'Deposit' : (a.type === 'withdraw' ? 'Withdraw' : a.subtype);
-          const iconSvg = isDeposit 
-            ? 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwRUNIODEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSI1IiB4Mj0iMTIiIHkyPSIxOSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjE5IDEyIDEyIDE5IDUgMTIiPjwvcG9seWxpbmU+PC9zdmc+'
-            : (a.type === 'withdraw' ? 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGNjQ2NUQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIxOSIgeDI9IjEyIiB5Mj0iNSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjUgMTIgMTIgNSAxOSAxMiI+PC9wb2x5bGluZT48L3N2Zz4=' : 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGQzQ1MzUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==');
-
-          html += `
-            <div class="modern-list-item ${isDeposit ? 'type-deposit' : (a.type === 'withdraw' ? 'type-withdraw' : 'type-claim')}">
-              <div class="mli-icon">
-                <img src="data:image/svg+xml;base64,${iconSvg}" alt="icon">
+      const totalDeposit = depositHistory.reduce((s,d)=>s+d.amount,0);
+      const totalWithdraw = withdrawHistory.reduce((s,w)=>s+w.amount,0);
+      
+      content.innerHTML = `
+        <div class="history-container">
+          <div class="history-header-section">
+            <div class="history-title-row">
+              <div class="history-main-title">All Activities</div>
+            </div>
+            <div class="history-stats-grid">
+              <div class="history-stat-card">
+                <div class="history-stat-label">Total Transactions</div>
+                <div class="history-stat-value">${all.length}</div>
               </div>
-              <div class="mli-content">
-                <div class="mli-title">${typeIcon}</div>
-                <div class="mli-sub">
-                  <span>${new Date(a.timestamp*1000).toLocaleDateString()}</span>
-                  <span>•</span>
-                  <span>${new Date(a.timestamp*1000).toLocaleTimeString()}</span>
-                </div>
-              </div>
-              <div class="mli-amount">
-                <div class="mli-val ${colorClass}">${isDeposit || isClaim ? '+':'-'}${a.amount} TON</div>
+              <div class="history-stat-card">
+                <div class="history-stat-label">Net Flow</div>
+                <div class="history-stat-value">${(totalDeposit - totalWithdraw).toFixed(2)} TON</div>
               </div>
             </div>
-          `;
-        });
-        html += '</div>';
-      }
-      content.innerHTML = html;
+          </div>
+          
+          <div class="history-list">
+            ${all.length ? all.map(a=>`
+              <div class="history-item">
+                <div class="history-item-header">
+                  <div class="history-type-badge ${a.badgeType}">
+                    <span>${a.type}</span>
+                  </div>
+                  <div class="history-timestamp">${new Date(a.timestamp*1000).toLocaleString()}</div>
+                </div>
+                <div class="history-amount-row">
+                  <div class="history-amount ${a.type==='Deposit'||a.type==='Daily Claim'?'positive':'negative'}">${a.type==='Deposit'||a.type==='Daily Claim'?'+':'-'}${a.amount} TON</div>
+                </div>
+                ${a.planName ? `
+                  <div class="history-details-row">
+                    <div class="history-detail-label">Plan</div>
+                    <div class="history-detail-value">${a.planName}</div>
+                  </div>
+                ` : ''}
+                ${a.txHash ? `
+                  <div class="history-details-row">
+                    <div class="history-detail-label">TX Hash</div>
+                    <div class="history-detail-value">${a.txHash}</div>
+                  </div>
+                ` : ''}
+                ${a.address ? `
+                  <div class="history-details-row">
+                    <div class="history-detail-label">Address</div>
+                    <div class="history-detail-value">${a.address}</div>
+                  </div>
+                ` : ''}
+              </div>
+            `).join('') : `
+              <div class="empty-state">
+                <div class="empty-icon">📊</div>
+                <div class="empty-title">No Activities Yet</div>
+                <div class="empty-text">Your activity history will appear here</div>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
       modal.style.display = 'flex';
     }
 
@@ -1624,46 +1806,63 @@
       const modal = document.getElementById('trades-modal');
       const content = document.getElementById('trades-content');
       const list=Object.values(activeTrades);
+      const totalInvested = list.reduce((sum, t) => {
+        const p = TRADE_PLANS.find(pp=>pp.id===t.planId);
+        return sum + (p?.price || 0);
+      }, 0);
+      const totalEarned = list.reduce((sum, t) => sum + (t.totalEarned || 0), 0);
       
-      let html = '<div class="section-header"><div class="section-title">Active Trades</div></div>';
-
-      if (list.length === 0) {
-         html += `
-          <div class="empty-state">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-            <div>No active trades</div>
-          </div>
-        `;
-      } else {
-        html += '<div class="modern-list-container">';
-        list.forEach(t => {
-          const p=TRADE_PLANS.find(pp=>pp.id===t.planId);
-          const prog=(t.claimedDays/p.duration*100);
-          html += `
-            <div class="modern-list-item type-plan">
-              <div class="mli-icon">
-                 <div style="font-weight:bold;color:var(--primary)">${p.icon}</div>
+      content.innerHTML = `
+        <div class="history-container">
+          <div class="history-header-section">
+            <div class="history-title-row">
+              <div class="history-main-title">Active Trades</div>
+            </div>
+            <div class="history-stats-grid">
+              <div class="history-stat-card">
+                <div class="history-stat-label">Active Plans</div>
+                <div class="history-stat-value">${list.length}</div>
               </div>
-              <div class="mli-content">
-                <div class="mli-title">${p.name}</div>
-                <div class="mli-sub">
-                  <span>Cost: ${p.price} TON</span>
-                </div>
-                <div class="prog" style="margin-top:8px; margin-bottom:0">
-                  <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
-                </div>
-                <div class="progtext" style="text-align:left; font-size:10px; margin-top:4px">${t.claimedDays}/${p.duration} days</div>
-              </div>
-              <div class="mli-amount">
-                 <div class="mli-val" style="font-size:14px; color:var(--primary)">${p.dailyEarning}/d</div>
-                 <div class="mli-status pending">Active</div>
+              <div class="history-stat-card">
+                <div class="history-stat-label">Total Invested</div>
+                <div class="history-stat-value">${totalInvested.toFixed(2)} TON</div>
               </div>
             </div>
-          `;
-        });
-        html += '</div>';
-      }
-      content.innerHTML = html;
+          </div>
+          
+          <div class="history-list">
+            ${list.length ? list.map(t=>{
+              const p=TRADE_PLANS.find(pp=>pp.id===t.planId);
+              const prog=(t.claimedDays/p.duration*100);
+              return `
+                <div class="history-item">
+                  <div class="history-item-header">
+                    <div class="history-type-badge purchase">
+                      <span>${p.name}</span>
+                    </div>
+                    <div class="history-timestamp">Started ${new Date(t.purchasedAt*1000).toLocaleDateString()}</div>
+                  </div>
+                  <div class="history-amount-row">
+                    <div class="history-amount" style="color:var(--primary)">${p.price} TON</div>
+                    <div class="history-status completed">${t.totalEarned.toFixed(2)} Earned</div>
+                  </div>
+                  <div class="prog" style="margin-top:12px">
+                    <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
+                    <div class="progtext">Progress: ${t.claimedDays}/${p.duration} days</div>
+                  </div>
+                  <div class="countdown">Next claim in: ${formatTime(86400-(now()-t.lastClaim))}</div>
+                </div>
+              `;
+            }).join('') : `
+              <div class="empty-state">
+                <div class="empty-icon">📈</div>
+                <div class="empty-title">No Active Trades</div>
+                <div class="empty-text">Purchase a trading plan to get started</div>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
       modal.style.display = 'flex';
     }
 
@@ -1678,13 +1877,13 @@
 
         <div class="stats-row">
           <div class="stat-box"><div class="stat-box-label">Today</div><div class="stat-box-value">${a.today||0}</div></div>
-          <div class="stat-box"><div class="stat-box-label">Lifetime</div><div class="stat-box-value">${a.lifetime||0}</div></div>
+          <div class="stat-box"><div class="stat-box-value">${a.lifetime||0}</div><div class="stat-box-label">Lifetime</div></div>
         </div>
 
         <div class="ad-card">
           <div class="ad-title">Watch Advertisement</div>
-          <div class="ad-reward">Earn 0.0001 TON after 10 seconds</div>
-          <button class="btn-primary" id="watchAd">${adLoading?'Processing...':'Watch Ad'}</button>
+          <div class="ad-reward">Earn 0.0001 TON per ad</div>
+          <button class="btn-primary" id="watchAd">${adLoading?'Loading...':'Watch Ad'}</button>
         </div>
 
         <div class="milestone-card">
@@ -1724,63 +1923,40 @@
       document.getElementById('watchAd').onclick = ()=>{
         if (adLoading) return;
         adLoading = true; 
-        const btn = document.getElementById('watchAd');
-        btn.textContent = 'Please wait...';
-        btn.disabled = true;
-
-        // 10 Second Timer Logic
-        let secondsLeft = 10;
+        document.getElementById('watchAd').textContent='Loading...';
         
-        const countdown = setInterval(() => {
-          secondsLeft--;
-          btn.textContent = `Wait ${secondsLeft}s...`;
-          
-          if (secondsLeft <= 0) {
-            clearInterval(countdown);
-            // Process Reward
-            const reward = 0.0001;
-            const today = todayISO(), ws = weekStartISO(), ms = monthStartISO();
+        // Check if SDK exists
+        if (typeof window.show_10116329 === 'function') {
+          try {
+            const adPromise = window.show_10116329();
             
-            if (userData.adStats.lastAdDate !== today) { 
-              userData.adStats.yesterday = userData.adStats.today; 
-              userData.adStats.today = 0; 
-              userData.adStats.lastAdDate = today; 
+            // Handle both Promise and non-Promise returns
+            if (adPromise && typeof adPromise.then === 'function') {
+              adPromise.then(() => {
+                processAdReward();
+              }).catch((err) => {
+                // Even if promise rejects, the ad might have shown
+                // Give benefit of doubt and reward user
+                console.log('Ad promise rejected, but processing reward anyway');
+                processAdReward();
+              });
+            } else {
+              // SDK returned something else, assume ad was shown
+              setTimeout(() => {
+                processAdReward();
+              }, 1000);
             }
-            if (userData.adStats.lastWeekReset !== ws) { 
-              userData.adStats.thisWeek = 0; 
-              userData.adStats.lastWeekReset = ws; 
-            }
-            if (userData.adStats.lastMonthReset !== ms) { 
-              userData.adStats.thisMonth = 0; 
-              userData.adStats.lastMonthReset = ms; 
-            }
-            
-            userData.adStats.today++; 
-            userData.adStats.thisWeek++; 
-            userData.adStats.thisMonth++; 
-            userData.adStats.lifetime++;
-            
-            const newBalance = tonBalance + reward;
-            
-            save({ 
-              tonBalance: newBalance, 
-              adStats: userData.adStats 
-            });
-            
-            tonBalance = newBalance;
-            document.getElementById('tonBalance').textContent = fmt(tonBalance);
-            
-            awardReferralCommission(reward);
-            notify(`Earned ${reward} TON!`);
-            
-            sendBot(`📺 <b>Ad Watched</b>\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
-            
-            adLoading = false;
-            btn.textContent = 'Watch Ad';
-            btn.disabled = false;
-            renderEarn(); // Refresh UI to show updated stats
+          } catch (e) {
+            console.error('Ad SDK error:', e);
+            // Still try to reward
+            processAdReward();
           }
-        }, 1000);
+        } else {
+          // SDK not available, simulate reward for testing
+          adLoading = false;
+          document.getElementById('watchAd').textContent = 'Watch Ad';
+          notify('Ad service loading... Please try again');
+        }
       };
 
       const setMilestone=(need,amt)=>{
@@ -1797,6 +1973,62 @@
       document.getElementById('m5500')?.addEventListener('click', ()=>setMilestone(5500,2.5));
 
       loadTasks();
+    }
+    
+    function processAdReward() {
+      adLoading = false;
+      const btn = document.getElementById('watchAd');
+      if (btn) btn.textContent = 'Watch Ad';
+      
+      const reward = 0.0001;
+      const today = todayISO();
+      const ws = weekStartISO();
+      const ms = monthStartISO();
+      
+      // Reset daily/weekly/monthly counters if needed
+      if (userData.adStats.lastAdDate !== today) { 
+        userData.adStats.yesterday = userData.adStats.today; 
+        userData.adStats.today = 0; 
+        userData.adStats.lastAdDate = today; 
+      }
+      if (userData.adStats.lastWeekReset !== ws) { 
+        userData.adStats.thisWeek = 0; 
+        userData.adStats.lastWeekReset = ws; 
+      }
+      if (userData.adStats.lastMonthReset !== ms) { 
+        userData.adStats.thisMonth = 0; 
+        userData.adStats.lastMonthReset = ms; 
+      }
+      
+      // Increment counters
+      userData.adStats.today++; 
+      userData.adStats.thisWeek++; 
+      userData.adStats.thisMonth++; 
+      userData.adStats.lifetime++;
+      
+      // Calculate new balance
+      const newBalance = tonBalance + reward;
+      
+      // Save everything
+      save({ 
+        tonBalance: newBalance, 
+        adStats: userData.adStats 
+      });
+      
+      // Update local state
+      tonBalance = newBalance;
+      
+      // Award referral commission
+      awardReferralCommission(reward);
+      
+      // Notify user
+      notify(`Earned ${reward} TON`);
+      
+      // Log to bot
+      sendBot(`Ad Watched\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
+      
+      // Re-render earn page
+      renderEarn();
     }
 
     function loadTasks(){
@@ -1871,7 +2103,7 @@
           <div style="margin-top:8px;padding:8px 12px;background:var(--bg-input);border-radius:8px;display:inline-flex;align-items:center;gap:8px">
             <span class="section-subtitle">ID:</span> 
             <span style="color:var(--primary);font-weight:800">${userId}</span> 
-            <button class="copy" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+            <button class="copy" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
           </div>
         </div>
 
@@ -1905,26 +2137,45 @@
           <button class="btn-primary" id="viewReferralsBtn">View My Referrals</button>
         </div>
 
-        <!-- Professional Redeem Section -->
-        <div class="redeem-professional">
-          <div style="position:relative;z-index:1">
-            <div style="font-size:18px;font-weight:800;color:var(--text-main);margin-bottom:4px">Redeem Code</div>
-            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px">Enter an 8-digit code to claim bonus</div>
-            
-            <div class="redeem-input-group">
-              <input id="redeem" maxlength="8" class="redeem-input" placeholder="XXXXXXXX">
-              <button class="redeem-btn" id="redeemGo">Redeem</button>
+        <div class="redeem-section">
+          <div class="redeem-header">
+            <div class="redeem-icon">🎁</div>
+            <div class="redeem-title-group">
+              <div class="redeem-title">Redeem Code</div>
+              <div class="redeem-subtitle">Enter your 8-character code to claim rewards</div>
             </div>
           </div>
+          <div class="redeem-input-wrapper">
+            <input id="redeem" maxlength="8" class="redeem-input" placeholder="XXXXXXXX" autocomplete="off" spellcheck="false">
+            <span class="redeem-char-count" id="charCount">0/8</span>
+          </div>
+          <button class="redeem-btn" id="redeemGo">
+            <span>Claim Reward</span>
+          </button>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
+      
+      // Character counter for redeem input
+      const redeemInput = document.getElementById('redeem');
+      const charCount = document.getElementById('charCount');
+      redeemInput.addEventListener('input', () => {
+        const len = redeemInput.value.length;
+        charCount.textContent = `${len}/8`;
+        if (len === 8) {
+          charCount.style.color = 'var(--accent-green)';
+        } else {
+          charCount.style.color = 'var(--text-muted)';
+        }
+      });
+      
       document.getElementById('copyUid').onclick=()=>copy(userId);
       document.getElementById('copyRef').onclick=()=>copy(document.getElementById('refLink').textContent);
       document.getElementById('redeemGo').onclick=()=>{
-        const code=document.getElementById('redeem').value.trim(); if(code.length!==8){ notify('Enter valid 8-digit code'); return; }
+        const code=document.getElementById('redeem').value.trim().toUpperCase(); 
+        if(code.length!==8){ notify('Enter valid 8-digit code'); return; }
         database.ref('redeemCodes/'+code).once('value').then(s=>{
-          if(!s.exists()){ notify('Invalid or used'); return; }
+          if(!s.exists()){ notify('Invalid or used code'); return; }
           const codeData = s.val();
           if (codeData.used >= codeData.maxUsers) { notify('Code limit reached'); return; }
           const reward = Math.random() * (0.20 - 0.01) + 0.01;
@@ -1932,6 +2183,8 @@
           save({ tonBalance: tonBalance + reward });
           notify(`Redeemed ${fmt(reward)} TON`);
           document.getElementById('redeem').value='';
+          charCount.textContent = '0/8';
+          charCount.style.color = 'var(--text-muted)';
         });
       };
       document.getElementById('viewReferralsBtn').onclick = showReferralList;
@@ -1979,7 +2232,7 @@
       }catch{
         const loc = localStorage.getItem('blockorbit_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
-          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawalCount: 0
+          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
         };
       }
       tonBalance = userData.tonBalance||0;
