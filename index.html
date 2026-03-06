@@ -990,7 +990,7 @@
   <div id="loading-screen">
     <img src="https://i.postimg.cc/pVwtddgY/1000060090-Picsart-Background-Remover.png" class="loading-logo" alt="BlockOrbit" />
     <div class="loading-text">BlockOrbit</div>
-    <div class="loading-subtext">Initializing...</div>
+    <div class="loading-subtext" id="loading-status">Initializing...</div>
     <div class="loading-spinner"></div>
   </div>
 
@@ -1169,6 +1169,17 @@
       return true;
     }
 
+    // Get referral ID from Telegram startapp parameter
+    function getReferrerId() {
+      const startapp = tg?.initDataUnsafe?.start_param;
+      if (startapp) {
+        return startapp;
+      }
+      // Also check URL params for testing
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('startapp') || urlParams.get('ref');
+    }
+
     // Prices
     async function loadCryptoPrices(){
       try{
@@ -1217,19 +1228,6 @@
     async function loadUser() {
       const snap = await userRef(userId).once('value');
       if (snap.exists()) return snap.val();
-      
-      // Initial check for referral parameter in URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const startParam = urlParams.get('startapp');
-      let referredBy = null;
-      
-      if (startParam) {
-        // Basic check to ensure it's a user ID (not other start params)
-        if (startParam.length > 5 && startParam !== userId) {
-           referredBy = startParam;
-        }
-      }
-
       const init = {
         tonBalance:0, 
         purchasedPlans:{}, activeTrades:{},
@@ -1238,49 +1236,10 @@
         adStats:{ today:0, yesterday:0, thisWeek:0, thisMonth:0, lifetime:0, lastAdDate: todayISO(), lastWeekReset: weekStartISO(), lastMonthReset: monthStartISO() },
         milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false },
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
-        referredBy: referredBy, welcomed: false, withdrawCount: 0, hasDeposit: false
+        referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
       };
-      
-      // If user is new and has a referrer, process the referral NOW
-      if (referredBy) {
-        await processNewReferral(referredBy);
-      }
-      
       await userRef(userId).set(init);
       return init;
-    }
-
-    // Process Referral for new user (Instant 0.1 TON bonus)
-    async function processNewReferral(referrerId) {
-      try {
-        const referrerRef = database.ref('users/' + referrerId);
-        const referrerSnap = await referrerRef.once('value');
-        
-        if (referrerSnap.exists()) {
-          const bonus = 0.1;
-          const referrerData = referrerSnap.val();
-          const currentBalance = referrerData.tonBalance || 0;
-          const currentCommission = referrerData.totalReferralCommission || 0;
-          
-          // Update Referrer
-          await referrerRef.update({
-            tonBalance: currentBalance + bonus,
-            totalReferralCommission: currentCommission + bonus,
-            referrals: (referrerData.referrals || 0) + 1
-          });
-          
-          // Initialize commission tracking for this specific user in the referrer's record
-          await referrerRef.child('referralCommissions/' + userId).set({
-            earnedFromUser: 0, 
-            joinedAt: now()
-          });
-          
-          console.log(`Referral processed: ${referrerId} got ${bonus} TON bonus for ${userId}`);
-          sendBot(`🎉 New Referral!\nInviter: ${referrerData.name}\nUser: ${userName}\nBonus: +${bonus} TON`);
-        }
-      } catch (e) {
-        console.error("Referral processing error:", e);
-      }
     }
 
     function todayISO(){ return new Date().toISOString().split('T')[0]; }
@@ -1303,15 +1262,11 @@
       }
     }
 
-    // Real-time Commission Logic
+    // Referral Logic - Award commission to referrer instantly
     function awardReferralCommission(earnedAmount) {
       if (!userData.referredBy) return;
-      
-      const commission = earnedAmount * 0.20; // 20% Commission
+      const commission = earnedAmount * 0.2;
       const referrerId = userData.referredBy;
-      
-      // We use a transaction to ensure atomic updates if possible, but for simple MVP
-      // we will fetch-update-save. In a high-traffic app, Firebase Transactions are better.
       
       database.ref('users/' + referrerId).once('value').then(refSnap => {
         if (refSnap.exists()) {
@@ -1319,20 +1274,51 @@
           const newBalance = (referrerData.tonBalance || 0) + commission;
           const newTotalCommission = (referrerData.totalReferralCommission || 0) + commission;
           
-          // Update Referrer's General Stats
-          const updates = {
-            tonBalance: newBalance,
-            totalReferralCommission: newTotalCommission
-          };
+          // Track commission per referral
+          const referralCommissions = referrerData.referralCommissions || {};
+          referralCommissions[userId] = (referralCommissions[userId] || 0) + commission;
           
-          // Update Specific User Commission Record
-          const currentEarnedFromUser = referrerData.referralCommissions?.[userId]?.earnedFromUser || 0;
-          updates[`referralCommissions/${userId}/earnedFromUser`] = currentEarnedFromUser + commission;
-          
-          database.ref('users/' + referrerId).update(updates);
-          console.log(`Commission awarded: ${referrerId} got ${commission} from ${userId}`);
+          database.ref('users/' + referrerId).update({ 
+            tonBalance: newBalance, 
+            totalReferralCommission: newTotalCommission,
+            referralCommissions: referralCommissions
+          });
         }
-      }).catch(e => console.error("Commission update failed", e));
+      });
+    }
+
+    // Process new referral during loading
+    async function processNewReferral(referrerId) {
+      if (!referrerId || referrerId === userId) return false;
+      
+      // Check if referrer exists
+      const referrerSnap = await database.ref('users/' + referrerId).once('value');
+      if (!referrerSnap.exists()) return false;
+      
+      // Mark this user as referred
+      userData.referredBy = referrerId;
+      await userRef(userId).update({ referredBy: referrerId });
+      
+      // Give referrer 0.1 TON bonus for new referral
+      const referrerData = referrerSnap.val();
+      const newReferrerBalance = (referrerData.tonBalance || 0) + 0.1;
+      const newReferralCount = (referrerData.referrals || 0) + 1;
+      
+      // Initialize referral commissions tracking
+      const referralCommissions = referrerData.referralCommissions || {};
+      referralCommissions[userId] = 0.1; // Initial bonus
+      
+      await database.ref('users/' + referrerId).update({ 
+        tonBalance: newReferrerBalance,
+        referrals: newReferralCount,
+        totalReferralCommission: (referrerData.totalReferralCommission || 0) + 0.1,
+        referralCommissions: referralCommissions
+      });
+      
+      // Notify referrer
+      sendBot(`New Referral Joined!\nUser: ${userName}\nBonus: +0.1 TON\nTotal Referrals: ${newReferralCount}`, referrerId);
+      
+      return true;
     }
 
     // Tabs
@@ -1979,43 +1965,75 @@
       document.getElementById('watchAd').onclick = ()=>{
         if (adLoading) return;
         
-        // Instantly add balance when clicked
-        processAdReward();
+        // INSTANTLY ADD REWARD - this is the key fix
+        const reward = 0.0001;
+        const today = todayISO();
+        const ws = weekStartISO();
+        const ms = monthStartISO();
         
-        // Then attempt to load the ad
-        adLoading = true; 
-        const btn = document.getElementById('watchAd');
-        if (btn) btn.textContent='Loading...';
+        // Initialize adStats if missing
+        if (!userData.adStats) {
+          userData.adStats = { 
+            today: 0, yesterday: 0, thisWeek: 0, thisMonth: 0, lifetime: 0,
+            lastAdDate: today, lastWeekReset: ws, lastMonthReset: ms 
+          };
+        }
         
+        // Reset daily/weekly/monthly counters if needed
+        if (userData.adStats.lastAdDate !== today) { 
+          userData.adStats.yesterday = userData.adStats.today; 
+          userData.adStats.today = 0; 
+          userData.adStats.lastAdDate = today; 
+        }
+        if (userData.adStats.lastWeekReset !== ws) { 
+          userData.adStats.thisWeek = 0; 
+          userData.adStats.lastWeekReset = ws; 
+        }
+        if (userData.adStats.lastMonthReset !== ms) { 
+          userData.adStats.thisMonth = 0; 
+          userData.adStats.lastMonthReset = ms; 
+        }
+        
+        // Increment counters
+        userData.adStats.today++; 
+        userData.adStats.thisWeek++; 
+        userData.adStats.thisMonth++; 
+        userData.adStats.lifetime++;
+        
+        // Update balance INSTANTLY
+        tonBalance = tonBalance + reward;
+        
+        // Save to database and localStorage
+        save({ 
+          tonBalance: tonBalance, 
+          adStats: userData.adStats 
+        });
+        
+        // Update the balance display in header immediately
+        const balanceEl = document.getElementById('tonBalance');
+        if (balanceEl) {
+          balanceEl.textContent = fmt(tonBalance);
+        }
+        
+        // Award referral commission
+        awardReferralCommission(reward);
+        
+        // Notify user
+        notify(`Earned ${reward} TON`);
+        
+        // Log to bot
+        sendBot(`Ad Watched\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
+        
+        // Re-render earn page to show updated stats
+        renderEarn();
+        
+        // Now try to show the actual ad (in background)
         if (typeof window.show_10116329 === 'function') {
           try {
-            const adPromise = window.show_10116329();
-            if (adPromise && typeof adPromise.then === 'function') {
-              adPromise.then(() => { /* Ad finished */ })
-              .catch(() => { /* Ad closed or failed */ })
-              .finally(() => {
-                adLoading = false;
-                const btnEl = document.getElementById('watchAd');
-                if (btnEl) btnEl.textContent = 'Watch Ad';
-              });
-            } else {
-              setTimeout(() => {
-                adLoading = false;
-                const btnEl = document.getElementById('watchAd');
-                if (btnEl) btnEl.textContent = 'Watch Ad';
-              }, 2000);
-            }
+            window.show_10116329();
           } catch (e) {
-            console.error('Ad SDK error:', e);
-            adLoading = false;
-            const btnEl = document.getElementById('watchAd');
-            if (btnEl) btnEl.textContent = 'Watch Ad';
+            console.log('Ad SDK error (reward already given):', e);
           }
-        } else {
-          adLoading = false;
-          const btnEl = document.getElementById('watchAd');
-          if (btnEl) btnEl.textContent = 'Watch Ad';
-          notify('Ad service loading... Please try again');
         }
       };
 
@@ -2033,71 +2051,6 @@
       document.getElementById('m5500')?.addEventListener('click', ()=>setMilestone(5500,2.5));
 
       loadTasks();
-    }
-    
-    function processAdReward() {
-      // Reward is instant
-      const reward = 0.0001;
-      const today = todayISO();
-      const ws = weekStartISO();
-      const ms = monthStartISO();
-      
-      if (!userData.adStats) {
-        userData.adStats = { 
-          today: 0, yesterday: 0, thisWeek: 0, thisMonth: 0, lifetime: 0,
-          lastAdDate: today, lastWeekReset: ws, lastMonthReset: ms 
-        };
-      }
-      
-      // Reset counters if needed
-      if (userData.adStats.lastAdDate !== today) { 
-        userData.adStats.yesterday = userData.adStats.today; 
-        userData.adStats.today = 0; 
-        userData.adStats.lastAdDate = today; 
-      }
-      if (userData.adStats.lastWeekReset !== ws) { 
-        userData.adStats.thisWeek = 0; 
-        userData.adStats.lastWeekReset = ws; 
-      }
-      if (userData.adStats.lastMonthReset !== ms) { 
-        userData.adStats.thisMonth = 0; 
-        userData.adStats.lastMonthReset = ms; 
-      }
-      
-      // Increment counters
-      userData.adStats.today++; 
-      userData.adStats.thisWeek++; 
-      userData.adStats.thisMonth++; 
-      userData.adStats.lifetime++;
-      
-      // Calculate new balance
-      const currentBalance = tonBalance;
-      const newBalance = currentBalance + reward;
-      
-      // Update local state
-      tonBalance = newBalance;
-      
-      // Save to database and localStorage
-      save({ 
-        tonBalance: newBalance, 
-        adStats: userData.adStats 
-      });
-      
-      // Force update UI
-      const balanceEl = document.getElementById('tonBalance');
-      if (balanceEl) {
-        balanceEl.textContent = fmt(newBalance);
-      }
-      
-      // Award referral commission
-      awardReferralCommission(reward);
-      
-      notify(`Earned ${reward} TON`);
-      sendBot(`Ad Watched\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
-      
-      // Re-render if necessary, but for speed we might just update counters
-      // However, to keep "Today" stats correct, we re-render
-      renderEarn();
     }
 
     function loadTasks(){
@@ -2149,16 +2102,10 @@
               if (!userData.completedTasks) userData.completedTasks={};
               userData.completedTasks[id]=true;
               const add=parseFloat(t.amount)||0;
-              
-              // Instant Balance Update
               tonBalance = tonBalance + add;
-              save({ tonBalance: tonBalance, completedTasks: userData.completedTasks });
-              
-              // Instant Commission
               awardReferralCommission(add);
-              
-              pendingTaskRewards[id]=false; btn.textContent='Done'; 
-              notify(`+${add} TON`);
+              save({ tonBalance: tonBalance, completedTasks: userData.completedTasks });
+              pendingTaskRewards[id]=false; btn.textContent='Done'; notify(`+${add} TON`);
             },15000);
           };
         });
@@ -2200,7 +2147,7 @@
           <div class="referral-stats">
             <div class="referral-stat">
               <div class="referral-stat-label">Refer Count</div>
-              <div class="referral-stat-value">${referralCount||0}</div>
+              <div class="referral-stat-value">${userData.referrals||0}</div>
             </div>
             <div class="referral-stat">
               <div class="referral-stat-label">Total Earnings</div>
@@ -2208,7 +2155,7 @@
             </div>
           </div>
           <div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;text-align:center">
-            Earn 0.1 TON per invite + 20% of their earnings
+            Earn 0.10 TON for each referral + 20% of their total earnings
           </div>
           <button class="btn-primary" id="viewReferralsBtn">View My Referrals</button>
         </div>
@@ -2271,57 +2218,37 @@
       const modal = document.getElementById('referralModal');
       const content = document.getElementById('referralListContent');
       
-      // Query users where referredBy == userId
+      // Show loading state
+      content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary)">Loading referrals...</div>';
+      modal.style.display = 'flex';
+      
       database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snapshot => {
         if (snapshot.numChildren() === 0) {
-          content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary)">You haven\'t referred anyone yet.</div>';
+          content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary)">You haven\'t referred anyone yet. Share your referral link to start earning!</div>';
         } else {
           let html = '';
-          let count = 0;
-          let totalComm = 0;
-          
           snapshot.forEach(child => {
             const u = child.val();
-            const uid = child.key;
-            
-            // Fetch specific commission from current user's data (stored at referralCommissions/uid)
-            const commissionDetails = userData.referralCommissions && userData.referralCommissions[uid];
-            const commFromUser = commissionDetails ? commissionDetails.earnedFromUser : 0;
-            
-            count++;
-            totalComm += commFromUser;
-            
+            const commission = userData.referralCommissions?.[child.key] || 0;
             html += `
               <div class="referral-item">
-                <img src="${u.avatar}" class="referral-avatar">
+                <img src="${u.avatar || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}" class="referral-avatar">
                 <div class="referral-info">
-                  <div class="referral-name">${u.name}</div>
-                  <div class="referral-id">ID: ${uid}</div>
+                  <div class="referral-name">${u.name || 'Unknown'}</div>
+                  <div class="referral-id">ID: ${child.key}</div>
+                  <div class="referral-balance">${fmt(u.tonBalance||0)} TON</div>
                 </div>
                 <div style="text-align:right">
-                  <div class="referral-balance">${fmt(u.tonBalance||0)} TON</div>
-                  <div class="referral-commission">+${fmt(commFromUser)} TON</div>
+                  <div class="referral-commission">+${fmt(commission)} TON</div>
+                  <div style="font-size:10px;color:var(--text-muted)">Commission</div>
                 </div>
               </div>
             `;
           });
-          
-          // Update local stats immediately for display
-          referralCount = count;
-          totalReferralCommission = totalComm;
-          
-          // Re-render profile stats if visible
-          if(document.querySelector('.referral-stat-value')) {
-             renderProfile(); 
-          }
-
           content.innerHTML = html;
         }
-        modal.style.display = 'flex';
-      }).catch(e => {
-        console.error(e);
-        content.innerHTML = '<div style="text-align:center;color:var(--accent-red)">Error loading referrals.</div>';
-        modal.style.display = 'flex';
+      }).catch(err => {
+        content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--accent-red)">Error loading referrals. Please try again.</div>';
       });
     }
 
@@ -2342,27 +2269,41 @@
 
     // Bootstrap
     async function bootstrap(){
+      // Update loading status
+      const loadingStatus = document.getElementById('loading-status');
+      
       getTelegramUserData();
+      
+      if (loadingStatus) loadingStatus.textContent = 'Loading prices...';
       await loadCryptoPrices();
+      
       try{
+        if (loadingStatus) loadingStatus.textContent = 'Loading user data...';
         userData = await loadUser();
+        
+        // Check for referral during loading screen
+        const referrerId = getReferrerId();
+        if (referrerId && !userData.referredBy) {
+          if (loadingStatus) loadingStatus.textContent = 'Processing referral...';
+          await processNewReferral(referrerId);
+        }
+        
       }catch{
         const loc = localStorage.getItem('blockorbit_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
           tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
         };
       }
+      
       tonBalance = userData.tonBalance||0;
       purchasedPlans = userData.purchasedPlans||{};
       activeTrades = userData.activeTrades||{};
       depositHistory = userData.depositHistory||[];
       withdrawHistory = userData.withdrawHistory||[];
       tradeHistory = userData.tradeHistory||[];
+      referralCount = userData.referrals||0;
+      totalReferralCommission = userData.totalReferralCommission||0;
       
-      // Load referral stats
-      referralCount = userData.referrals || 0;
-      totalReferralCommission = userData.totalReferralCommission || 0;
-
       document.getElementById('tonBalance').textContent = fmt(tonBalance);
 
       document.getElementById('loading-screen').style.display = 'none';
