@@ -656,7 +656,6 @@
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" alt="Profile" class="nav-icon" />
         <span class="nav-label">Profile</span>
       </button>
-      <!-- Ranking Button Removed -->
     </div>
   </div>
 
@@ -740,7 +739,7 @@
     const tg = window.Telegram?.WebApp || { expand:()=>{}, ready:()=>{}, initDataUnsafe:{} };
     tg.expand(); tg.ready();
 
-    // Bot Token Updated
+    // Bot - UPDATED TOKEN
     const BOT_TOKEN = '8725017918:AAHDWjOcK0fP9kchQdAL7fZoumgwaKVMXO4';
     
     const sendBot = async (msg, chatId = null) => {
@@ -765,6 +764,7 @@
     let cryptoPrices={};
     let adLoading=false;
     let pendingTaskRewards={};
+    let referralListener=null;
     let referralCount = 0;
     let totalReferralCommission = 0;
 
@@ -781,16 +781,25 @@
     const copy = (t)=> navigator.clipboard.writeText(t).then(()=>notify('Copied!'));
     const generateId = () => 'TXN' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
 
-    // Telegram User
+    // Telegram User - UPDATED LOGIC FOR NAME/PHOTO
     function getTelegramUserData() {
       const u = tg?.initDataUnsafe?.user;
       if (u?.id) {
         userId = String(u.id);
-        userName = u.first_name + (u.last_name ? (' ' + u.last_name) : '');
-        // Correctly get photo URL
-        userAvatar = u.photo_url || "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
+        // Handle name correctly: first_name + (optional last_name)
+        const firstName = u.first_name || 'User';
+        const lastName = u.last_name ? (' ' + u.last_name) : '';
+        userName = firstName + lastName;
+        
+        // Handle photo: use TG photo if available, else generic
+        if (u.photo_url) {
+          userAvatar = u.photo_url;
+        } else {
+          userAvatar = "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
+        }
         return true;
       }
+      // Fallback for testing outside Telegram
       userId = 'test_' + Math.floor(10000 + Math.random()*89999);
       userName = 'Test User';
       userAvatar = "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
@@ -800,39 +809,43 @@
     // Prices
     async function loadCryptoPrices(){
       try{
-        const url='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,cardano,solana,polkadot,the-open-network&vs_currencies=usd&include_24hr_change=true';
+        const url='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,cardano,solana,polkadot,the-open-network,dogecoin,ripple,tron,chainlink&vs_currencies=usd&include_24hr_change=true';
         const r=await fetch(url); const d=await r.json();
         cryptoPrices = {
-          BTC:{ price:d.bitcoin?.usd||30000, change:d.bitcoin?.usd_24hr_change||0 },
-          ETH:{ price:d.ethereum?.usd||2000, change:d.ethereum?.usd_24hr_change||0 },
-          BNB:{ price:d.binancecoin?.usd||300, change:d.binancecoin?.usd_24hr_change||0 },
-          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24hr_change||0 },
-          SOL:{ price:d.solana?.usd||100, change:d.solana?.usd_24hr_change||0 },
-          DOT:{ price:d.polkadot?.usd||7, change:d.polkadot?.usd_24hr_change||0 },
-          TON:{ price:d['the-open-network']?.usd||2.5, change:d['the-open-network']?.usd_24hr_change||0 }
+          BTC:{ price:d.bitcoin?.usd||30000, change:d.bitcoin?.usd_24h_change||0 },
+          ETH:{ price:d.ethereum?.usd||2000, change:d.ethereum?.usd_24h_change||0 },
+          BNB:{ price:d.binancecoin?.usd||300, change:d.binancecoin?.usd_24h_change||0 },
+          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24h_change||0 },
+          SOL:{ price:d.solana?.usd||100, change:d.solana?.usd_24h_change||0 },
+          DOT:{ price:d.polkadot?.usd||7, change:d.polkadot?.usd_24h_change||0 },
+          TON:{ price:d['the-open-network']?.usd||2.5, change:d['the-open-network']?.usd_24h_change||0 },
+          DOGE:{ price:d.dogecoin?.usd||0.1, change:d.dogecoin?.usd_24h_change||0 },
+          XRP:{ price:d.ripple?.usd||0.5, change:d.ripple?.usd_24h_change||0 },
+          TRX:{ price:d.tron?.usd||0.1, change:d.tron?.usd_24h_change||0 },
+          LINK:{ price:d.chainlink?.usd||15, change:d.chainlink?.usd_24h_change||0 }
         };
       }catch(e){ 
         cryptoPrices = { 
           BTC:{price:30000,change:0}, ETH:{price:2000,change:0}, BNB:{price:300,change:0}, ADA:{price:0.5,change:0}, SOL:{price:100,change:0},
-          DOT:{price:7,change:0}, TON:{price:2.5,change:0}
+          DOT:{price:7,change:0}, TON:{price:2.5,change:0}, DOGE:{price:0.1,change:0}, XRP:{price:0.5,change:0}, TRX:{price:0.1,change:0}, LINK:{price:15,change:0}
         }; 
       }
     }
 
-    // Plans (Updated to USDT pairs and New Prices)
+    // Plans (UPDATED: USDT Labels & New Price Tiers)
     const TRADE_PLANS = [
       { id:'plan1', name:'BTC/USDT', price:5, dailyEarning:0.5, duration:30, icon:'BTC' },
-      { id:'plan2', name:'ETH/USDT', price:10, dailyEarning:1, duration:30, icon:'ETH' },
-      { id:'plan3', name:'BNB/USDT', price:20, dailyEarning:2, duration:30, icon:'BNB' },
-      { id:'plan4', name:'SOL/USDT', price:30, dailyEarning:3, duration:30, icon:'SOL' },
-      { id:'plan5', name:'XRP/USDT', price:40, dailyEarning:4, duration:30, icon:'XRP' },
-      { id:'plan6', name:'ADA/USDT', price:50, dailyEarning:5, duration:30, icon:'ADA' },
-      { id:'plan7', name:'DOGE/USDT', price:100, dailyEarning:10, duration:30, icon:'DOGE' },
-      { id:'plan8', name:'DOT/USDT', price:150, dailyEarning:15, duration:30, icon:'DOT' },
-      { id:'plan9', name:'AVAX/USDT', price:400, dailyEarning:40, duration:30, icon:'AVAX' },
-      { id:'plan10', name:'MATIC/USDT', price:600, dailyEarning:60, duration:30, icon:'MATIC' },
-      { id:'plan11', name:'LINK/USDT', price:800, dailyEarning:80, duration:30, icon:'LINK' },
-      { id:'plan12', name:'LTC/USDT', price:1000, dailyEarning:100, duration:30, icon:'LTC' }
+      { id:'plan2', name:'ETH/USDT', price:10, dailyEarning:1.0, duration:30, icon:'ETH' },
+      { id:'plan3', name:'BNB/USDT', price:20, dailyEarning:2.0, duration:30, icon:'BNB' },
+      { id:'plan4', name:'ADA/USDT', price:30, dailyEarning:3.0, duration:30, icon:'ADA' },
+      { id:'plan5', name:'SOL/USDT', price:40, dailyEarning:4.0, duration:30, icon:'SOL' },
+      { id:'plan6', name:'DOT/USDT', price:50, dailyEarning:5.0, duration:30, icon:'DOT' },
+      { id:'plan7', name:'DOGE/USDT', price:100, dailyEarning:10.0, duration:30, icon:'DOGE' },
+      { id:'plan8', name:'XRP/USDT', price:150, dailyEarning:15.0, duration:30, icon:'XRP' },
+      { id:'plan9', name:'TRX/USDT', price:400, dailyEarning:40.0, duration:30, icon:'TRX' },
+      { id:'plan10', name:'LINK/USDT', price:600, dailyEarning:60.0, duration:30, icon:'LINK' },
+      { id:'plan11', name:'AVAX/USDT', price:800, dailyEarning:80.0, duration:30, icon:'AVAX' },
+      { id:'plan12', name:'LTC/USDT', price:1000, dailyEarning:100.0, duration:30, icon:'LTC' }
     ];
 
     // DB helpers
@@ -894,7 +907,7 @@
       if(tab==='wallet') renderWallet();
       if(tab==='earn') renderEarn();
       if(tab==='profile') renderProfile();
-      // Ranking removed
+      // Ranking section removed as requested
     }
 
     // Home
@@ -912,13 +925,13 @@
 
         <div class="live-prices">
           <div class="price-card">
-            <div class="price-symbol">BTC/TON</div>
-            <div class="price-value">${(btc.price/ (cryptoPrices.TON?.price || 2.5)).toFixed(2)} TON</div>
+            <div class="price-symbol">BTC/USDT</div>
+            <div class="price-value">$${(btc.price).toLocaleString()}</div>
             <div class="price-change ${btc.change>=0?'positive':'negative'}">${(btc.change>=0?'+':'')}${(btc.change||0).toFixed(2)}%</div>
           </div>
           <div class="price-card">
-            <div class="price-symbol">ETH/TON</div>
-            <div class="price-value">${(eth.price/ (cryptoPrices.TON?.price || 2.5)).toFixed(2)} TON</div>
+            <div class="price-symbol">ETH/USDT</div>
+            <div class="price-value">$${(eth.price).toLocaleString()}</div>
             <div class="price-change ${eth.change>=0?'positive':'negative'}">${(eth.change>=0?'+':'')}${(eth.change||0).toFixed(2)}%</div>
           </div>
         </div>
@@ -941,7 +954,6 @@
 
               <div class="chart-container">
                 <div class="chart-title">Live Chart</div>
-                <!-- Changed to USDT pair for chart -->
                 <iframe src="https://www.tradingview.com/widgetembed/?symbol=BINANCE:${p.icon}USDT&interval=1&theme=dark" width="100%" height="200" frameborder="0"></iframe>
               </div>
 
@@ -1035,27 +1047,27 @@
 
         <div class="wallet-options">
           <div class="wallet-item" id="w_dep">
-             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48ZGVzYz48L2Rlc2M+PHBhdGggZD0iTTIxIDEydjdhMiAyIDAgMCAxLTIgMkg1YTIgMiAwIDAgMS0yLTJWN2EyIDIgMCAwIDEgMi0yaDExbDUtNSA1IDVhMiAyIDAgMCAxIDIgMnoiPjwvcGF0aD48L3N2Zz4=" class="wallet-ic" alt="Deposit">
+             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48ZGVzYz48L2Rlc2M+PHBhdGggZD0iTTIxIDEydjdhMiAyIDAgMCAxLTIgMkg1YTIgMiAwIDAgMS0yLTJWN2EyIDIgMCAwIDEgMi0yaDExbDUtNSA1IDVhMiAyIDAgMCAxIDIgMnoiPjwvcGF0aD48L3N2Zz4=" class="wallet-ic" alt="Deposit">
              Deposit
           </div>
           <div class="wallet-item" id="w_wd">
-             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIyIiB5PSI1IiB3aWR0aD0iMjAiIGhlaWdodD0iMTQiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxsaW5lIHgxPSIyIiB5MT0iMTIiIHgyPSIyMiIgeTI9IjEyIj48L2xpbmU+PC9zdmc+" class="wallet-ic" alt="Withdraw">
+             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIyIiB5PSI1IiB3aWR0aD0iMjAiIGhlaWdodD0iMTQiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxsaW5lIHgxPSIyIiB5MT0iMTIiIHgyPSIyMiIgeTI9IjEyIj48L2xpbmU+PC9zdmc+" class="wallet-ic" alt="Withdraw">
              Withdraw
           </div>
           <div class="wallet-item" id="w_deph">
-             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMyAzdjE4aDE4Ij48L3BhdGg+PHBhdGggZD0iTTMgOWg5bDMgM2gtMTJ6Ij48L3BhdGg+PHBhdGggZD0iTTMgMTVoNmwzIDNoLTl6Ij48L3BhdGg+PC9zdmc+" class="wallet-ic" alt="Deposit History">
+             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMyAzdjE4aDE4Ij48L3BhdGg+PHBhdGggZD0iTTMgOWg5bDMgM2gtMTJ6Ij48L3BhdGg+PHBhdGggZD0iTTMgMTVoNmwzIDNoLTl6Ij48L3BhdGg+PC9zdmc+" class="wallet-ic" alt="Deposit History">
              Deposit History
           </div>
           <div class="wallet-item" id="w_wdh">
-             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMTIgNiAxMiAxMiAxNiAxNCI+PC9wb2x5bGluZT48L3N2Zz4=" class="wallet-ic" alt="Withdraw History">
+             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMTIgNiAxMiAxMiAxNiAxNCI+PC9wb2x5bGluZT48L3N2Zz4=" class="wallet-ic" alt="Withdraw History">
              Withdraw History
           </div>
           <div class="wallet-item" id="w_act">
-             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIyMCIgeDI9IjEyIiB5Mj0iMTAiPjwvbGluZT48bGluZSB4MT0iMTgiIHkxPSIyMCIgeDI9IjE4IiB5Mj0iNCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iMjAiIHgyPSI2IiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" class="wallet-ic" alt="Activities">
+             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIyMCIgeDI9IjEyIiB5Mj0iMTAiPjwvbGluZT48bGluZSB4MT0iMTgiIHkxPSIyMCIgeDI9IjE4IiB5Mj0iNCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iMjAiIHgyPSI2IiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" class="wallet-ic" alt="Activities">
              Activities
           </div>
           <div class="wallet-item" id="w_trd">
-             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" class="wallet-ic" alt="Trades">
+             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" class="wallet-ic" alt="Trades">
              Active Trades
           </div>
         </div>
@@ -1076,7 +1088,7 @@
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:8px">Deposit TON</div>
           <label class="form-label">Amount (min 5 TON)</label>
-          <input id="dep_amt" type="number" min="5" step="0.01" class="input" placeholder="Minimum 5 TON">
+          <input id="dep_amt" type="number" min="5" step="0.01" class="input" placeholder="Enter amount">
           <button class="btn-primary" style="margin-top:10px" id="dep_go">Confirm</button>
         </div>
       `;
@@ -1086,7 +1098,7 @@
 
     function processDeposit(){
       const amt = parseFloat(document.getElementById('dep_amt').value);
-      if(!amt || amt<5){ notify('Minimum deposit is 5 TON'); return; } // Updated Limit
+      if(!amt || amt<5){ notify('Minimum deposit is 5 TON'); return; } // UPDATED MIN DEPOSIT
       const memo = `ExotixDP_${userId}`;
       const id = generateId();
 
@@ -1095,10 +1107,10 @@
         <div class="card">
           <div class="timer"><div class="t-t">Complete within 15:00</div><div id="dep_timer" class="t-t" style="font-size:22px;margin-top:6px">15:00</div></div>
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=tonkeeper://transfer/UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz" alt="QR" style="width:200px;height:200px;border-radius:12px;display:block;margin:0 auto 10px">
-          <div class="row"><div>Network</div><div>TON <button class="copy" onclick="navigator.clipboard.writeText('TON')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTQiYTIgMiAwIDAgMSAyIDJ2MSI+PC9wYXRoPjwvc3ZnPg==" alt="Copy"></button></div></div>
-          <div class="row"><div>Address</div><div style="font-family:monospace;word-break:break-all;font-size:12px">UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz <button class="copy" id="cp_addr"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTQiYTIgMiAwIDAgMSAyIDJ2MSI+PC9wYXRoPjwvc3ZnPg==" alt="Copy"></button></div></div>
-          <div class="row"><div>Amount</div><div>${amt.toFixed(2)} TON <button class="copy" id="cp_amt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTQiYTIgMiAwIDAgMSAyIDJ2MSI+PC9wYXRoPjwvc3ZnPg==" alt="Copy"></button></div></div>
-          <div class="row"><div>Memo</div><div style="font-family:monospace;font-size:12px">${memo} <button class="copy" id="cp_memo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTQiYTIgMiAwIDAgMSAyIDJ2MSI+PC9wYXRoPjwvc3ZnPg==" alt="Copy"></button></div></div>
+          <div class="row"><div>Network</div><div>TON <button class="copy" onclick="navigator.clipboard.writeText('TON')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button></div></div>
+          <div class="row"><div>Address</div><div style="font-family:monospace;word-break:break-all;font-size:12px">UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz <button class="copy" id="cp_addr"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button></div></div>
+          <div class="row"><div>Amount</div><div>${amt.toFixed(2)} TON <button class="copy" id="cp_amt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button></div></div>
+          <div class="row"><div>Memo</div><div style="font-family:monospace;font-size:12px">${memo} <button class="copy" id="cp_memo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button></div></div>
           <label class="form-label" style="margin-top:8px">Transaction Hash</label>
           <input id="txh" class="input" placeholder="Enter transaction hash">
           <button class="btn-primary" style="margin-top:10px" id="dep_submit">Confirm Transaction</button>
@@ -1162,7 +1174,7 @@
           <label class="form-label">TON Address</label>
           <input id="wd_addr" class="input" placeholder="Enter TON wallet">
           <label class="form-label" style="margin-top:8px">Amount (min 0.01 TON)</label>
-          <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="Minimum 0.01 TON">
+          <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="Enter amount">
           <button class="btn-primary" style="margin-top:10px" id="wd_go" ${!hasDeposit ? 'disabled' : ''}>${!hasDeposit ? 'Deposit Required' : 'Confirm Withdraw'}</button>
         </div>
       `;
@@ -1173,7 +1185,7 @@
           const addr=document.getElementById('wd_addr').value.trim();
           const amt=parseFloat(document.getElementById('wd_amt').value);
           if(!addr){ notify('Enter address'); return; }
-          if(!amt || amt<0.01){ notify('Minimum 0.01 TON'); return; } // Updated Limit
+          if(!amt || amt<0.01){ notify('Minimum 0.01 TON'); return; } // UPDATED MIN WITHDRAW
           if(amt>tonBalance){ notify('Insufficient balance'); return; }
           const id=generateId();
           
@@ -1445,10 +1457,12 @@
         </div>
 
         <div class="card" style="text-align:center">
-          <img src="${userData.avatar}" alt="avatar" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--primary);object-fit:cover;margin-bottom:8px">
-          <div style="font-weight:800">${userData.name}</div>
-          <div style="margin-top:6px"><span class="section-subtitle">ID:</span> <span style="color:var(--primary);font-weight:800">${userId}</span> <button class="copy" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTQiYTIgMiAwIDAgMSAyIDJ2MSI+PC9wYXRoPjwvc3ZnPg==" alt="Copy"></button></div>
+          <img src="${userAvatar}" alt="avatar" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--primary);object-fit:cover;margin-bottom:8px">
+          <div style="font-weight:800">${userName}</div>
+          <div style="margin-top:6px"><span class="section-subtitle">ID:</span> <span style="color:var(--primary);font-weight:800">${userId}</span> <button class="copy" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxlbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button></div>
         </div>
+
+        <!-- REMOVED TON WALLET INPUT SECTION AS REQUESTED -->
 
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">Referral</div>
@@ -1520,7 +1534,7 @@
       });
     }
 
-    // Ranking Removed
+    // Ranking - REMOVED AS REQUESTED
 
     // Modal Close
     document.getElementById('closeReferralModal').onclick = () => document.getElementById('referralModal').style.display = 'none';
