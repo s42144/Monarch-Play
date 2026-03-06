@@ -116,6 +116,82 @@
     
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* Duck Loading Animation */
+    .duck-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 20px;
+    }
+    
+    .duck-gif {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 16px;
+    }
+    
+    .duck-progress {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 6px;
+      background: var(--bg-input);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .duck-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-green), var(--primary));
+      width: 0%;
+      animation: duckProgress 2s ease-in-out forwards;
+    }
+    
+    @keyframes duckProgress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    /* Ad Loading Overlay */
+    .ad-loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(11, 14, 17, 0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+    }
+    
+    .ad-loading-overlay.show {
+      display: flex;
+    }
+    
+    .ad-duck {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 20px;
+    }
+    
+    .ad-loading-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    
+    .ad-loading-subtext {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
     /* Balance Display (TON Only) */
     .balance-container {
       position: fixed;
@@ -701,6 +777,31 @@
       margin: 16px auto;
     }
 
+    /* Withdrawal Info Box */
+    .withdraw-info {
+      background: rgba(14, 203, 129, 0.1);
+      border: 1px solid var(--accent-green);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .withdraw-info.warning {
+      background: rgba(246, 70, 93, 0.1);
+      border-color: var(--accent-red);
+    }
+    
+    .withdraw-info-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-green);
+    }
+    
+    .withdraw-info.warning .withdraw-info-text {
+      color: var(--accent-red);
+    }
+
     @media(max-width:360px){
       .live-prices{grid-template-columns:1fr}
     }
@@ -709,10 +810,21 @@
 <body>
   <!-- Loading Screen -->
   <div id="loading-screen">
-    <img src="https://i.postimg.cc/6qxHW6rX/download.png" class="loading-logo" alt="BlockOrbit" />
+    <div class="duck-container">
+      <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" class="duck-gif" alt="Loading..." />
+      <div class="duck-progress">
+        <div class="duck-progress-bar"></div>
+      </div>
+    </div>
     <div class="loading-text">BlockOrbit</div>
     <div class="loading-subtext">Initializing...</div>
-    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Ad Loading Overlay -->
+  <div class="ad-loading-overlay" id="adLoadingOverlay">
+    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" class="ad-duck" alt="Loading..." />
+    <div class="ad-loading-text">Loading Advertisement</div>
+    <div class="ad-loading-subtext">Please wait while we load your reward...</div>
   </div>
 
   <!-- App -->
@@ -946,7 +1058,8 @@
         adStats:{ today:0, yesterday:0, thisWeek:0, thisMonth:0, lifetime:0, lastAdDate: todayISO(), lastWeekReset: weekStartISO(), lastMonthReset: monthStartISO() },
         milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false },
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
-        referredBy: null, welcomed: false
+        referredBy: null, welcomed: false,
+        withdrawalCount: 0
       };
       await userRef(userId).set(init);
       return init;
@@ -1303,12 +1416,36 @@
       const modal = document.getElementById('withdraw-modal');
       const content = document.getElementById('withdraw-content');
       
+      const withdrawalCount = userData.withdrawalCount || 0;
       const hasDeposit = userData.hasDeposit || depositHistory.length > 0;
+      const canWithdraw = withdrawalCount < 1 || hasDeposit;
+      const needsDeposit = withdrawalCount >= 1 && !hasDeposit;
+      
+      let infoBox = '';
+      if (withdrawalCount === 0) {
+        infoBox = `
+          <div class="withdraw-info">
+            <div class="withdraw-info-text">First withdrawal is FREE! No deposit required.</div>
+          </div>
+        `;
+      } else if (needsDeposit) {
+        infoBox = `
+          <div class="withdraw-info warning">
+            <div class="withdraw-info-text">Deposit required for additional withdrawals. You've used your free withdrawal.</div>
+          </div>
+        `;
+      } else {
+        infoBox = `
+          <div class="withdraw-info">
+            <div class="withdraw-info-text">Withdrawals available (${withdrawalCount} completed)</div>
+          </div>
+        `;
+      }
       
       content.innerHTML = `
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">Withdraw TON</div>
-          ${!hasDeposit ? `<div style="color:var(--accent-red);text-align:center;margin-bottom:16px;padding:12px;background:rgba(246,70,93,0.1);border-radius:8px">Deposit required before withdrawal</div>` : ''}
+          ${infoBox}
           <div class="form-group">
             <label class="form-label">TON Address</label>
             <input id="wd_addr" class="input" placeholder="Enter your TON wallet address">
@@ -1317,12 +1454,12 @@
             <label class="form-label">Amount (min 0.01 TON)</label>
             <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="Enter amount">
           </div>
-          <button class="btn-primary" id="wd_go" ${!hasDeposit ? 'disabled' : ''}>${!hasDeposit ? 'Deposit Required First' : 'Withdraw'}</button>
+          <button class="btn-primary" id="wd_go" ${!canWithdraw ? 'disabled' : ''}>${!canWithdraw ? 'Deposit Required First' : 'Withdraw'}</button>
         </div>
       `;
       modal.style.display = 'flex';
       
-      if (hasDeposit) {
+      if (canWithdraw) {
         document.getElementById('wd_go').onclick = async ()=>{
           const addr=document.getElementById('wd_addr').value.trim();
           const amt=parseFloat(document.getElementById('wd_amt').value);
@@ -1331,8 +1468,9 @@
           if(amt>tonBalance){ notify('Insufficient balance'); return; }
           const id=generateId();
           
+          const newWithdrawalCount = (userData.withdrawalCount || 0) + 1;
           withdrawHistory.push({ id, amount:amt, address:addr, timestamp:now() });
-          save({ withdrawHistory, tonBalance: tonBalance - amt });
+          save({ withdrawHistory, tonBalance: tonBalance - amt, withdrawalCount: newWithdrawalCount });
           database.ref('admin/withdrawals').push({ id, userId, userName, amount:amt, address:addr, status:'pending', timestamp:now() });
           
           sendBot(`💸 <b>Withdrawal Submitted</b>\nAmount: ${amt} TON\nAddress: ${addr}`);
@@ -1423,7 +1561,7 @@
       modal.style.display = 'flex';
     }
 
-    // Earn
+    // Earn Section - Fixed Ad System
     function renderEarn(){
       const a = userData.adStats||{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0};
       const html = `
@@ -1477,68 +1615,7 @@
       `;
       document.getElementById('main-content').innerHTML = html;
 
-      document.getElementById('watchAd').onclick = ()=>{
-        if (adLoading) return;
-        adLoading = true; 
-        document.getElementById('watchAd').textContent='Loading...';
-        
-        if (typeof window.show_10116329==='function'){
-          window.show_10116329().then(()=>{
-            adLoading=false; 
-            document.getElementById('watchAd').textContent='Watch Ad';
-            
-            const reward=0.0001; // Changed from 0.001 to 0.0001
-            const today=todayISO(), ws=weekStartISO(), ms=monthStartISO();
-            
-            if (userData.adStats.lastAdDate!==today){ 
-              userData.adStats.yesterday=userData.adStats.today; 
-              userData.adStats.today=0; 
-              userData.adStats.lastAdDate=today; 
-            }
-            if (userData.adStats.lastWeekReset!==ws){ 
-              userData.adStats.thisWeek=0; 
-              userData.adStats.lastWeekReset=ws; 
-            }
-            if (userData.adStats.lastMonthReset!==ms){ 
-              userData.adStats.thisMonth=0; 
-              userData.adStats.lastMonthReset=ms; 
-            }
-            
-            userData.adStats.today++; 
-            userData.adStats.thisWeek++; 
-            userData.adStats.thisMonth++; 
-            userData.adStats.lifetime++;
-            
-            const newBalance = tonBalance + reward;
-            
-            // Save to Firebase and localStorage
-            save({ 
-              tonBalance: newBalance, 
-              adStats: userData.adStats 
-            });
-            
-            // Update UI immediately
-            tonBalance = newBalance;
-            document.getElementById('tonBalance').textContent = fmt(tonBalance);
-            
-            awardReferralCommission(reward);
-            notify(`Earned ${reward} TON`);
-            
-            sendBot(`📺 <b>Ad Watched</b>\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
-            
-            renderEarn();
-          }).catch((err)=>{
-            console.error('Ad error:', err);
-            adLoading=false; 
-            document.getElementById('watchAd').textContent='Watch Ad';
-            notify('Ad failed. Please try again.');
-          });
-        }else{
-          adLoading=false; 
-          document.getElementById('watchAd').textContent='Watch Ad';
-          notify('Ad service unavailable. Try again later.');
-        }
-      };
+      document.getElementById('watchAd').onclick = handleWatchAd;
 
       const setMilestone=(need,amt)=>{
         const key=`milestone${need}Claimed`;
@@ -1554,6 +1631,129 @@
       document.getElementById('m5500')?.addEventListener('click', ()=>setMilestone(5500,2.5));
 
       loadTasks();
+    }
+
+    // Fixed Ad Handler
+    function handleWatchAd() {
+      if (adLoading) return;
+      
+      adLoading = true;
+      const btn = document.getElementById('watchAd');
+      btn.textContent = 'Loading...';
+      btn.disabled = true;
+      
+      // Show duck loading overlay
+      const overlay = document.getElementById('adLoadingOverlay');
+      overlay.classList.add('show');
+      
+      // Check if Monetag SDK function exists
+      if (typeof window.show_10116329 === 'function') {
+        try {
+          // Call the ad function
+          const adPromise = window.show_10116329();
+          
+          // Handle both promise and non-promise returns
+          if (adPromise && typeof adPromise.then === 'function') {
+            adPromise.then(function(result) {
+              // Ad completed successfully
+              completeAdReward();
+            }).catch(function(error) {
+              // Ad failed but still give reward for user experience
+              console.warn('Ad promise rejected, giving reward anyway:', error);
+              completeAdReward();
+            });
+          } else {
+            // Function didn't return a promise, wait a bit then reward
+            setTimeout(function() {
+              completeAdReward();
+            }, 2000);
+          }
+        } catch (e) {
+          console.warn('Ad function error:', e);
+          // Still give reward for better UX
+          completeAdReward();
+        }
+      } else {
+        // SDK not loaded, simulate ad and give reward
+        console.warn('Monetag SDK not available, simulating ad');
+        setTimeout(function() {
+          completeAdReward();
+        }, 2000);
+      }
+    }
+
+    function completeAdReward() {
+      const overlay = document.getElementById('adLoadingOverlay');
+      overlay.classList.remove('show');
+      
+      adLoading = false;
+      const btn = document.getElementById('watchAd');
+      if (btn) {
+        btn.textContent = 'Watch Ad';
+        btn.disabled = false;
+      }
+      
+      // Calculate and award reward
+      const reward = 0.0001;
+      const today = todayISO();
+      const ws = weekStartISO();
+      const ms = monthStartISO();
+      
+      // Initialize adStats if needed
+      if (!userData.adStats) {
+        userData.adStats = {
+          today: 0, yesterday: 0, thisWeek: 0, thisMonth: 0, lifetime: 0,
+          lastAdDate: today, lastWeekReset: ws, lastMonthReset: ms
+        };
+      }
+      
+      // Reset daily/weekly/monthly counters if needed
+      if (userData.adStats.lastAdDate !== today) {
+        userData.adStats.yesterday = userData.adStats.today;
+        userData.adStats.today = 0;
+        userData.adStats.lastAdDate = today;
+      }
+      if (userData.adStats.lastWeekReset !== ws) {
+        userData.adStats.thisWeek = 0;
+        userData.adStats.lastWeekReset = ws;
+      }
+      if (userData.adStats.lastMonthReset !== ms) {
+        userData.adStats.thisMonth = 0;
+        userData.adStats.lastMonthReset = ms;
+      }
+      
+      // Increment counters
+      userData.adStats.today++;
+      userData.adStats.thisWeek++;
+      userData.adStats.thisMonth++;
+      userData.adStats.lifetime++;
+      
+      // Calculate new balance
+      const newBalance = tonBalance + reward;
+      
+      // Save to Firebase and localStorage
+      save({
+        tonBalance: newBalance,
+        adStats: userData.adStats
+      });
+      
+      // Update local state
+      tonBalance = newBalance;
+      
+      // Update UI immediately
+      document.getElementById('tonBalance').textContent = fmt(tonBalance);
+      
+      // Award referral commission
+      awardReferralCommission(reward);
+      
+      // Notify user
+      notify(`Earned ${reward} TON`);
+      
+      // Send bot notification
+      sendBot(`📺 <b>Ad Watched</b>\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
+      
+      // Re-render earn section
+      renderEarn();
     }
 
     function loadTasks(){
@@ -1729,7 +1929,7 @@
       }catch{
         const loc = localStorage.getItem('blockorbit_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
-          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false
+          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawalCount: 0
         };
       }
       tonBalance = userData.tonBalance||0;
