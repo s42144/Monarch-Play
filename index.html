@@ -12,9 +12,6 @@
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Monetag SDK -->
-  <script src='//libtl.com/sdk.js' data-zone='10116329' data-sdk='show_10116329'></script>
-
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -841,120 +838,173 @@
       box-shadow: none;
     }
 
-    /* Earn Section */
-    .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
-    .stat-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-    }
-    .stat-box-label { font-size: 12px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; }
-    .stat-box-value { font-size: 20px; font-weight: 800; color: var(--primary); margin-top: 8px; }
-    
-    .ad-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    .ad-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-    .ad-reward { font-size: 14px; color: var(--accent-green); font-weight: 700; margin-bottom: 20px; }
-
-    /* Milestone */
-    .milestone-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    
-    .milestone-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .milestone-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; font-size: 20px; }
-    .milestone-info { flex: 1; }
-    .milestone-title { font-size: 16px; font-weight: 800; }
-    .milestone-reward { font-size: 13px; color: var(--primary); font-weight: 700; }
-
-    /* Tasks */
-    .task-category {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    
-    .category-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .category-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; }
-    .category-title { font-size: 16px; font-weight: 800; }
-    
-    .task-card {
+    /* Tasks Section New Design */
+    .tasks-grid {
       display: flex;
+      flex-direction: column;
       gap: 12px;
-      align-items: center;
-      background: var(--bg-input);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 10px;
     }
     
-    .task-image { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border-color); }
-    .task-info { flex: 1; }
-    .task-name { font-size: 14px; font-weight: 700; }
-    .task-reward { font-size: 12px; color: var(--accent-green); font-weight: 800; }
+    .task-category-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
     
-    .task-btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
+    .task-category-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-secondary);
+    }
+    
+    .task-item-new {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .task-item-new:active { transform: scale(0.98); }
+    
+    .task-item-new.completed {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .task-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-input);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .task-icon-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .task-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .task-name-new {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    
+    .task-reward-new {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .task-action-btn {
       background: var(--primary);
       color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
       font-weight: 800;
-      font-size: 12px;
+      font-size: 13px;
       cursor: pointer;
       transition: all 0.2s;
     }
     
-    .task-btn.completed { background: var(--text-muted); color: #fff; cursor: not-allowed; }
+    .task-action-btn:disabled {
+      background: var(--text-muted);
+      color: #fff;
+    }
 
-    /* Referrals */
-    .referral-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
+    /* Affiliate Page */
+    .affiliate-card {
+      background: linear-gradient(135deg, #1E2329 0%, #2B3139 100%);
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
     }
     
-    .referral-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .referral-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; }
-    .referral-title { font-size: 16px; font-weight: 800; }
+    .affiliate-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent-green));
+    }
     
-    .referral-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .referral-stat { background: var(--bg-input); border-radius: 12px; padding: 14px; text-align: center; }
-    .referral-stat-label { font-size: 12px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; }
-    .referral-stat-value { font-size: 18px; font-weight: 800; color: var(--primary); margin-top: 6px; }
+    .affiliate-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    
+    .affiliate-stat-item {
+      background: var(--bg-input);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .affiliate-stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    
+    .affiliate-stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
 
-    .referral-item {
+    .referral-link-box {
+      background: var(--bg-input);
+      padding: 12px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: var(--bg-input);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 10px;
+      justify-content: space-between;
+      margin-top: 16px;
+      gap: 8px;
     }
     
-    .referral-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); }
-    .referral-info { flex: 1; }
-    .referral-name { font-size: 14px; font-weight: 700; }
-    .referral-id { font-size: 12px; color: var(--text-secondary); }
-    .referral-balance { font-size: 14px; font-weight: 800; color: var(--primary); }
-    .referral-commission { font-size: 12px; color: var(--accent-blue); font-weight: 700; }
+    .referral-link-text {
+      font-size: 12px;
+      font-family: monospace;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     /* Empty State */
     .empty-state {
@@ -982,6 +1032,7 @@
 
     @media(max-width:360px){
       .live-prices{grid-template-columns:1fr}
+      .nav-label { font-size: 10px; }
     }
   </style>
 </head>
@@ -990,7 +1041,7 @@
   <div id="loading-screen">
     <img src="https://i.postimg.cc/pVwtddgY/1000060090-Picsart-Background-Remover.png" class="loading-logo" alt="BlockOrbit" />
     <div class="loading-text">BlockOrbit</div>
-    <div class="loading-subtext" id="loading-status">Initializing...</div>
+    <div class="loading-subtext">Initializing...</div>
     <div class="loading-spinner"></div>
   </div>
 
@@ -1015,8 +1066,12 @@
         <span class="nav-label">Wallet</span>
       </button>
       <button class="nav-btn" data-tab="earn">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PGxpbmUgeDE9IjEyIiB5MT0iOCIgeDI9IjEyIiB5Mj0iMTIiPjwvbGluZT48bGluZSB4MT0iMTIiIHkxPSIxNiIgeDI9IjEyLjAxIiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" alt="Earn" class="nav-icon" />
-        <span class="nav-label">Earn</span>
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PGxpbmUgeDE9IjEyIiB5MT0iOCIgeDI9IjEyIiB5Mj0iMTIiPjwvbGluZT48bGluZSB4MT0iMTIiIHkxPSIxNiIgeDI9IjEyLjAxIiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" alt="Tasks" class="nav-icon" />
+        <span class="nav-label">Tasks</span>
+      </button>
+      <button class="nav-btn" data-tab="affiliate">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTcgMjFoLTJ2LTJhMiAyIDAgMCAxIDItMmgyYTIgMiAwIDAgMSAyIDJ2MmgtMnptMCAwaDIiLz48cGF0aCBkPSJNOSAyMUg3di0yYTIgMiAwIDAgMSAyLTJoMmEyIDIgMCAwIDEgMiAydjJIOSIvPjxwYXRoIGQ9Ik0xMiAxNmwzLTNoLTVsMy0zIi8+PC9zdmc+" alt="Affiliate" class="nav-icon" />
+        <span class="nav-label">Affiliate</span>
       </button>
       <button class="nav-btn" data-tab="profile">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" alt="Profile" class="nav-icon" />
@@ -1128,9 +1183,7 @@
     let withdrawHistory=[];
     let tradeHistory=[];
     let cryptoPrices={};
-    let adLoading=false;
     let pendingTaskRewards={};
-    let referralListener=null;
     let referralCount = 0;
     let totalReferralCommission = 0;
 
@@ -1167,17 +1220,6 @@
       userName = 'Test User';
       userAvatar = "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
       return true;
-    }
-
-    // Get referral ID from Telegram startapp parameter
-    function getReferrerId() {
-      const startapp = tg?.initDataUnsafe?.start_param;
-      if (startapp) {
-        return startapp;
-      }
-      // Also check URL params for testing
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('startapp') || urlParams.get('ref');
     }
 
     // Prices
@@ -1233,21 +1275,12 @@
         purchasedPlans:{}, activeTrades:{},
         depositHistory:[], withdrawHistory:[], tradeHistory:[],
         avatar:userAvatar, name:userName, referrals:0, completedTasks:{},
-        adStats:{ today:0, yesterday:0, thisWeek:0, thisMonth:0, lifetime:0, lastAdDate: todayISO(), lastWeekReset: weekStartISO(), lastMonthReset: monthStartISO() },
-        milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false },
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
         referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
       };
       await userRef(userId).set(init);
       return init;
     }
-
-    function todayISO(){ return new Date().toISOString().split('T')[0]; }
-    function weekStartISO(){
-      const d=new Date(); const day=d.getDay(); const diff=d.getDate()-day+(day===0?-6:1); d.setDate(diff);
-      return d.toISOString().split('T')[0];
-    }
-    function monthStartISO(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`; }
 
     function save(partial){
       userData = { ...userData, ...partial };
@@ -1262,7 +1295,7 @@
       }
     }
 
-    // Referral Logic - Award commission to referrer instantly
+    // Referral Logic
     function awardReferralCommission(earnedAmount) {
       if (!userData.referredBy) return;
       const commission = earnedAmount * 0.2;
@@ -1272,53 +1305,9 @@
         if (refSnap.exists()) {
           const referrerData = refSnap.val();
           const newBalance = (referrerData.tonBalance || 0) + commission;
-          const newTotalCommission = (referrerData.totalReferralCommission || 0) + commission;
-          
-          // Track commission per referral
-          const referralCommissions = referrerData.referralCommissions || {};
-          referralCommissions[userId] = (referralCommissions[userId] || 0) + commission;
-          
-          database.ref('users/' + referrerId).update({ 
-            tonBalance: newBalance, 
-            totalReferralCommission: newTotalCommission,
-            referralCommissions: referralCommissions
-          });
+          database.ref('users/' + referrerId).update({ tonBalance: newBalance, totalReferralCommission: (referrerData.totalReferralCommission || 0) + commission });
         }
       });
-    }
-
-    // Process new referral during loading
-    async function processNewReferral(referrerId) {
-      if (!referrerId || referrerId === userId) return false;
-      
-      // Check if referrer exists
-      const referrerSnap = await database.ref('users/' + referrerId).once('value');
-      if (!referrerSnap.exists()) return false;
-      
-      // Mark this user as referred
-      userData.referredBy = referrerId;
-      await userRef(userId).update({ referredBy: referrerId });
-      
-      // Give referrer 0.1 TON bonus for new referral
-      const referrerData = referrerSnap.val();
-      const newReferrerBalance = (referrerData.tonBalance || 0) + 0.1;
-      const newReferralCount = (referrerData.referrals || 0) + 1;
-      
-      // Initialize referral commissions tracking
-      const referralCommissions = referrerData.referralCommissions || {};
-      referralCommissions[userId] = 0.1; // Initial bonus
-      
-      await database.ref('users/' + referrerId).update({ 
-        tonBalance: newReferrerBalance,
-        referrals: newReferralCount,
-        totalReferralCommission: (referrerData.totalReferralCommission || 0) + 0.1,
-        referralCommissions: referralCommissions
-      });
-      
-      // Notify referrer
-      sendBot(`New Referral Joined!\nUser: ${userName}\nBonus: +0.1 TON\nTotal Referrals: ${newReferralCount}`, referrerId);
-      
-      return true;
     }
 
     // Tabs
@@ -1327,6 +1316,7 @@
       if(tab==='home') renderHome();
       if(tab==='wallet') renderWallet();
       if(tab==='earn') renderEarn();
+      if(tab==='affiliate') renderAffiliate();
       if(tab==='profile') renderProfile();
     }
 
@@ -1676,7 +1666,6 @@
       const modal = document.getElementById('withdraw-modal');
       const content = document.getElementById('withdraw-content');
       
-      // Allow first withdrawal without deposit, subsequent require deposit
       const withdrawCount = userData.withdrawCount || 0;
       const hasDeposit = userData.hasDeposit || false;
       const canWithdraw = withdrawCount === 0 || hasDeposit;
@@ -1908,152 +1897,23 @@
       modal.style.display = 'flex';
     }
 
-    // Earn
+    // Earn (Tasks)
     function renderEarn(){
-      const a = userData.adStats||{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0};
       const html = `
         <div class="section-header">
-          <div class="section-title">Earn TON</div>
-          <div class="section-subtitle">Watch ads and complete tasks to earn rewards</div>
+          <div class="section-title">Tasks</div>
+          <div class="section-subtitle">Complete tasks to earn extra TON rewards</div>
         </div>
-
-        <div class="stats-row">
-          <div class="stat-box"><div class="stat-box-label">Today</div><div class="stat-box-value">${a.today||0}</div></div>
-          <div class="stat-box"><div class="stat-box-value">${a.lifetime||0}</div><div class="stat-box-label">Lifetime</div></div>
-        </div>
-
-        <div class="ad-card">
-          <div class="ad-title">Watch Advertisement</div>
-          <div class="ad-reward">Earn 0.0001 TON per ad</div>
-          <button class="btn-primary" id="watchAd">${adLoading?'Loading...':'Watch Ad'}</button>
-        </div>
-
-        <div class="milestone-card">
-          <div class="milestone-header">
-            <div class="milestone-icon">🏆</div>
-            <div class="milestone-info">
-              <div class="milestone-title">Milestone Rewards</div>
-              <div class="milestone-reward">Complete ads to unlock rewards</div>
-            </div>
-          </div>
-          ${[
-            {id:'m1500', need:1500, amt:0.5, label:'1,500 Ads'},
-            {id:'m2500', need:2500, amt:1.0, label:'2,500 Ads'},
-            {id:'m5500', need:5500, amt:2.5, label:'5,500 Ads'}
-          ].map(m=>{
-            const can = (a.lifetime||0)>=m.need && !userData.milestones?.[`milestone${m.need}Claimed`];
-            const txt = userData.milestones?.[`milestone${m.need}Claimed`] ? 'Claimed' : (can?'Claim Now!':`${a.lifetime||0}/${m.need}`);
-            const prog = Math.min((a.lifetime||0)/m.need*100, 100);
-            return `
-              <div class="milestone-progress" style="margin-top:16px">
-                <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-                  <div style="font-weight:700;font-size:14px">${m.label}</div>
-                  <div style="color:var(--accent-green);font-weight:700;font-size:14px">+${m.amt} TON</div>
-                </div>
-                <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
-                <div class="progtext">${a.lifetime||0}/${m.need} ads completed</div>
-                <button class="btn-primary" style="margin-top:10px" id="${m.id}" ${can?'':'disabled'}>${txt}</button>
-              </div>
-            `;
-          }).join('')}
-        </div>
-
-        <div id="tasksList"></div>
+        <div id="tasksContainer"></div>
       `;
       document.getElementById('main-content').innerHTML = html;
-
-      document.getElementById('watchAd').onclick = ()=>{
-        if (adLoading) return;
-        
-        // INSTANTLY ADD REWARD - this is the key fix
-        const reward = 0.0001;
-        const today = todayISO();
-        const ws = weekStartISO();
-        const ms = monthStartISO();
-        
-        // Initialize adStats if missing
-        if (!userData.adStats) {
-          userData.adStats = { 
-            today: 0, yesterday: 0, thisWeek: 0, thisMonth: 0, lifetime: 0,
-            lastAdDate: today, lastWeekReset: ws, lastMonthReset: ms 
-          };
-        }
-        
-        // Reset daily/weekly/monthly counters if needed
-        if (userData.adStats.lastAdDate !== today) { 
-          userData.adStats.yesterday = userData.adStats.today; 
-          userData.adStats.today = 0; 
-          userData.adStats.lastAdDate = today; 
-        }
-        if (userData.adStats.lastWeekReset !== ws) { 
-          userData.adStats.thisWeek = 0; 
-          userData.adStats.lastWeekReset = ws; 
-        }
-        if (userData.adStats.lastMonthReset !== ms) { 
-          userData.adStats.thisMonth = 0; 
-          userData.adStats.lastMonthReset = ms; 
-        }
-        
-        // Increment counters
-        userData.adStats.today++; 
-        userData.adStats.thisWeek++; 
-        userData.adStats.thisMonth++; 
-        userData.adStats.lifetime++;
-        
-        // Update balance INSTANTLY
-        tonBalance = tonBalance + reward;
-        
-        // Save to database and localStorage
-        save({ 
-          tonBalance: tonBalance, 
-          adStats: userData.adStats 
-        });
-        
-        // Update the balance display in header immediately
-        const balanceEl = document.getElementById('tonBalance');
-        if (balanceEl) {
-          balanceEl.textContent = fmt(tonBalance);
-        }
-        
-        // Award referral commission
-        awardReferralCommission(reward);
-        
-        // Notify user
-        notify(`Earned ${reward} TON`);
-        
-        // Log to bot
-        sendBot(`Ad Watched\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
-        
-        // Re-render earn page to show updated stats
-        renderEarn();
-        
-        // Now try to show the actual ad (in background)
-        if (typeof window.show_10116329 === 'function') {
-          try {
-            window.show_10116329();
-          } catch (e) {
-            console.log('Ad SDK error (reward already given):', e);
-          }
-        }
-      };
-
-      const setMilestone=(need,amt)=>{
-        const key=`milestone${need}Claimed`;
-        if ((userData.adStats?.lifetime||0)>=need && !userData.milestones?.[key]){
-          const ms={...(userData.milestones||{}), [key]:true };
-          save({ tonBalance: tonBalance+amt, milestones: ms });
-          notify(`Claimed ${amt} TON milestone reward!`);
-          renderEarn();
-        }
-      };
-      document.getElementById('m1500')?.addEventListener('click', ()=>setMilestone(1500,0.5));
-      document.getElementById('m2500')?.addEventListener('click', ()=>setMilestone(2500,1.0));
-      document.getElementById('m5500')?.addEventListener('click', ()=>setMilestone(5500,2.5));
-
       loadTasks();
     }
 
     function loadTasks(){
+      const container = document.getElementById('tasksContainer');
+      container.innerHTML = '<div style="text-align:center;padding:20px"><div class="loading-spinner" style="margin:0 auto"></div></div>';
+      
       database.ref('tasks').once('value').then(s=>{
         const tasks=s.exists()?s.val():{};
         const categories = ['Project', 'Partner', 'Advertise'];
@@ -2063,21 +1923,30 @@
           const categoryTasks = Object.keys(tasks).filter(id => tasks[id].category === category);
           if(categoryTasks.length > 0){
             html += `
-              <div class="task-category">
-                <div class="category-header">
-                  <div class="category-icon">📂</div>
-                  <div class="category-title">${category}</div>
-                </div>
+              <div class="task-category-header">
+                <div style="width:4px;height:16px;background:var(--primary);border-radius:2px"></div>
+                <div class="task-category-title">${category} Tasks</div>
+              </div>
+              <div class="tasks-grid">
                 ${categoryTasks.map(id=>{
-                  const t=tasks[id]; const done = !!(userData.completedTasks&&userData.completedTasks[id]);
+                  const t=tasks[id]; 
+                  const done = !!(userData.completedTasks&&userData.completedTasks[id]);
                   return `
-                    <div class="task-card">
-                      <img src="${t.photo}" class="task-image" alt="${t.name}">
-                      <div class="task-info">
-                        <div class="task-name">${t.name}</div>
-                        <div class="task-reward">+${t.amount} TON</div>
+                    <div class="task-item-new ${done ? 'completed' : ''}" id="taskItem_${id}">
+                      <div class="task-icon-box">
+                        <img src="${t.photo}" alt="${t.name}">
                       </div>
-                      <button class="task-btn ${done?'completed':''}" data-id="${id}">${done?'Done':'Start'}</button>
+                      <div class="task-details">
+                        <div class="task-name-new">${t.name}</div>
+                        <div class="task-reward-new">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v12M6 12h12"></path>
+                          </svg>
+                          +${t.amount} TON
+                        </div>
+                      </div>
+                      <button class="task-action-btn" data-id="${id}" ${done ? 'disabled' : ''}>${done ? 'Done' : 'Start'}</button>
                     </div>
                   `;
                 }).join('')}
@@ -2086,18 +1955,18 @@
           }
         });
         
-        const c=document.createElement('div'); 
-        c.className='card'; 
-        c.innerHTML=`<div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">Tasks</div>${html||'<div class="section-subtitle" style="text-align:center;padding:20px 0">No tasks available</div>'}`;
-        document.getElementById('main-content').appendChild(c);
+        if(!html) html = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">No Tasks Available</div><div class="empty-text">Check back later for new tasks</div></div>';
+        
+        container.innerHTML = html;
 
-        document.querySelectorAll('.task-btn').forEach(btn=>{
+        document.querySelectorAll('.task-action-btn').forEach(btn=>{
           btn.onclick=()=>{
             const id=btn.dataset.id; const t=tasks[id]; if(!t) return;
             if (userData.completedTasks && userData.completedTasks[id]){ window.open(t.link,'_blank'); return; }
             if (pendingTaskRewards[id]){ notify('Processing...'); return; }
-            pendingTaskRewards[id]=true; btn.disabled=true; btn.textContent='Processing...';
+            pendingTaskRewards[id]=true; btn.disabled=true; btn.textContent='Wait...';
             window.open(t.link,'_blank');
+            
             setTimeout(()=>{
               if (!userData.completedTasks) userData.completedTasks={};
               userData.completedTasks[id]=true;
@@ -2105,10 +1974,79 @@
               tonBalance = tonBalance + add;
               awardReferralCommission(add);
               save({ tonBalance: tonBalance, completedTasks: userData.completedTasks });
-              pendingTaskRewards[id]=false; btn.textContent='Done'; notify(`+${add} TON`);
-            },15000);
+              pendingTaskRewards[id]=false; 
+              
+              // Update UI
+              btn.textContent = 'Done';
+              btn.disabled = true;
+              const item = document.getElementById(`taskItem_${id}`);
+              if(item) item.classList.add('completed');
+              
+              notify(`+${add} TON earned!`);
+            }, 15000);
           };
         });
+      });
+    }
+
+    // Affiliate Page
+    function renderAffiliate(){
+      const refLink = `https://t.me/BlockOrbit_Bot/open?startapp=${userId}`;
+      const html=`
+        <div class="section-header">
+          <div class="section-title">Affiliate Program</div>
+          <div class="section-subtitle">Invite friends and earn lifetime commissions</div>
+        </div>
+
+        <div class="affiliate-card">
+          <div style="font-size:14px;color:var(--text-secondary);font-weight:600;margin-bottom:8px">Total Earnings</div>
+          <div style="font-size:32px;font-weight:800;color:var(--primary)">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} TON</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">From ${referralCount||0} Referrals</div>
+        </div>
+
+        <div class="affiliate-stats-grid">
+          <div class="affiliate-stat-item">
+            <div class="affiliate-stat-value">${referralCount||0}</div>
+            <div class="affiliate-stat-label">Total Referrals</div>
+          </div>
+          <div class="affiliate-stat-item">
+            <div class="affiliate-stat-value">${fmt(totalReferralCommission)} TON</div>
+            <div class="affiliate-stat-label">Commission (20%)</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-weight:800;margin-bottom:8px">Your Invite Link</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Share this link to invite friends. You receive 20% of their earnings forever.</div>
+          
+          <div class="referral-link-box">
+            <div class="referral-link-text">${refLink}</div>
+            <button class="copy" id="copyRefLink"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+          </div>
+
+          <button class="btn-primary" id="viewReferralsBtn" style="margin-top:16px">View My Referrals</button>
+        </div>
+      `;
+      document.getElementById('main-content').innerHTML = html;
+      document.getElementById('copyRefLink').onclick=()=>copy(refLink);
+      document.getElementById('viewReferralsBtn').onclick = showReferralList;
+    }
+
+    function showReferralList() {
+      const modal = document.getElementById('referralModal');
+      const content = document.getElementById('referralListContent');
+      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snapshot => {
+        if (snapshot.numChildren() === 0) {
+          content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary)">You haven\'t referred anyone yet.</div>';
+        } else {
+          let html = '';
+          snapshot.forEach(child => {
+            const u = child.val();
+            html += `<div class="referral-item"><img src="${u.avatar}" class="referral-avatar"><div class="referral-info"><div class="referral-name">${u.name}</div><div class="referral-id">ID: ${child.key}</div><div class="referral-balance">${fmt(u.tonBalance||0)} TON</div></div></div>`;
+          });
+          content.innerHTML = html;
+        }
+        modal.style.display = 'flex';
       });
     }
 
@@ -2117,7 +2055,7 @@
       const html=`
         <div class="section-header">
           <div class="section-title">Profile</div>
-          <div class="section-subtitle">Account settings and referrals</div>
+          <div class="section-subtitle">Account settings</div>
         </div>
 
         <div class="card" style="text-align:center">
@@ -2128,36 +2066,6 @@
             <span style="color:var(--primary);font-weight:800">${userId}</span> 
             <button class="copy" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
           </div>
-        </div>
-
-        <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">Referral Program</div>
-          <div class="row" style="margin-bottom:12px">
-            <div style="font-size:12px;color:var(--text-secondary)">Link</div>
-            <div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-family:monospace" id="refLink">https://t.me/BlockOrbit_Bot/open?startapp=${userId}</div>
-          </div>
-          <button class="btn-primary" id="copyRef">Copy Referral Link</button>
-        </div>
-
-        <div class="referral-card">
-          <div class="referral-header">
-            <div class="referral-icon">👥</div>
-            <div class="referral-title">My Referrals</div>
-          </div>
-          <div class="referral-stats">
-            <div class="referral-stat">
-              <div class="referral-stat-label">Refer Count</div>
-              <div class="referral-stat-value">${userData.referrals||0}</div>
-            </div>
-            <div class="referral-stat">
-              <div class="referral-stat-label">Total Earnings</div>
-              <div class="referral-stat-value">${fmt(totalReferralCommission)} TON</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;text-align:center">
-            Earn 0.10 TON for each referral + 20% of their total earnings
-          </div>
-          <button class="btn-primary" id="viewReferralsBtn">View My Referrals</button>
         </div>
 
         <div class="redeem-section">
@@ -2179,7 +2087,6 @@
       `;
       document.getElementById('main-content').innerHTML = html;
       
-      // Character counter for redeem input
       const redeemInput = document.getElementById('redeem');
       const charCount = document.getElementById('charCount');
       redeemInput.addEventListener('input', () => {
@@ -2193,7 +2100,6 @@
       });
       
       document.getElementById('copyUid').onclick=()=>copy(userId);
-      document.getElementById('copyRef').onclick=()=>copy(document.getElementById('refLink').textContent);
       document.getElementById('redeemGo').onclick=()=>{
         const code=document.getElementById('redeem').value.trim().toUpperCase(); 
         if(code.length!==8){ notify('Enter valid 8-digit code'); return; }
@@ -2211,45 +2117,6 @@
           charCount.style.color = 'var(--text-muted)';
         });
       };
-      document.getElementById('viewReferralsBtn').onclick = showReferralList;
-    }
-
-    function showReferralList() {
-      const modal = document.getElementById('referralModal');
-      const content = document.getElementById('referralListContent');
-      
-      // Show loading state
-      content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary)">Loading referrals...</div>';
-      modal.style.display = 'flex';
-      
-      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snapshot => {
-        if (snapshot.numChildren() === 0) {
-          content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary)">You haven\'t referred anyone yet. Share your referral link to start earning!</div>';
-        } else {
-          let html = '';
-          snapshot.forEach(child => {
-            const u = child.val();
-            const commission = userData.referralCommissions?.[child.key] || 0;
-            html += `
-              <div class="referral-item">
-                <img src="${u.avatar || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}" class="referral-avatar">
-                <div class="referral-info">
-                  <div class="referral-name">${u.name || 'Unknown'}</div>
-                  <div class="referral-id">ID: ${child.key}</div>
-                  <div class="referral-balance">${fmt(u.tonBalance||0)} TON</div>
-                </div>
-                <div style="text-align:right">
-                  <div class="referral-commission">+${fmt(commission)} TON</div>
-                  <div style="font-size:10px;color:var(--text-muted)">Commission</div>
-                </div>
-              </div>
-            `;
-          });
-          content.innerHTML = html;
-        }
-      }).catch(err => {
-        content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--accent-red)">Error loading referrals. Please try again.</div>';
-      });
     }
 
     // Modal Close
@@ -2269,41 +2136,29 @@
 
     // Bootstrap
     async function bootstrap(){
-      // Update loading status
-      const loadingStatus = document.getElementById('loading-status');
-      
       getTelegramUserData();
-      
-      if (loadingStatus) loadingStatus.textContent = 'Loading prices...';
       await loadCryptoPrices();
-      
       try{
-        if (loadingStatus) loadingStatus.textContent = 'Loading user data...';
         userData = await loadUser();
-        
-        // Check for referral during loading screen
-        const referrerId = getReferrerId();
-        if (referrerId && !userData.referredBy) {
-          if (loadingStatus) loadingStatus.textContent = 'Processing referral...';
-          await processNewReferral(referrerId);
-        }
-        
       }catch{
         const loc = localStorage.getItem('blockorbit_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
-          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
+          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
         };
       }
-      
       tonBalance = userData.tonBalance||0;
       purchasedPlans = userData.purchasedPlans||{};
       activeTrades = userData.activeTrades||{};
       depositHistory = userData.depositHistory||[];
       withdrawHistory = userData.withdrawHistory||[];
       tradeHistory = userData.tradeHistory||[];
-      referralCount = userData.referrals||0;
-      totalReferralCommission = userData.totalReferralCommission||0;
+      totalReferralCommission = userData.totalReferralCommission || 0;
       
+      // Count referrals
+      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snap => {
+        referralCount = snap.numChildren();
+      });
+
       document.getElementById('tonBalance').textContent = fmt(tonBalance);
 
       document.getElementById('loading-screen').style.display = 'none';
