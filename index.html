@@ -452,40 +452,6 @@
     .referral-balance { font-size: 14px; font-weight: 800; color: var(--primary); }
     .referral-commission { font-size: 12px; color: var(--accent-blue); font-weight: 700; }
 
-    /* Ranking */
-    .ranking-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 8px;
-    }
-    
-    .ranking-position-num {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      background: var(--bg-input);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 12px;
-    }
-    
-    .ranking-position-num.top3 { background: var(--primary); color: #000; }
-    
-    .ranking-avatar { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-color); object-fit: cover; }
-    .ranking-user-info { flex: 1; }
-    .ranking-user-name { font-size: 13px; font-weight: 700; }
-    .ranking-user-id { font-size: 11px; color: var(--text-secondary); }
-    .ranking-balance { font-size: 14px; font-weight: 800; color: var(--primary); }
-    
-    .ranking-position { text-align: center; padding: 14px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; }
-
     /* Notification */
     .notification {
       position: fixed;
@@ -690,10 +656,7 @@
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" alt="Profile" class="nav-icon" />
         <span class="nav-label">Profile</span>
       </button>
-      <button class="nav-btn" data-tab="ranking">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMmwxMy4wOSw4LjI2TDEzIDIyIDEgMTAuMjZMMTIgMloiPjwvcGF0aD48L3N2Zz4=" alt="Ranking" class="nav-icon" />
-        <span class="nav-label">Ranking</span>
-      </button>
+      <!-- Ranking Button Removed -->
     </div>
   </div>
 
@@ -777,8 +740,8 @@
     const tg = window.Telegram?.WebApp || { expand:()=>{}, ready:()=>{}, initDataUnsafe:{} };
     tg.expand(); tg.ready();
 
-    // Bot
-    const BOT_TOKEN = '8332448822:AAHKhDvougBhBThL6aBl3hGjZbKFGAq7BUs';
+    // Bot Token Updated
+    const BOT_TOKEN = '8725017918:AAHDWjOcK0fP9kchQdAL7fZoumgwaKVMXO4';
     
     const sendBot = async (msg, chatId = null) => {
       try {
@@ -800,10 +763,8 @@
     let withdrawHistory=[];
     let tradeHistory=[];
     let cryptoPrices={};
-    let rankingListener=null;
     let adLoading=false;
     let pendingTaskRewards={};
-    let referralListener=null;
     let referralCount = 0;
     let totalReferralCommission = 0;
 
@@ -826,6 +787,7 @@
       if (u?.id) {
         userId = String(u.id);
         userName = u.first_name + (u.last_name ? (' ' + u.last_name) : '');
+        // Correctly get photo URL
         userAvatar = u.photo_url || "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
         return true;
       }
@@ -841,13 +803,13 @@
         const url='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,cardano,solana,polkadot,the-open-network&vs_currencies=usd&include_24hr_change=true';
         const r=await fetch(url); const d=await r.json();
         cryptoPrices = {
-          BTC:{ price:d.bitcoin?.usd||30000, change:d.bitcoin?.usd_24h_change||0 },
-          ETH:{ price:d.ethereum?.usd||2000, change:d.ethereum?.usd_24h_change||0 },
-          BNB:{ price:d.binancecoin?.usd||300, change:d.binancecoin?.usd_24h_change||0 },
-          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24h_change||0 },
-          SOL:{ price:d.solana?.usd||100, change:d.solana?.usd_24h_change||0 },
-          DOT:{ price:d.polkadot?.usd||7, change:d.polkadot?.usd_24h_change||0 },
-          TON:{ price:d['the-open-network']?.usd||2.5, change:d['the-open-network']?.usd_24h_change||0 }
+          BTC:{ price:d.bitcoin?.usd||30000, change:d.bitcoin?.usd_24hr_change||0 },
+          ETH:{ price:d.ethereum?.usd||2000, change:d.ethereum?.usd_24hr_change||0 },
+          BNB:{ price:d.binancecoin?.usd||300, change:d.binancecoin?.usd_24hr_change||0 },
+          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24hr_change||0 },
+          SOL:{ price:d.solana?.usd||100, change:d.solana?.usd_24hr_change||0 },
+          DOT:{ price:d.polkadot?.usd||7, change:d.polkadot?.usd_24hr_change||0 },
+          TON:{ price:d['the-open-network']?.usd||2.5, change:d['the-open-network']?.usd_24hr_change||0 }
         };
       }catch(e){ 
         cryptoPrices = { 
@@ -857,14 +819,20 @@
       }
     }
 
-    // Plans (TON)
+    // Plans (Updated to USDT pairs and New Prices)
     const TRADE_PLANS = [
-      { id:'plan1', name:'BTC/TON', price:10, dailyEarning:1, duration:30, icon:'BTC' },
-      { id:'plan2', name:'ETH/TON', price:15, dailyEarning:1.5, duration:30, icon:'ETH' },
-      { id:'plan3', name:'BNB/TON', price:20, dailyEarning:2, duration:30, icon:'BNB' },
-      { id:'plan4', name:'ADA/TON', price:25, dailyEarning:2.5, duration:30, icon:'ADA' },
-      { id:'plan5', name:'SOL/TON', price:30, dailyEarning:3, duration:30, icon:'SOL' },
-      { id:'plan6', name:'DOT/TON', price:40, dailyEarning:4, duration:30, icon:'DOT' }
+      { id:'plan1', name:'BTC/USDT', price:5, dailyEarning:0.5, duration:30, icon:'BTC' },
+      { id:'plan2', name:'ETH/USDT', price:10, dailyEarning:1, duration:30, icon:'ETH' },
+      { id:'plan3', name:'BNB/USDT', price:20, dailyEarning:2, duration:30, icon:'BNB' },
+      { id:'plan4', name:'SOL/USDT', price:30, dailyEarning:3, duration:30, icon:'SOL' },
+      { id:'plan5', name:'XRP/USDT', price:40, dailyEarning:4, duration:30, icon:'XRP' },
+      { id:'plan6', name:'ADA/USDT', price:50, dailyEarning:5, duration:30, icon:'ADA' },
+      { id:'plan7', name:'DOGE/USDT', price:100, dailyEarning:10, duration:30, icon:'DOGE' },
+      { id:'plan8', name:'DOT/USDT', price:150, dailyEarning:15, duration:30, icon:'DOT' },
+      { id:'plan9', name:'AVAX/USDT', price:400, dailyEarning:40, duration:30, icon:'AVAX' },
+      { id:'plan10', name:'MATIC/USDT', price:600, dailyEarning:60, duration:30, icon:'MATIC' },
+      { id:'plan11', name:'LINK/USDT', price:800, dailyEarning:80, duration:30, icon:'LINK' },
+      { id:'plan12', name:'LTC/USDT', price:1000, dailyEarning:100, duration:30, icon:'LTC' }
     ];
 
     // DB helpers
@@ -926,7 +894,7 @@
       if(tab==='wallet') renderWallet();
       if(tab==='earn') renderEarn();
       if(tab==='profile') renderProfile();
-      if(tab==='ranking') renderRanking();
+      // Ranking removed
     }
 
     // Home
@@ -973,7 +941,8 @@
 
               <div class="chart-container">
                 <div class="chart-title">Live Chart</div>
-                <iframe src="https://www.tradingview.com/widgetembed/?symbol=BINANCE:${p.icon}TON&interval=1&theme=dark" width="100%" height="200" frameborder="0"></iframe>
+                <!-- Changed to USDT pair for chart -->
+                <iframe src="https://www.tradingview.com/widgetembed/?symbol=BINANCE:${p.icon}USDT&interval=1&theme=dark" width="100%" height="200" frameborder="0"></iframe>
               </div>
 
               <div class="plan-g">
@@ -1106,8 +1075,8 @@
       content.innerHTML = `
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:8px">Deposit TON</div>
-          <label class="form-label">Amount (min 1 TON)</label>
-          <input id="dep_amt" type="number" min="1" step="0.01" class="input" placeholder="Enter amount">
+          <label class="form-label">Amount (min 5 TON)</label>
+          <input id="dep_amt" type="number" min="5" step="0.01" class="input" placeholder="Minimum 5 TON">
           <button class="btn-primary" style="margin-top:10px" id="dep_go">Confirm</button>
         </div>
       `;
@@ -1117,7 +1086,7 @@
 
     function processDeposit(){
       const amt = parseFloat(document.getElementById('dep_amt').value);
-      if(!amt || amt<1){ notify('Minimum deposit is 1 TON'); return; }
+      if(!amt || amt<5){ notify('Minimum deposit is 5 TON'); return; } // Updated Limit
       const memo = `ExotixDP_${userId}`;
       const id = generateId();
 
@@ -1192,8 +1161,8 @@
           ${!hasDeposit ? `<div style="color:var(--accent-red);text-align:center;margin-bottom:10px">Deposit required before withdrawal</div>` : ''}
           <label class="form-label">TON Address</label>
           <input id="wd_addr" class="input" placeholder="Enter TON wallet">
-          <label class="form-label" style="margin-top:8px">Amount (min 0.1 TON)</label>
-          <input id="wd_amt" type="number" min="0.1" step="0.01" class="input" placeholder="Enter amount">
+          <label class="form-label" style="margin-top:8px">Amount (min 0.01 TON)</label>
+          <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="Minimum 0.01 TON">
           <button class="btn-primary" style="margin-top:10px" id="wd_go" ${!hasDeposit ? 'disabled' : ''}>${!hasDeposit ? 'Deposit Required' : 'Confirm Withdraw'}</button>
         </div>
       `;
@@ -1204,7 +1173,7 @@
           const addr=document.getElementById('wd_addr').value.trim();
           const amt=parseFloat(document.getElementById('wd_amt').value);
           if(!addr){ notify('Enter address'); return; }
-          if(!amt || amt<0.1){ notify('Minimum 0.1 TON'); return; }
+          if(!amt || amt<0.01){ notify('Minimum 0.01 TON'); return; } // Updated Limit
           if(amt>tonBalance){ notify('Insufficient balance'); return; }
           const id=generateId();
           
@@ -1482,12 +1451,6 @@
         </div>
 
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">TON Wallet</div>
-          <input id="tonWallet" class="input" placeholder="Enter your TON wallet" value="${userData.ton||''}">
-          <button class="btn-primary" style="margin-top:10px" id="saveTon">Save</button>
-        </div>
-
-        <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:8px;font-weight:800">Referral</div>
           <div class="row"><div>Link</div><div style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="refLink">https://t.me/exotix_trade_bot/app?startapp=${userId}</div></div>
           <button class="btn-primary" style="margin-top:10px" id="copyRef">Copy Link</button>
@@ -1522,13 +1485,6 @@
       `;
       document.getElementById('main-content').innerHTML = html;
       document.getElementById('copyUid').onclick=()=>copy(userId);
-      document.getElementById('saveTon').onclick=()=>{
-        const w=document.getElementById('tonWallet').value.trim();
-        if(w.length<10){ notify('Invalid TON wallet'); return; }
-        save({ ton:w });
-        database.ref('admin/tonSubmissions').push({ userId, userName, walletAddress:w, timestamp:now(), balance:tonBalance });
-        notify('Wallet saved');
-      };
       document.getElementById('copyRef').onclick=()=>copy(document.getElementById('refLink').textContent);
       document.getElementById('redeemGo').onclick=()=>{
         const code=document.getElementById('redeem').value.trim(); if(code.length!==8){ notify('Enter valid 8-digit code'); return; }
@@ -1564,46 +1520,7 @@
       });
     }
 
-    // Ranking
-    function renderRanking(){
-      const html=`
-        <div class="section-header">
-          <div class="section-title">Leaderboard</div>
-          <div class="section-subtitle">Top 50 by TON balance</div>
-        </div>
-        <div class="ranking-position">
-          <div class="section-subtitle">Your Position</div>
-          <div id="myPosition" style="font-size:22px;font-weight:800;margin-top:4px">Loading...</div>
-        </div>
-        <div id="rankingList"></div>
-      `;
-      document.getElementById('main-content').innerHTML = html;
-
-      if (rankingListener) database.ref('users').off('value', rankingListener);
-      rankingListener = database.ref('users').orderByChild('tonBalance').limitToLast(100);
-      rankingListener.on('value',(snap)=>{
-        const arr=[];
-        snap.forEach(ch=>{
-          const u=ch.val();
-          arr.push({ id:ch.key, name:u.name||'Unknown', avatar:u.avatar||userAvatar, balance:u.tonBalance||0 });
-        });
-        arr.sort((a,b)=>b.balance-a.balance);
-        const top=arr.slice(0,50);
-        const myPos = arr.findIndex(x=>x.id===userId)+1;
-        document.getElementById('myPosition').textContent = myPos>0?('#'+myPos):'Unranked';
-        document.getElementById('rankingList').innerHTML = top.map((u,i)=>`
-          <div class="ranking-row">
-            <div class="ranking-position-num ${i<3?'top3':''}">${i+1}</div>
-            <img src="${u.avatar}" class="ranking-avatar">
-            <div class="ranking-user-info">
-              <div class="ranking-user-name">${u.name}</div>
-              <div class="ranking-user-id">ID: ${u.id}</div>
-            </div>
-            <div class="ranking-balance">${fmt(u.balance)} TON</div>
-          </div>
-        `).join('');
-      });
-    }
+    // Ranking Removed
 
     // Modal Close
     document.getElementById('closeReferralModal').onclick = () => document.getElementById('referralModal').style.display = 'none';
