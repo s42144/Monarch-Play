@@ -349,7 +349,7 @@
     .form-group { margin-bottom: 16px; }
     .form-label { font-size: 13px; color: var(--text-secondary); font-weight: 700; margin-bottom: 8px; display: block; }
     
-    .input, .select-input {
+    .input {
       width: 100%;
       padding: 14px 16px;
       border-radius: 12px;
@@ -361,16 +361,8 @@
       font-size: 15px;
       transition: border-color 0.2s;
     }
-
-    .select-input {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23848E9C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1em;
-    }
     
-    .input:focus, .select-input:focus { border-color: var(--primary); }
+    .input:focus { border-color: var(--primary); }
     
     .row {
       display: flex;
@@ -1014,104 +1006,45 @@
       text-overflow: ellipsis;
     }
 
-    /* Direct Referral List Design */
+    /* Referral List Styles */
     .referral-list-container {
       margin-top: 24px;
     }
-    
     .referral-list-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-main);
+      font-size: 18px;
+      font-weight: 800;
       margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    
     .referral-item {
-      background: var(--bg-input);
-      border-radius: 12px;
-      padding: 12px;
       display: flex;
       align-items: center;
       gap: 12px;
+      background: var(--bg-input);
+      padding: 12px;
+      border-radius: 12px;
       margin-bottom: 8px;
-      border: 1px solid var(--border-color);
     }
-    
     .referral-avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid var(--bg-card);
     }
-    
     .referral-info {
       flex: 1;
     }
-    
     .referral-name {
-      font-size: 14px;
       font-weight: 700;
-      color: var(--text-main);
+      font-size: 14px;
     }
-    
-    .referral-id {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: monospace;
-    }
-    
     .referral-balance {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12px;
       color: var(--accent-green);
-    }
-
-    /* Settings Section */
-    .settings-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-
-    .settings-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .settings-item:last-child {
-      border-bottom: none;
-    }
-
-    .settings-label {
-      font-size: 14px;
       font-weight: 600;
-      color: var(--text-main);
     }
-
-    .btn-support {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: .2s;
-      background: var(--accent-blue);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-support:hover { background: #1565C0; transform: translateY(-1px); }
 
     /* Empty State */
     .empty-state {
@@ -1137,9 +1070,64 @@
       color: var(--text-secondary);
     }
 
+    /* Settings & Language Styles */
+    .settings-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+    .settings-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .language-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .lang-btn {
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-main);
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+    .support-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
     @media(max-width:360px){
       .live-prices{grid-template-columns:1fr}
       .nav-label { font-size: 10px; }
+      .language-selector { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -1148,7 +1136,7 @@
   <div id="loading-screen">
     <img src="https://i.postimg.cc/pVwtddgY/1000060090-Picsart-Background-Remover.png" class="loading-logo" alt="BlockOrbit" />
     <div class="loading-text">BlockOrbit</div>
-    <div class="loading-subtext" id="loading-text">Initializing...</div>
+    <div class="loading-subtext">Initializing...</div>
     <div class="loading-spinner"></div>
   </div>
 
@@ -1166,42 +1154,31 @@
     <div class="nav-bar">
       <button class="nav-btn active" data-tab="home">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGNUQ1MDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" alt="Trade" class="nav-icon" />
-        <span class="nav-label" data-i18n="nav_home">Trade Plans</span>
+        <span class="nav-label" data-lang="nav_trade">Trade Plans</span>
       </button>
       <button class="nav-btn" data-tab="wallet">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIyIiB5PSI3IiB3aWR0aD0iMjAiIGhlaWdodD0iMTQiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik0xNiAyMUg4YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDhsMiAyaDZhMiAyIDAgMCAxIDIgMnYxMmEyIDIgMCAwIDEtMiAyeiI+PC9wYXRoPjwvc3ZnPg==" alt="Wallet" class="nav-icon" />
-        <span class="nav-label" data-i18n="nav_wallet">Wallet</span>
+        <span class="nav-label" data-lang="nav_wallet">Wallet</span>
       </button>
       <button class="nav-btn" data-tab="earn">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PGxpbmUgeDE9IjEyIiB5MT0iOCIgeDI9IjEyIiB5Mj0iMTIiPjwvbGluZT48bGluZSB4MT0iMTIiIHkxPSIxNiIgeDI9IjEyLjAxIiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" alt="Tasks" class="nav-icon" />
-        <span class="nav-label" data-i18n="nav_earn">Tasks</span>
+        <span class="nav-label" data-lang="nav_tasks">Tasks</span>
       </button>
       <button class="nav-btn" data-tab="affiliate">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTcgMjFoLTJ2LTJhMiAyIDAgMCAxIDItMmgyYTIgMiAwIDAgMSAyIDJ2MmgtMnptMCAwaDIiLz48cGF0aCBkPSJNOSAyMUg3di0yYTIgMiAwIDAgMSAyLTJoMmEyIDIgMCAwIDEgMiAydjJIOSIvPjxwYXRoIGQ9Ik0xMiAxNmwzLTNoLTVsMy0zIi8+PC9zdmc+" alt="Affiliate" class="nav-icon" />
-        <span class="nav-label" data-i18n="nav_affiliate">Affiliate</span>
+        <span class="nav-label" data-lang="nav_affiliate">Affiliate</span>
       </button>
       <button class="nav-btn" data-tab="profile">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" alt="Profile" class="nav-icon" />
-        <span class="nav-label" data-i18n="nav_profile">Profile</span>
+        <span class="nav-label" data-lang="nav_profile">Profile</span>
       </button>
-    </div>
-  </div>
-
-  <!-- Referral List Modal (Kept for legacy compatibility but not used directly in new flow) -->
-  <div class="modal-overlay" id="referralModal">
-    <div class="modal-content-box">
-      <div class="modal-header" style="padding: 0; border: none; margin-bottom: 20px;">
-        <div class="modal-title">My Referrals</div>
-        <button class="modal-close" id="closeReferralModal">×</button>
-      </div>
-      <div id="referralListContent"></div>
     </div>
   </div>
 
   <!-- Full Screen Modals -->
   <div class="fullscreen-modal" id="deposit-modal">
     <div class="modal-header">
-      <div class="modal-title" data-i18n="deposit_title">Deposit TON</div>
+      <div class="modal-title" data-lang="deposit_title">Deposit TON</div>
       <button class="modal-close" id="closeDepositModal">×</button>
     </div>
     <div class="modal-content" id="deposit-content"></div>
@@ -1209,7 +1186,7 @@
 
   <div class="fullscreen-modal" id="withdraw-modal">
     <div class="modal-header">
-      <div class="modal-title" data-i18n="withdraw_title">Withdraw TON</div>
+      <div class="modal-title" data-lang="withdraw_title">Withdraw TON</div>
       <button class="modal-close" id="closeWithdrawModal">×</button>
     </div>
     <div class="modal-content" id="withdraw-content"></div>
@@ -1217,7 +1194,7 @@
   
   <div class="fullscreen-modal" id="deposit-history-modal">
     <div class="modal-header">
-      <div class="modal-title" data-i18n="deposit_history">Deposit History</div>
+      <div class="modal-title" data-lang="dep_history">Deposit History</div>
       <button class="modal-close" id="closeDepositHistoryModal">×</button>
     </div>
     <div class="modal-content" id="deposit-history-content"></div>
@@ -1225,7 +1202,7 @@
 
   <div class="fullscreen-modal" id="withdraw-history-modal">
     <div class="modal-header">
-      <div class="modal-title" data-i18n="withdraw_history">Withdraw History</div>
+      <div class="modal-title" data-lang="wd_history">Withdraw History</div>
       <button class="modal-close" id="closeWithdrawHistoryModal">×</button>
     </div>
     <div class="modal-content" id="withdraw-history-content"></div>
@@ -1233,7 +1210,7 @@
   
   <div class="fullscreen-modal" id="activities-modal">
     <div class="modal-header">
-      <div class="modal-title" data-i18n="activities_title">Activities</div>
+      <div class="modal-title" data-lang="activity">Activities</div>
       <button class="modal-close" id="closeActivitiesModal">×</button>
     </div>
     <div class="modal-content" id="activities-content"></div>
@@ -1241,404 +1218,13 @@
 
   <div class="fullscreen-modal" id="trades-modal">
     <div class="modal-header">
-      <div class="modal-title" data-i18n="active_trades">Active Trades</div>
+      <div class="modal-title" data-lang="active_trades">Active Trades</div>
       <button class="modal-close" id="closeTradesModal">×</button>
     </div>
     <div class="modal-content" id="trades-content"></div>
   </div>
 
   <script>
-    // --- Translations ---
-    const translations = {
-      en: {
-        loading: "Initializing...",
-        nav_home: "Trade Plans",
-        nav_wallet: "Wallet",
-        nav_earn: "Tasks",
-        nav_affiliate: "Affiliate",
-        nav_profile: "Profile",
-        home_title: "Trade Plans",
-        home_subtitle: "Invest TON and claim earnings every 24 hours",
-        daily: "Daily",
-        duration: "Duration",
-        days: "days",
-        progress: "Progress",
-        next_claim: "Next claim in:",
-        purchased: "Purchased",
-        buy_plan: "Buy Plan",
-        claim: "Claim",
-        wait: "Wait",
-        live_chart: "Live Chart",
-        wallet_total: "Total Balance",
-        deposit: "Deposit",
-        withdraw: "Withdraw",
-        deposit_history: "Deposit History",
-        withdraw_history: "Withdraw History",
-        activities: "Activities",
-        active_trades: "Active Trades",
-        earn_title: "Tasks",
-        earn_subtitle: "Complete tasks to earn extra TON rewards",
-        start: "Start",
-        done: "Done",
-        affiliate_title: "Affiliate Program",
-        affiliate_subtitle: "Invite friends and earn lifetime commissions",
-        total_earnings: "Total Earnings",
-        from_ref: "From",
-        referrals: "Referrals",
-        commission: "Commission (20%)",
-        invite_link: "Your Invite Link",
-        share_text: "Share this link to invite friends. You receive 20% of their earnings forever.",
-        my_referrals: "My Referrals",
-        no_referrals: "You haven't referred anyone yet.",
-        profile_title: "Profile",
-        profile_subtitle: "Account settings",
-        redeem_title: "Redeem Code",
-        redeem_subtitle: "Enter your 8-character code to claim rewards",
-        claim_reward: "Claim Reward",
-        settings: "Settings",
-        language: "Language",
-        support: "Support",
-        support_desc: "Contact our support team",
-        min_deposit: "Minimum deposit is 5 TON",
-        amount: "Amount",
-        network: "Network",
-        address: "Deposit Address",
-        memo: "Memo (Required)",
-        tx_hash: "Transaction Hash",
-        confirm_tx: "Confirm Transaction",
-        complete_within: "Complete within",
-        insufficient_balance: "Insufficient TON balance",
-        already_purchased: "Already purchased",
-        claim_available: "Claim available every 24h",
-        plan_completed: "Plan completed. Total earned",
-        daily_claimed: "Daily Claimed",
-        enter_amount: "Enter amount",
-        enter_address: "Enter your TON wallet address",
-        min_withdraw: "Minimum 0.01 TON",
-        withdraw_submitted: "Withdrawal submitted",
-        deposit_submitted: "Submitted successfully!",
-        copied: "Copied to clipboard!",
-        invalid_code: "Invalid or used code",
-        code_limit: "Code limit reached",
-        processing: "Processing...",
-        tasks_cat_project: "Project Tasks",
-        tasks_cat_partner: "Partner Tasks",
-        tasks_cat_advertise: "Advertise Tasks",
-        no_tasks: "No Tasks Available",
-        check_back: "Check back later for new tasks",
-        total_deposits: "Total Deposits",
-        total_withdrawals: "Total Withdrawals",
-        total_transactions: "Total Transactions",
-        net_flow: "Net Flow",
-        total_invested: "Total Invested",
-        no_active_trades: "No Active Trades",
-        purchase_plan: "Purchase a trading plan to get started",
-        no_deposits: "No Deposits Yet",
-        dep_history_text: "Your deposit history will appear here",
-        no_withdrawals: "No Withdrawals Yet",
-        wd_history_text: "Your withdrawal history will appear here",
-        no_activities: "No Activities Yet",
-        act_history_text: "Your activity history will appear here"
-      },
-      cn: {
-        loading: "初始化中...",
-        nav_home: "交易计划",
-        nav_wallet: "钱包",
-        nav_earn: "任务",
-        nav_affiliate: "联盟",
-        nav_profile: "个人资料",
-        home_title: "交易计划",
-        home_subtitle: "投资 TON 并每 24 小时领取收益",
-        daily: "每日",
-        duration: "期限",
-        days: "天",
-        progress: "进度",
-        next_claim: "下次领取时间：",
-        purchased: "已购买",
-        buy_plan: "购买计划",
-        claim: "领取",
-        wait: "等待",
-        live_chart: "实时图表",
-        wallet_total: "总余额",
-        deposit: "存款",
-        withdraw: "提款",
-        deposit_history: "存款历史",
-        withdraw_history: "提款历史",
-        activities: "活动",
-        active_trades: "活跃交易",
-        earn_title: "任务",
-        earn_subtitle: "完成任务以获得额外的 TON 奖励",
-        start: "开始",
-        done: "完成",
-        affiliate_title: "联盟计划",
-        affiliate_subtitle: "邀请朋友并赚取终身佣金",
-        total_earnings: "总收益",
-        from_ref: "来自",
-        referrals: "推荐人",
-        commission: "佣金 (20%)",
-        invite_link: "您的邀请链接",
-        share_text: "分享此链接邀请朋友。您将永久获得他们收益的 20%。",
-        my_referrals: "我的推荐",
-        no_referrals: "您尚未推荐任何人。",
-        profile_title: "个人资料",
-        profile_subtitle: "账户设置",
-        redeem_title: "兑换代码",
-        redeem_subtitle: "输入您的 8 位代码以领取奖励",
-        claim_reward: "领取奖励",
-        settings: "设置",
-        language: "语言",
-        support: "支持",
-        support_desc: "联系我们的支持团队",
-        min_deposit: "最低存款为 5 TON",
-        amount: "金额",
-        network: "网络",
-        address: "存款地址",
-        memo: "备注 (必填)",
-        tx_hash: "交易哈希",
-        confirm_tx: "确认交易",
-        complete_within: "请在内完成",
-        insufficient_balance: "TON 余额不足",
-        already_purchased: "已购买",
-        claim_available: "每 24 小时可领取一次",
-        plan_completed: "计划已完成。总赚取",
-        daily_claimed: "每日已领取",
-        enter_amount: "输入金额",
-        enter_address: "输入您的 TON 钱包地址",
-        min_withdraw: "最低 0.01 TON",
-        withdraw_submitted: "提款已提交",
-        deposit_submitted: "提交成功！",
-        copied: "已复制到剪贴板！",
-        invalid_code: "无效或已使用的代码",
-        code_limit: "代码使用次数已达上限",
-        processing: "处理中...",
-        tasks_cat_project: "项目任务",
-        tasks_cat_partner: "合作伙伴任务",
-        tasks_cat_advertise: "广告任务",
-        no_tasks: "暂无任务",
-        check_back: "稍后查看新任务",
-        total_deposits: "总存款",
-        total_withdrawals: "总提款",
-        total_transactions: "总交易",
-        net_flow: "净流量",
-        total_invested: "总投资",
-        no_active_trades: "无活跃交易",
-        purchase_plan: "购买交易计划以开始",
-        no_deposits: "暂无存款",
-        dep_history_text: "您的存款历史将显示在这里",
-        no_withdrawals: "暂无提款",
-        wd_history_text: "您的提款历史将显示在这里",
-        no_activities: "暂无活动",
-        act_history_text: "您的活动历史将显示在这里"
-      },
-      bn: {
-        loading: "শুরু হচ্ছে...",
-        nav_home: "ট্রেড পরিকল্পনা",
-        nav_wallet: "ওয়ালেট",
-        nav_earn: "কাজ",
-        nav_affiliate: "অ্যাফিলিয়েট",
-        nav_profile: "প্রোফাইল",
-        home_title: "ট্রেড পরিকল্পনা",
-        home_subtitle: "TON বিনিয়োগ করুন এবং প্রতি ২৪ ঘন্টায় আয় দাবি করুন",
-        daily: "দৈনিক",
-        duration: "সময়সীমা",
-        days: "দিন",
-        progress: "অগ্রগতি",
-        next_claim: "পরবর্তী দাবি:",
-        purchased: "কেনা হয়েছে",
-        buy_plan: "পরিকল্পনা কিনুন",
-        claim: "দাবি করুন",
-        wait: "অপেক্ষা করুন",
-        live_chart: "লাইভ চার্ট",
-        wallet_total: "মোট ব্যালেন্স",
-        deposit: "জমা",
-        withdraw: "উত্তোলন",
-        deposit_history: "জমা ইতিহাস",
-        withdraw_history: "উত্তোলন ইতিহাস",
-        activities: "কার্যকলাপ",
-        active_trades: "সক্রিয় ট্রেড",
-        earn_title: "কাজ",
-        earn_subtitle: "অতিরিক্ত TON পুরষ্কার পেতে কাজ সম্পূর্ণ করুন",
-        start: "শুরু",
-        done: "সম্পন্ন",
-        affiliate_title: "অ্যাফিলিয়েট প্রোগ্রাম",
-        affiliate_subtitle: "বন্ধুদের আমন্ত্রণ জানান এবং আজীবন কমিশন উপার্জন করুন",
-        total_earnings: "মোট আয়",
-        from_ref: "থেকে",
-        referrals: "রেফারেল",
-        commission: "কমিশন (২০%)",
-        invite_link: "আপনার আমন্ত্রণ লিঙ্ক",
-        share_text: "বন্ধুদের আমন্ত্রণ জানাতে এই লিঙ্কটি শেয়ার করুন। আপনি তাদের আয়ের ২০% আজীবন পাবেন।",
-        my_referrals: "আমার রেফারেল",
-        no_referrals: "আপনি এখনও কাউকে রেফার করেননি।",
-        profile_title: "প্রোফাইল",
-        profile_subtitle: "অ্যাকাউন্ট সেটিংস",
-        redeem_title: "কোড রিডিম করুন",
-        redeem_subtitle: "পুরস্কার দাবি করতে আপনার ৮ অক্ষরের কোড লিখুন",
-        claim_reward: "পুরস্কার দাবি করুন",
-        settings: "সেটিংস",
-        language: "ভাষা",
-        support: "সহায়তা",
-        support_desc: "আমাদের সমর্থন দলের সাথে যোগাযোগ করুন",
-        min_deposit: "সর্বনিম্ন জমা ৫ TON",
-        amount: "পরিমাণ",
-        network: "নেটওয়ার্ক",
-        address: "জমা ঠিকানা",
-        memo: "মেমো (প্রয়োজনীয়)",
-        tx_hash: "লেনদেন হ্যাশ",
-        confirm_tx: "লেনদেন নিশ্চিত করুন",
-        complete_within: "এর মধ্যে সম্পূর্ণ করুন",
-        insufficient_balance: "পর্যাপ্ত TON ব্যালেন্স নেই",
-        already_purchased: "ইতিমধ্যে কেনা হয়েছে",
-        claim_available: "প্রতি ২৪ ঘন্টায় দাবি করা যাবে",
-        plan_completed: "পরিকল্পনা সম্পন্ন হয়েছে। মোট উপার্জন",
-        daily_claimed: "দৈনিক দাবি করা হয়েছে",
-        enter_amount: "পরিমাণ লিখুন",
-        enter_address: "আপনার TON ওয়ালেট ঠিকানা লিখুন",
-        min_withdraw: "সর্বনিম্ন ০.০১ TON",
-        withdraw_submitted: "উত্তোলন জমা দেওয়া হয়েছে",
-        deposit_submitted: "সফলভাবে জমা দেওয়া হয়েছে!",
-        copied: "ক্লিপবোর্ডে কপি করা হয়েছে!",
-        invalid_code: "অবৈধ বা ব্যবহৃত কোড",
-        code_limit: "কোডের সীমা শেষ",
-        processing: "প্রক্রিয়াকরণ...",
-        tasks_cat_project: "প্রকল্প কাজ",
-        tasks_cat_partner: "অংশীদার কাজ",
-        tasks_cat_advertise: "বিজ্ঞাপন কাজ",
-        no_tasks: "কোন কাজ নেই",
-        check_back: "নতুন কাজের জন্য পরে চেক করুন",
-        total_deposits: "মোট জমা",
-        total_withdrawals: "মোট উত্তোলন",
-        total_transactions: "মোট লেনদেন",
-        net_flow: "নেট ফ্লো",
-        total_invested: "মোট বিনিয়োগ",
-        no_active_trades: "কোন সক্রিয় ট্রেড নেই",
-        purchase_plan: "শুরু করতে একটি ট্রেডিং প্ল্যান কিনুন",
-        no_deposits: "এখনও কোন জমা নেই",
-        dep_history_text: "আপনার জমার ইতিহাস এখানে দেখা যাবে",
-        no_withdrawals: "এখনও কোন উত্তোলন নেই",
-        wd_history_text: "আপনার উত্তোলনের ইতিহাস এখানে দেখা যাবে",
-        no_activities: "এখনও কোন কার্যকলাপ নেই",
-        act_history_text: "আপনার কার্যকলাপের ইতিহাস এখানে দেখা যাবে"
-      },
-      ru: {
-        loading: "Инициализация...",
-        nav_home: "Торговые планы",
-        nav_wallet: "Кошелек",
-        nav_earn: "Задания",
-        nav_affiliate: "Партнеры",
-        nav_profile: "Профиль",
-        home_title: "Торговые планы",
-        home_subtitle: "Инвестируйте TON и получайте доход каждые 24 часа",
-        daily: "Ежедневно",
-        duration: "Срок",
-        days: "дней",
-        progress: "Прогресс",
-        next_claim: "Следующее получение через:",
-        purchased: "Куплено",
-        buy_plan: "Купить план",
-        claim: "Получить",
-        wait: "Ждать",
-        live_chart: "График",
-        wallet_total: "Общий баланс",
-        deposit: "Депозит",
-        withdraw: "Вывод",
-        deposit_history: "История депозитов",
-        withdraw_history: "История выводов",
-        activities: "Активность",
-        active_trades: "Активные сделки",
-        earn_title: "Задания",
-        earn_subtitle: "Выполняйте задания для получения дополнительных TON",
-        start: "Начать",
-        done: "Готово",
-        affiliate_title: "Партнерская программа",
-        affiliate_subtitle: "Приглашайте друзей и получайте пожизненные комиссионные",
-        total_earnings: "Общий доход",
-        from_ref: "От",
-        referrals: "Рефералов",
-        commission: "Комиссия (20%)",
-        invite_link: "Ваша реферальная ссылка",
-        share_text: "Поделитесь этой ссылкой, чтобы пригласить друзей. Вы получаете 20% от их заработка навсегда.",
-        my_referrals: "Мои рефералы",
-        no_referrals: "Вы еще никого не пригласили.",
-        profile_title: "Профиль",
-        profile_subtitle: "Настройки аккаунта",
-        redeem_title: "Пromo-код",
-        redeem_subtitle: "Введите ваш 8-значный код для получения вознаграждения",
-        claim_reward: "Получить награду",
-        settings: "Настройки",
-        language: "Язык",
-        support: "Поддержка",
-        support_desc: "Свяжитесь с нашей службой поддержки",
-        min_deposit: "Минимальный депозит 5 TON",
-        amount: "Сумма",
-        network: "Сеть",
-        address: "Адрес депозита",
-        memo: "Мемо (Обязательно)",
-        tx_hash: "Хэш транзакции",
-        confirm_tx: "Подтвердить транзакцию",
-        complete_within: "Завершить в течение",
-        insufficient_balance: "Недостаточно TON",
-        already_purchased: "Уже куплено",
-        claim_available: "Доступно каждые 24 часа",
-        plan_completed: "План завершен. Всего заработано",
-        daily_claimed: "Ежедневно получено",
-        enter_amount: "Введите сумму",
-        enter_address: "Введите ваш адрес TON кошелька",
-        min_withdraw: "Минимум 0.01 TON",
-        withdraw_submitted: "Запрос на вывод отправлен",
-        deposit_submitted: "Успешно отправлено!",
-        copied: "Скопировано в буфер обмена!",
-        invalid_code: "Неверный или использованный код",
-        code_limit: "Лимит кода исчерпан",
-        processing: "Обработка...",
-        tasks_cat_project: "Задания проекта",
-        tasks_cat_partner: "Задания партнеров",
-        tasks_cat_advertise: "Рекламные задания",
-        no_tasks: "Нет доступных заданий",
-        check_back: "Зайдите позже для новых заданий",
-        total_deposits: "Всего депозитов",
-        total_withdrawals: "Всего выводов",
-        total_transactions: "Всего транзакций",
-        net_flow: "Чистый поток",
-        total_invested: "Всего инвестировано",
-        no_active_trades: "Нет активных сделок",
-        purchase_plan: "Купите торговый план для начала",
-        no_deposits: "Пока нет депозитов",
-        dep_history_text: "История ваших депозитов появится здесь",
-        no_withdrawals: "Пока нет выводов",
-        wd_history_text: "История ваших выводов появится здесь",
-        no_activities: "Пока нет активности",
-        act_history_text: "История вашей активности появится здесь"
-      }
-    };
-
-    let currentLang = 'en';
-
-    function t(key) {
-      return translations[currentLang][key] || translations['en'][key] || key;
-    }
-
-    function updateUIText() {
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        el.innerText = t(key);
-      });
-      // Update dynamic elements if needed
-      document.getElementById('loading-text').innerText = t('loading');
-    }
-
-    // --- Haptic Feedback ---
-    function triggerHaptic(type = 'light') {
-      if (window.Telegram?.WebApp?.HapticFeedback) {
-        if(type === 'success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-        else if(type === 'error') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-        else if(type === 'warning') window.Telegram.WebApp.HapticFeedback.notificationOccurred('warning');
-        else window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
-      } else if (navigator.vibrate) {
-        navigator.vibrate(type === 'heavy' ? 50 : 20);
-      }
-    }
-
     // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBfR97veh6idxb81mH6N5_Gq8-CpW2D7bE",
@@ -1657,6 +1243,15 @@
     // Telegram WebApp Initialization
     const tg = window.Telegram?.WebApp || { expand:()=>{}, ready:()=>{}, initDataUnsafe:{} };
     tg.expand(); tg.ready();
+    
+    // Haptic Feedback Helper
+    const haptic = () => {
+      if (window.Telegram?.WebApp?.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+      } else if (navigator.vibrate) {
+        navigator.vibrate(10);
+      }
+    };
 
     // Bot
     const BOT_TOKEN = '8725017918:AAHDWjOcK0fP9kchQdAL7fZoumgwaKVMXO4';
@@ -1670,6 +1265,187 @@
         });
       } catch (e) { console.warn('Bot send failed', e); }
     };
+
+    // Language System
+    const LANG = {
+      EN: {
+        nav_trade: "Trade Plans",
+        nav_wallet: "Wallet",
+        nav_tasks: "Tasks",
+        nav_affiliate: "Affiliate",
+        nav_profile: "Profile",
+        deposit_title: "Deposit TON",
+        withdraw_title: "Withdraw TON",
+        dep_history: "Deposit History",
+        wd_history: "Withdraw History",
+        activity: "Activities",
+        active_trades: "Active Trades",
+        profile_title: "Profile",
+        profile_subtitle: "Account settings",
+        settings_title: "Settings",
+        language: "Language",
+        support: "Support",
+        redeem_code: "Redeem Code",
+        redeem_subtitle: "Enter your 8-character code",
+        claim_reward: "Claim Reward",
+        affiliate_title: "Affiliate Program",
+        affiliate_subtitle: "Invite friends and earn lifetime commissions",
+        total_earnings: "Total Earnings",
+        total_referrals: "Total Referrals",
+        commission: "Commission (20%)",
+        invite_link: "Your Invite Link",
+        copy: "Copy",
+        my_referrals: "My Referrals",
+        no_referrals: "You haven't referred anyone yet.",
+        buy_plan: "Buy Plan",
+        purchased: "Purchased",
+        claim: "Claim",
+        wait: "Wait",
+        daily: "Daily",
+        duration: "Duration",
+        progress: "Progress",
+        next_claim: "Next claim in",
+        balance: "Total Balance",
+        deposit: "Deposit",
+        withdraw: "Withdraw"
+      },
+      CN: {
+        nav_trade: "交易计划",
+        nav_wallet: "钱包",
+        nav_tasks: "任务",
+        nav_affiliate: "联盟",
+        nav_profile: "我的",
+        deposit_title: "充值 TON",
+        withdraw_title: "提现 TON",
+        dep_history: "充值记录",
+        wd_history: "提现记录",
+        activity: "活动记录",
+        active_trades: "活跃交易",
+        profile_title: "个人中心",
+        profile_subtitle: "账户设置",
+        settings_title: "设置",
+        language: "语言",
+        support: "客服支持",
+        redeem_code: "兑换码",
+        redeem_subtitle: "输入8位兑换码",
+        claim_reward: "领取奖励",
+        affiliate_title: "推荐计划",
+        affiliate_subtitle: "邀请好友并获得终身佣金",
+        total_earnings: "总收益",
+        total_referrals: "总推荐人数",
+        commission: "佣金 (20%)",
+        invite_link: "您的邀请链接",
+        copy: "复制",
+        my_referrals: "我的推荐",
+        no_referrals: "您还没有推荐任何人。",
+        buy_plan: "购买计划",
+        purchased: "已购买",
+        claim: "领取",
+        wait: "等待",
+        daily: "每日收益",
+        duration: "周期",
+        progress: "进度",
+        next_claim: "下次领取时间",
+        balance: "总余额",
+        deposit: "充值",
+        withdraw: "提现"
+      },
+      BN: {
+        nav_trade: "ট্রেড প্ল্যান",
+        nav_wallet: "ওয়ালেট",
+        nav_tasks: "টাস্ক",
+        nav_affiliate: "অ্যাফিলিয়েট",
+        nav_profile: "প্রোফাইল",
+        deposit_title: "TON জমা",
+        withdraw_title: "TON তোলা",
+        dep_history: "জমার ইতিহাস",
+        wd_history: "তোলার ইতিহাস",
+        activity: "কার্যকলাপ",
+        active_trades: "সক্রিয় ট্রেড",
+        profile_title: "প্রোফাইল",
+        profile_subtitle: "অ্যাকাউন্ট সেটিংস",
+        settings_title: "সেটিংস",
+        language: "ভাষা",
+        support: "সাপোর্ট",
+        redeem_code: "রিডিম কোড",
+        redeem_subtitle: "আপনার ৮-অক্ষরের কোড লিখুন",
+        claim_reward: "পুরস্কার নিন",
+        affiliate_title: "অ্যাফিলিয়েট প্রোগ্রাম",
+        affiliate_subtitle: "বন্ধুদের আমন্ত্রণ করুন এবং আজীবন কমিশন অর্জন করুন",
+        total_earnings: "মোট আয়",
+        total_referrals: "মোট রেফারেল",
+        commission: "কমিশন (২০%)",
+        invite_link: "আপনার আমন্ত্রণ লিংক",
+        copy: "কপি",
+        my_referrals: "আমার রেফারেল",
+        no_referrals: "আপনি এখনো কাউকে রেফার করেননি।",
+        buy_plan: "প্ল্যান কিনুন",
+        purchased: "কেনা হয়েছে",
+        claim: "দাবি",
+        wait: "অপেক্ষা",
+        daily: "দৈনিক",
+        duration: "মেয়াদ",
+        progress: "অগ্রগতি",
+        next_claim: "পরবর্তী দাবি",
+        balance: "মোট ব্যালেন্স",
+        deposit: "জমা",
+        withdraw: "তোলা"
+      },
+      RU: {
+        nav_trade: "Торговые планы",
+        nav_wallet: "Кошелек",
+        nav_tasks: "Задания",
+        nav_affiliate: "Партнеры",
+        nav_profile: "Профиль",
+        deposit_title: "Депозит TON",
+        withdraw_title: "Вывод TON",
+        dep_history: "История депозитов",
+        wd_history: "История выводов",
+        activity: "Активность",
+        active_trades: "Активные сделки",
+        profile_title: "Профиль",
+        profile_subtitle: "Настройки аккаунта",
+        settings_title: "Настройки",
+        language: "Язык",
+        support: "Поддержка",
+        redeem_code: "Код активации",
+        redeem_subtitle: "Введите 8-значный код",
+        claim_reward: "Получить награду",
+        affiliate_title: "Партнерская программа",
+        affiliate_subtitle: "Приглашайте друзей и получайте пожизненные комиссии",
+        total_earnings: "Всего заработано",
+        total_referrals: "Всего рефералов",
+        commission: "Комиссия (20%)",
+        invite_link: "Ваша ссылка",
+        copy: "Копировать",
+        my_referrals: "Мои рефералы",
+        no_referrals: "У вас пока нет рефералов.",
+        buy_plan: "Купить план",
+        purchased: "Куплено",
+        claim: "Забрать",
+        wait: "Ждать",
+        daily: "Ежедневно",
+        duration: "Срок",
+        progress: "Прогресс",
+        next_claim: "Следующий вывод через",
+        balance: "Всего баланс",
+        deposit: "Депозит",
+        withdraw: "Вывод"
+      }
+    };
+
+    let currentLang = 'EN';
+
+    function t(key) {
+      return LANG[currentLang][key] || LANG['EN'][key] || key;
+    }
+
+    function updateUILanguage() {
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        const key = el.getAttribute('data-lang');
+        el.textContent = t(key);
+      });
+    }
 
     // State
     let userId=null, userName=null, userAvatar=null;
@@ -1695,12 +1471,7 @@
       document.body.appendChild(n); 
       setTimeout(()=>n.remove(), d); 
     };
-    const copy = (txt)=> {
-      navigator.clipboard.writeText(txt).then(()=>{
-        notify(t('copied'));
-        triggerHaptic('success');
-      });
-    };
+    const copy = (t)=> { haptic(); navigator.clipboard.writeText(t).then(()=>notify('Copied to clipboard!')); };
     const generateId = () => 'TXN' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
 
     // Telegram User
@@ -1734,7 +1505,7 @@
           BTC:{ price:d.bitcoin?.usd||30000, change:d.bitcoin?.usd_24h_change||0 },
           ETH:{ price:d.ethereum?.usd||2000, change:d.ethereum?.usd_24h_change||0 },
           BNB:{ price:d.binancecoin?.usd||300, change:d.binancecoin?.usd_24h_change||0 },
-          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24h_change||0 },
+          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24hr_change||0 },
           SOL:{ price:d.solana?.usd||100, change:d.solana?.usd_24h_change||0 },
           DOT:{ price:d.polkadot?.usd||7, change:d.polkadot?.usd_24h_change||0 },
           TON:{ price:d['the-open-network']?.usd||2.5, change:d['the-open-network']?.usd_24h_change||0 },
@@ -1780,7 +1551,7 @@
         avatar:userAvatar, name:userName, referrals:0, completedTasks:{},
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
         referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false,
-        language: 'en' // Save language preference
+        lang: 'EN'
       };
       await userRef(userId).set(init);
       return init;
@@ -1796,13 +1567,6 @@
         if (balanceEl) {
           balanceEl.textContent = fmt(tonBalance);
         }
-      }
-      if (partial.language) {
-        currentLang = partial.language;
-        updateUIText();
-        // Re-render current tab if it's profile or affiliate to apply translations to dynamic content
-        const activeTab = document.querySelector('.nav-btn.active').dataset.tab;
-        if(activeTab === 'profile' || activeTab === 'affiliate') showTab(activeTab);
       }
     }
 
@@ -1823,12 +1587,14 @@
 
     // Tabs
     function showTab(tab){
+      haptic();
       document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
       if(tab==='home') renderHome();
       if(tab==='wallet') renderWallet();
       if(tab==='earn') renderEarn();
       if(tab==='affiliate') renderAffiliate();
       if(tab==='profile') renderProfile();
+      updateUILanguage();
     }
 
     // Home
@@ -1840,8 +1606,8 @@
 
       const html = `
         <div class="section-header">
-          <div class="section-title">${t('home_title')}</div>
-          <div class="section-subtitle">${t('home_subtitle')}</div>
+          <div class="section-title">${t('nav_trade')}</div>
+          <div class="section-subtitle">Invest TON and claim earnings every 24 hours</div>
         </div>
 
         <div class="live-prices">
@@ -1874,7 +1640,7 @@
               </div>
 
               <div class="chart-container">
-                <div class="chart-title">${t('live_chart')}</div>
+                <div class="chart-title">Live Chart</div>
                 <iframe src="https://www.tradingview.com/widgetembed/?symbol=BINANCE:${p.icon}USDT&interval=1&theme=dark" width="100%" height="200" frameborder="0"></iframe>
               </div>
 
@@ -1885,16 +1651,16 @@
                 </div>
                 <div class="g-it">
                   <div class="g-l">${t('duration')}</div>
-                  <div class="g-v">${p.duration} ${t('days')}</div>
+                  <div class="g-v">${p.duration} days</div>
                 </div>
               </div>
 
               ${tr ? `
                 <div class="prog">
                   <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
-                  <div class="progtext">${t('progress')}: ${tr.claimedDays}/${p.duration} ${t('days')}</div>
+                  <div class="progtext">${t('progress')}: ${tr.claimedDays}/${p.duration} days</div>
                 </div>
-                <div class="countdown" id="cd_${p.id}">${t('next_claim')} ${formatTime(86400-(now()-tr.lastClaim))}</div>
+                <div class="countdown" id="cd_${p.id}">${t('next_claim')}: ${formatTime(86400-(now()-tr.lastClaim))}</div>
                 <button class="btn-claim" id="claim_${p.id}" ${canClaim?'':'disabled'}>${canClaim?`${t('claim')} ${p.dailyEarning} TON`:t('wait')}</button>
               ` : `
                 <button class="btn-primary" id="buy_${p.id}" ${purchased?'disabled':''}>${purchased?t('purchased'):t('buy_plan')}</button>
@@ -1909,10 +1675,9 @@
         const buy=document.getElementById(`buy_${p.id}`);
         const claim=document.getElementById(`claim_${p.id}`);
         if(buy){
-          buy.addEventListener('click', ()=>{
-            triggerHaptic('medium');
-            if (purchasedPlans[p.id]) { notify(t('already_purchased')); return; }
-            if (tonBalance < p.price) { notify(t('insufficient_balance')); triggerHaptic('error'); return; }
+          buy.addEventListener('click', ()=>{ haptic(); 
+            if (purchasedPlans[p.id]) { notify('Already purchased'); return; }
+            if (tonBalance < p.price) { notify('Insufficient TON balance'); return; }
             const newBal=tonBalance - p.price;
             const newPurchased = { ...purchasedPlans, [p.id]:true };
             const newTrades = { ...activeTrades, [p.id]:{ planId:p.id, purchasedAt:now(), lastClaim:now(), claimedDays:0, totalEarned:0 } };
@@ -1922,15 +1687,14 @@
             tradeHistory.push({ type:'purchase', planId:p.id, planName:p.name, amount:p.price, timestamp:now() });
             save({ tradeHistory });
             sendBot(`Plan Purchased\nPlan: ${p.name}\nAmount: ${p.price} TON`);
-            notify(`${t('purchased')} ${p.name}`);
+            notify(`Purchased ${p.name}`);
             renderHome();
           });
         }
         if(claim){
-          claim.addEventListener('click', ()=>{
-            triggerHaptic('medium');
+          claim.addEventListener('click', ()=>{ haptic();
             const tr=activeTrades[p.id]; if(!tr) return;
-            if ((now()-tr.lastClaim)<86400){ notify(t('claim_available')); triggerHaptic('warning'); return; }
+            if ((now()-tr.lastClaim)<86400){ notify('Claim available every 24h'); return; }
             const earned=p.dailyEarning;
             const newBal=tonBalance+earned;
             tr.lastClaim=now(); tr.claimedDays+=1; tr.totalEarned+=earned;
@@ -1941,12 +1705,12 @@
               const copy={...activeTrades}; delete copy[p.id];
               activeTrades = copy;
               save({ tonBalance:newBal, activeTrades:copy });
-              notify(`${t('plan_completed')} ${tr.totalEarned} TON`);
+              notify(`Plan completed. Total earned ${tr.totalEarned} TON`);
               sendBot(`Plan Completed\nPlan: ${p.name}\nTotal Earned: ${tr.totalEarned} TON`);
             }else{
               activeTrades = {...activeTrades};
               save({ tonBalance:newBal, activeTrades:{...activeTrades} });
-              notify(`${t('daily_claimed')} ${earned} TON from ${p.name}`);
+              notify(`Claimed ${earned} TON from ${p.name}`);
               sendBot(`Daily Claimed\nPlan: ${p.name}\nEarned: ${earned} TON`);
             }
             tradeHistory.push({ type:'claim', planId:p.id, planName:p.name, amount:earned, timestamp:now() });
@@ -1959,7 +1723,7 @@
       setInterval(()=>{
         Object.values(activeTrades).forEach(tr=>{
           const el=document.getElementById(`cd_${tr.planId}`); if(!el) return;
-          el.textContent = `${t('next_claim')} ${formatTime(86400-(now()-tr.lastClaim))}`;
+          el.textContent = `${t('next_claim')}: ${formatTime(86400-(now()-tr.lastClaim))}`;
         });
       },1000);
     }
@@ -1969,7 +1733,7 @@
       const html = `
         <div class="wallet-dashboard">
           <div class="wallet-balance-card">
-            <div class="wb-label">${t('wallet_total')}</div>
+            <div class="wb-label">${t('balance')}</div>
             <div class="wb-value">
               <img src="https://i.postimg.cc/6qxHW6rX/download.png" alt="TON" />
               ${fmt(tonBalance)}
@@ -1993,19 +1757,19 @@
 
           <div class="wallet-menu-item" id="w_deph">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMTIgNiAxMiAxMiAxNiAxNCI+PC9wb2x5bGluZT48L3N2Zz4=" class="wmi-icon" alt="Deposit History">
-            <div class="wmi-text">${t('deposit_history')}</div>
+            <div class="wmi-text">${t('dep_history')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
           <div class="wallet-menu-item" id="w_wdh">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMyAzdjE4aDE4Ij48L3BhdGg+PHBhdGggZD0iTTMgOWg5bDMgM2gtMTJ6Ij48L3BhdGg+PHBhdGggZD0iTTMgMTVoNmwzIDNoLTl6Ij48L3BhdGg+PC9zdmc+" class="wmi-icon" alt="Withdraw History">
-            <div class="wmi-text">${t('withdraw_history')}</div>
+            <div class="wmi-text">${t('wd_history')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
           <div class="wallet-menu-item" id="w_act">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIyMCIgeDI9IjEyIiB5Mj0iMTAiPjwvbGluZT48bGluZSB4MT0iMTgiIHkxPSIyMCIgeDI9IjE4IiB5Mj0iNCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iMjAiIHgyPSI2IiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" class="wmi-icon" alt="Activities">
-            <div class="wmi-text">${t('activities')}</div>
+            <div class="wmi-text">${t('activity')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
@@ -2017,50 +1781,41 @@
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
-      
-      // Helper to attach haptic to wallet menu items
-      const menuIds = ['w_dep', 'w_wd', 'w_deph', 'w_wdh', 'w_act', 'w_trd'];
-      menuIds.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.onclick = () => { triggerHaptic('light'); };
-      });
-
-      document.getElementById('w_dep').onclick = () => { triggerHaptic('light'); showDepositModal(); };
-      document.getElementById('w_wd').onclick = () => { triggerHaptic('light'); showWithdrawModal(); };
-      document.getElementById('w_deph').onclick = () => { triggerHaptic('light'); showDepositHistoryModal(); };
-      document.getElementById('w_wdh').onclick = () => { triggerHaptic('light'); showWithdrawHistoryModal(); };
-      document.getElementById('w_act').onclick = () => { triggerHaptic('light'); showActivitiesModal(); };
-      document.getElementById('w_trd').onclick = () => { triggerHaptic('light'); showTradesModal(); };
+      document.getElementById('w_dep').onclick = () => { haptic(); showDepositModal(); };
+      document.getElementById('w_wd').onclick = () => { haptic(); showWithdrawModal(); };
+      document.getElementById('w_deph').onclick = () => { haptic(); showDepositHistoryModal(); };
+      document.getElementById('w_wdh').onclick = () => { haptic(); showWithdrawHistoryModal(); };
+      document.getElementById('w_act').onclick = () => { haptic(); showActivitiesModal(); };
+      document.getElementById('w_trd').onclick = () => { haptic(); showTradesModal(); };
     }
 
     function showDepositModal() {
-      triggerHaptic('light');
       const modal = document.getElementById('deposit-modal');
       const content = document.getElementById('deposit-content');
       content.innerHTML = `
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">${t('deposit_title')}</div>
           <div class="form-group">
-            <label class="form-label">${t('amount')} (min 5 TON)</label>
-            <input id="dep_amt" type="number" min="5" step="0.01" class="input" placeholder="${t('enter_amount')}">
+            <label class="form-label">Amount (min 5 TON)</label>
+            <input id="dep_amt" type="number" min="5" step="0.01" class="input" placeholder="Enter amount">
           </div>
-          <button class="btn-primary" id="dep_go">${t('deposit')}</button>
+          <button class="btn-primary" id="dep_go">Continue</button>
         </div>
       `;
       modal.style.display = 'flex';
-      document.getElementById('dep_go').onclick = processDeposit;
+      document.getElementById('dep_go').onclick = () => { haptic(); processDeposit(); };
     }
 
     function processDeposit(){
       const amt = parseFloat(document.getElementById('dep_amt').value);
-      if(!amt || amt<5){ notify(t('min_deposit')); triggerHaptic('error'); return; }
+      if(!amt || amt<5){ notify('Minimum deposit is 5 TON'); return; }
       const memo = `BlockOrbit_${userId}`;
       const id = generateId();
 
       const content = document.getElementById('deposit-content');
       content.innerHTML = `
         <div class="card">
-          <div class="timer"><div class="t-t">${t('complete_within')} 15:00</div><div id="dep_timer" class="t-t" style="font-size:28px;margin-top:8px;font-family:monospace">15:00</div></div>
+          <div class="timer"><div class="t-t">Complete within 15:00</div><div id="dep_timer" class="t-t" style="font-size:28px;margin-top:8px;font-family:monospace">15:00</div></div>
           
           <div style="text-align:center">
             <div class="qr-container">
@@ -2069,15 +1824,15 @@
           </div>
 
           <div class="form-group" style="margin-top:16px">
-            <label class="form-label">${t('network')}</label>
+            <label class="form-label">Network</label>
             <div class="row">
               <span style="font-weight:600">TON</span>
-              <button class="copy" onclick="navigator.clipboard.writeText('TON')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+              <button class="copy" onclick="copy('TON')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">${t('address')}</label>
+            <label class="form-label">Deposit Address</label>
             <div class="row" style="font-size:11px">
               <span style="font-family:monospace">UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz</span>
               <button class="copy" id="cp_addr"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
@@ -2085,7 +1840,7 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">${t('amount')}</label>
+            <label class="form-label">Amount</label>
             <div class="row">
               <span style="font-weight:700">${amt.toFixed(2)} TON</span>
               <button class="copy" id="cp_amt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
@@ -2093,7 +1848,7 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">${t('memo')}</label>
+            <label class="form-label">Memo (Required)</label>
             <div class="row" style="font-family:monospace;font-size:12px">
               <span>${memo}</span>
               <button class="copy" id="cp_memo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
@@ -2101,35 +1856,33 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">${t('tx_hash')}</label>
+            <label class="form-label">Transaction Hash</label>
             <input id="txh" class="input" placeholder="Enter transaction hash after sending">
           </div>
 
-          <button class="btn-primary" id="dep_submit">${t('confirm_tx')}</button>
+          <button class="btn-primary" id="dep_submit">Confirm Transaction</button>
         </div>
       `;
       document.getElementById('cp_addr').onclick=()=>copy('UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz');
       document.getElementById('cp_amt').onclick=()=>copy(String(amt));
       document.getElementById('cp_memo').onclick=()=>copy(memo);
 
-      let timeLeft=900; const el=document.getElementById('dep_timer');
-      const it=setInterval(()=>{ const m=(timeLeft/60|0), s=(timeLeft%60); el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; if(--timeLeft<0){clearInterval(it); el.textContent='Expired';} },1000);
+      let t=900; const el=document.getElementById('dep_timer');
+      const it=setInterval(()=>{ const m=(t/60|0), s=(t%60); el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; if(--t<0){clearInterval(it); el.textContent='Expired';} },1000);
 
-      document.getElementById('dep_submit').onclick = async ()=>{
-        triggerHaptic('medium');
+      document.getElementById('dep_submit').onclick = async ()=>{ haptic();
         const tx = document.getElementById('txh').value.trim();
-        if(!tx){ notify('Enter transaction hash'); triggerHaptic('error'); return; }
+        if(!tx){ notify('Enter transaction hash'); return; }
         depositHistory.push({ id, amount:amt, txHash:tx, timestamp:now() });
         save({ depositHistory, hasDeposit:true });
         database.ref('admin/deposits').push({ id, userId, userName, amount:amt, txHash:tx, status:'pending', timestamp:now() });
         sendBot(`Deposit Submitted\nAmount: ${amt} TON\nTX: ${tx}`);
-        notify(t('deposit_submitted'));
+        notify('Submitted successfully!');
         showDepositHistoryModal();
       };
     }
 
     function showDepositHistoryModal() {
-      triggerHaptic('light');
       const modal = document.getElementById('deposit-history-modal');
       const content = document.getElementById('deposit-history-content');
       const totalDeposited = depositHistory.reduce((sum, d) => sum + d.amount, 0);
@@ -2138,15 +1891,15 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">${t('deposit_history')}</div>
+              <div class="history-main-title">${t('dep_history')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
-                <div class="history-stat-label">${t('total_deposits')}</div>
+                <div class="history-stat-label">Total Deposits</div>
                 <div class="history-stat-value">${depositHistory.length}</div>
               </div>
               <div class="history-stat-card">
-                <div class="history-stat-label">${t('amount')}</div>
+                <div class="history-stat-label">Total Amount</div>
                 <div class="history-stat-value">${totalDeposited.toFixed(2)} TON</div>
               </div>
             </div>
@@ -2176,8 +1929,8 @@
             `).join('') : `
               <div class="empty-state">
                 <div class="empty-icon">📥</div>
-                <div class="empty-title">${t('no_deposits')}</div>
-                <div class="empty-text">${t('dep_history_text')}</div>
+                <div class="empty-title">No Deposits Yet</div>
+                <div class="empty-text">Your deposit history will appear here</div>
               </div>
             `}
           </div>
@@ -2187,7 +1940,6 @@
     }
 
     function showWithdrawModal() {
-      triggerHaptic('light');
       const modal = document.getElementById('withdraw-modal');
       const content = document.getElementById('withdraw-content');
       
@@ -2200,11 +1952,11 @@
           <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">${t('withdraw_title')}</div>
           <div class="form-group">
             <label class="form-label">TON Address</label>
-            <input id="wd_addr" class="input" placeholder="${t('enter_address')}">
+            <input id="wd_addr" class="input" placeholder="Enter your TON wallet address">
           </div>
           <div class="form-group">
-            <label class="form-label">${t('amount')} (min 0.01 TON)</label>
-            <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="${t('enter_amount')}">
+            <label class="form-label">Amount (min 0.01 TON)</label>
+            <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="Enter amount">
           </div>
           <button class="btn-primary" id="wd_go" ${!canWithdraw ? 'disabled' : ''}>${t('withdraw')}</button>
         </div>
@@ -2212,13 +1964,12 @@
       modal.style.display = 'flex';
       
       if (canWithdraw) {
-        document.getElementById('wd_go').onclick = async ()=>{
-          triggerHaptic('medium');
+        document.getElementById('wd_go').onclick = async ()=>{ haptic();
           const addr=document.getElementById('wd_addr').value.trim();
           const amt=parseFloat(document.getElementById('wd_amt').value);
-          if(!addr){ notify(t('enter_address')); triggerHaptic('error'); return; }
-          if(!amt || amt<0.01){ notify(t('min_withdraw')); triggerHaptic('error'); return; }
-          if(amt>tonBalance){ notify(t('insufficient_balance')); triggerHaptic('error'); return; }
+          if(!addr){ notify('Enter address'); return; }
+          if(!amt || amt<0.01){ notify('Minimum 0.01 TON'); return; }
+          if(amt>tonBalance){ notify('Insufficient balance'); return; }
           const id=generateId();
           
           const newWithdrawCount = (withdrawCount || 0) + 1;
@@ -2227,14 +1978,13 @@
           database.ref('admin/withdrawals').push({ id, userId, userName, amount:amt, address:addr, status:'pending', timestamp:now() });
           
           sendBot(`Withdrawal Submitted\nAmount: ${amt} TON\nAddress: ${addr}`);
-          notify(`${t('withdraw_submitted')} ${amt} TON`);
+          notify(`Withdrawal of ${amt} TON submitted`);
           showWithdrawHistoryModal();
         };
       }
     }
 
     function showWithdrawHistoryModal() {
-      triggerHaptic('light');
       const modal = document.getElementById('withdraw-history-modal');
       const content = document.getElementById('withdraw-history-content');
       const totalWithdrawn = withdrawHistory.reduce((sum, w) => sum + w.amount, 0);
@@ -2243,15 +1993,15 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">${t('withdraw_history')}</div>
+              <div class="history-main-title">${t('wd_history')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
-                <div class="history-stat-label">${t('total_withdrawals')}</div>
+                <div class="history-stat-label">Total Withdrawals</div>
                 <div class="history-stat-value">${withdrawHistory.length}</div>
               </div>
               <div class="history-stat-card">
-                <div class="history-stat-label">${t('amount')}</div>
+                <div class="history-stat-label">Total Amount</div>
                 <div class="history-stat-value">${totalWithdrawn.toFixed(2)} TON</div>
               </div>
             </div>
@@ -2281,8 +2031,8 @@
             `).join('') : `
               <div class="empty-state">
                 <div class="empty-icon">📤</div>
-                <div class="empty-title">${t('no_withdrawals')}</div>
-                <div class="empty-text">${t('wd_history_text')}</div>
+                <div class="empty-title">No Withdrawals Yet</div>
+                <div class="empty-text">Your withdrawal history will appear here</div>
               </div>
             `}
           </div>
@@ -2292,10 +2042,9 @@
     }
 
     function showActivitiesModal(){
-      triggerHaptic('light');
       const modal = document.getElementById('activities-modal');
       const content = document.getElementById('activities-content');
-      const all=[...depositHistory.map(x=>({...x,type:'Deposit', badgeType:'deposit'})),...withdrawHistory.map(x=>({...x,type:'Withdraw', badgeType:'withdraw'})),...tradeHistory.map(x=>({...x,type:x.type==='purchase'?'Plan Purchase':'Daily Claim', badgeType:x.type==='purchase'?'purchase':'claim'}))].sort((a,b)=>b.timestamp-a.timestamp);
+      const all=[...depositHistory.map(x=>({...x,type:t('deposit'), badgeType:'deposit'})),...withdrawHistory.map(x=>({...x,type:t('withdraw'), badgeType:'withdraw'})),...tradeHistory.map(x=>({...x,type:x.type==='purchase'?'Plan Purchase':'Daily Claim', badgeType:x.type==='purchase'?'purchase':'claim'}))].sort((a,b)=>b.timestamp-a.timestamp);
       
       const totalDeposit = depositHistory.reduce((s,d)=>s+d.amount,0);
       const totalWithdraw = withdrawHistory.reduce((s,w)=>s+w.amount,0);
@@ -2304,15 +2053,15 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">${t('activities')}</div>
+              <div class="history-main-title">${t('activity')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
-                <div class="history-stat-label">${t('total_transactions')}</div>
+                <div class="history-stat-label">Total Transactions</div>
                 <div class="history-stat-value">${all.length}</div>
               </div>
               <div class="history-stat-card">
-                <div class="history-stat-label">${t('net_flow')}</div>
+                <div class="history-stat-label">Net Flow</div>
                 <div class="history-stat-value">${(totalDeposit - totalWithdraw).toFixed(2)} TON</div>
               </div>
             </div>
@@ -2328,7 +2077,7 @@
                   <div class="history-timestamp">${new Date(a.timestamp*1000).toLocaleString()}</div>
                 </div>
                 <div class="history-amount-row">
-                  <div class="history-amount ${a.type==='Deposit'||a.type==='Daily Claim'?'positive':'negative'}">${a.type==='Deposit'||a.type==='Daily Claim'?'+':'-'}${a.amount} TON</div>
+                  <div class="history-amount ${a.type===t('deposit')||a.type==='Daily Claim'?'positive':'negative'}">${a.type===t('deposit')||a.type==='Daily Claim'?'+':'-'}${a.amount} TON</div>
                 </div>
                 ${a.planName ? `
                   <div class="history-details-row">
@@ -2352,8 +2101,8 @@
             `).join('') : `
               <div class="empty-state">
                 <div class="empty-icon">📊</div>
-                <div class="empty-title">${t('no_activities')}</div>
-                <div class="empty-text">${t('act_history_text')}</div>
+                <div class="empty-title">No Activities Yet</div>
+                <div class="empty-text">Your activity history will appear here</div>
               </div>
             `}
           </div>
@@ -2363,7 +2112,6 @@
     }
 
     function showTradesModal(){
-      triggerHaptic('light');
       const modal = document.getElementById('trades-modal');
       const content = document.getElementById('trades-content');
       const list=Object.values(activeTrades);
@@ -2385,7 +2133,7 @@
                 <div class="history-stat-value">${list.length}</div>
               </div>
               <div class="history-stat-card">
-                <div class="history-stat-label">${t('total_invested')}</div>
+                <div class="history-stat-label">Total Invested</div>
                 <div class="history-stat-value">${totalInvested.toFixed(2)} TON</div>
               </div>
             </div>
@@ -2408,16 +2156,16 @@
                   </div>
                   <div class="prog" style="margin-top:12px">
                     <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
-                    <div class="progtext">${t('progress')}: ${t.claimedDays}/${p.duration} ${t('days')}</div>
+                    <div class="progtext">${t('progress')}: ${t.claimedDays}/${p.duration} days</div>
                   </div>
-                  <div class="countdown">${t('next_claim')} ${formatTime(86400-(now()-t.lastClaim))}</div>
+                  <div class="countdown">${t('next_claim')}: ${formatTime(86400-(now()-t.lastClaim))}</div>
                 </div>
               `;
             }).join('') : `
               <div class="empty-state">
                 <div class="empty-icon">📈</div>
-                <div class="empty-title">${t('no_active_trades')}</div>
-                <div class="empty-text">${t('purchase_plan')}</div>
+                <div class="empty-title">No Active Trades</div>
+                <div class="empty-text">Purchase a trading plan to get started</div>
               </div>
             `}
           </div>
@@ -2430,8 +2178,8 @@
     function renderEarn(){
       const html = `
         <div class="section-header">
-          <div class="section-title">${t('earn_title')}</div>
-          <div class="section-subtitle">${t('earn_subtitle')}</div>
+          <div class="section-title">${t('nav_tasks')}</div>
+          <div class="section-subtitle">Complete tasks to earn extra TON rewards</div>
         </div>
         <div id="tasksContainer"></div>
       `;
@@ -2451,15 +2199,10 @@
         categories.forEach(category=>{
           const categoryTasks = Object.keys(tasks).filter(id => tasks[id].category === category);
           if(categoryTasks.length > 0){
-            // Map category to translation key
-            let catKey = 'tasks_cat_project';
-            if(category === 'Partner') catKey = 'tasks_cat_partner';
-            if(category === 'Advertise') catKey = 'tasks_cat_advertise';
-
             html += `
               <div class="task-category-header">
                 <div style="width:4px;height:16px;background:var(--primary);border-radius:2px"></div>
-                <div class="task-category-title">${t(catKey)}</div>
+                <div class="task-category-title">${category} Tasks</div>
               </div>
               <div class="tasks-grid">
                 ${categoryTasks.map(id=>{
@@ -2480,7 +2223,7 @@
                           +${t.amount} TON
                         </div>
                       </div>
-                      <button class="task-action-btn" data-id="${id}" ${done ? 'disabled' : ''}>${done ? t('done') : t('start')}</button>
+                      <button class="task-action-btn" data-id="${id}" ${done ? 'disabled' : ''}>${done ? 'Done' : 'Start'}</button>
                     </div>
                   `;
                 }).join('')}
@@ -2489,17 +2232,16 @@
           }
         });
         
-        if(!html) html = `<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">${t('no_tasks')}</div><div class="empty-text">${t('check_back')}</div></div>`;
+        if(!html) html = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">No Tasks Available</div><div class="empty-text">Check back later for new tasks</div></div>';
         
         container.innerHTML = html;
 
         document.querySelectorAll('.task-action-btn').forEach(btn=>{
-          btn.onclick=()=>{
-            triggerHaptic('light');
+          btn.onclick=()=>{ haptic();
             const id=btn.dataset.id; const t=tasks[id]; if(!t) return;
             if (userData.completedTasks && userData.completedTasks[id]){ window.open(t.link,'_blank'); return; }
-            if (pendingTaskRewards[id]){ notify(t('processing')); return; }
-            pendingTaskRewards[id]=true; btn.disabled=true; btn.textContent=t('wait');
+            if (pendingTaskRewards[id]){ notify('Processing...'); return; }
+            pendingTaskRewards[id]=true; btn.disabled=true; btn.textContent='Wait...';
             window.open(t.link,'_blank');
             
             setTimeout(()=>{
@@ -2511,7 +2253,8 @@
               save({ tonBalance: tonBalance, completedTasks: userData.completedTasks });
               pendingTaskRewards[id]=false; 
               
-              btn.textContent = t('done');
+              // Update UI
+              btn.textContent = 'Done';
               btn.disabled = true;
               const item = document.getElementById(`taskItem_${id}`);
               if(item) item.classList.add('completed');
@@ -2523,11 +2266,9 @@
       });
     }
 
-    // Affiliate Page - Redesigned with Direct List
+    // Affiliate Page
     function renderAffiliate(){
       const refLink = `https://t.me/BlockOrbit_Bot/open?startapp=${userId}`;
-      
-      // Initial HTML with loading placeholder for list
       const html=`
         <div class="section-header">
           <div class="section-title">${t('affiliate_title')}</div>
@@ -2537,13 +2278,13 @@
         <div class="affiliate-card">
           <div style="font-size:14px;color:var(--text-secondary);font-weight:600;margin-bottom:8px">${t('total_earnings')}</div>
           <div style="font-size:32px;font-weight:800;color:var(--primary)">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} TON</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">${t('from_ref')} ${referralCount||0} ${t('referrals')}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">From ${referralCount||0} Referrals</div>
         </div>
 
         <div class="affiliate-stats-grid">
           <div class="affiliate-stat-item">
             <div class="affiliate-stat-value">${referralCount||0}</div>
-            <div class="affiliate-stat-label">${t('referrals')}</div>
+            <div class="affiliate-stat-label">${t('total_referrals')}</div>
           </div>
           <div class="affiliate-stat-item">
             <div class="affiliate-stat-value">${fmt(totalReferralCommission)} TON</div>
@@ -2553,7 +2294,7 @@
 
         <div class="card">
           <div style="font-weight:800;margin-bottom:8px">${t('invite_link')}</div>
-          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">${t('share_text')}</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Share this link to invite friends. You receive 20% of their earnings forever.</div>
           
           <div class="referral-link-box">
             <div class="referral-link-text">${refLink}</div>
@@ -2561,46 +2302,44 @@
           </div>
         </div>
 
-        <!-- Direct Referral List Section -->
         <div class="referral-list-container">
-          <div class="referral-list-title">${t('my_referrals')}</div>
-          <div id="directReferralList">
-            <div style="text-align:center; padding: 20px; color: var(--text-secondary);">Loading...</div>
+          <div class="referral-list-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            ${t('my_referrals')}
+          </div>
+          <div id="affiliate-referral-list">
+            <div style="text-align:center; padding: 20px; color: var(--text-muted);">Loading...</div>
           </div>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
-      document.getElementById('copyRefLink').onclick=()=>{
-        triggerHaptic('light');
-        copy(refLink);
-      };
-
-      // Fetch and Render Referrals Directly
+      document.getElementById('copyRefLink').onclick=()=>copy(refLink);
+      
+      // Load referrals directly
       database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snapshot => {
-        const listContainer = document.getElementById('directReferralList');
+        const listEl = document.getElementById('affiliate-referral-list');
         if (snapshot.numChildren() === 0) {
-          listContainer.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary)">${t('no_referrals')}</div>`;
+          listEl.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary)">${t('no_referrals')}</div>`;
         } else {
           let html = '';
           snapshot.forEach(child => {
             const u = child.val();
             html += `
               <div class="referral-item">
-                <img src="${u.avatar}" class="referral-avatar" alt="User">
+                <img src="${u.avatar || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}" class="referral-avatar">
                 <div class="referral-info">
                   <div class="referral-name">${u.name}</div>
-                  <div class="referral-id">ID: ${child.key}</div>
+                  <div class="referral-balance">${fmt(u.tonBalance||0)} TON</div>
                 </div>
-                <div class="referral-balance">${fmt(u.tonBalance||0)} TON</div>
               </div>
             `;
           });
-          listContainer.innerHTML = html;
+          listEl.innerHTML = html;
         }
       });
     }
 
-    // Profile - Enhanced with Settings & Support
+    // Profile
     function renderProfile(){
       const html=`
         <div class="section-header">
@@ -2619,37 +2358,30 @@
         </div>
 
         <div class="settings-card">
-           <div class="redeem-header" style="margin-bottom: 10px;">
-            <div class="redeem-icon" style="width:36px;height:36px;font-size:20px">⚙️</div>
-            <div class="redeem-title-group">
-              <div class="redeem-title" style="font-size:16px">${t('settings')}</div>
-            </div>
+          <div class="settings-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            ${t('settings_title')}
           </div>
           
-          <div class="settings-item">
-            <span class="settings-label">${t('language')}</span>
-            <select id="langSelect" class="select-input" style="width: auto; padding: 8px 12px;">
-              <option value="en" ${currentLang === 'en' ? 'selected' : ''}>English</option>
-              <option value="cn" ${currentLang === 'cn' ? 'selected' : ''}>中文</option>
-              <option value="bn" ${currentLang === 'bn' ? 'selected' : ''}>বাংলা</option>
-              <option value="ru" ${currentLang === 'ru' ? 'selected' : ''}>Русский</option>
-            </select>
+          <div style="margin-bottom:12px;font-weight:600;font-size:14px">${t('language')}</div>
+          <div class="language-selector">
+            <button class="lang-btn ${currentLang === 'EN' ? 'active' : ''}" data-lang="EN">EN</button>
+            <button class="lang-btn ${currentLang === 'CN' ? 'active' : ''}" data-lang="CN">CN</button>
+            <button class="lang-btn ${currentLang === 'BN' ? 'active' : ''}" data-lang="BN">BN</button>
+            <button class="lang-btn ${currentLang === 'RU' ? 'active' : ''}" data-lang="RU">RU</button>
           </div>
-          
-           <div class="settings-item" style="cursor:pointer; padding-top:16px;" id="supportBtn">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:18px">💬</span>
-              <span class="settings-label">${t('support')}</span>
-            </div>
-            <div class="wmi-arrow">›</div>
-          </div>
+
+          <button class="support-btn" id="supportBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            ${t('support')}
+          </button>
         </div>
 
         <div class="redeem-section">
           <div class="redeem-header">
             <div class="redeem-icon">🎁</div>
             <div class="redeem-title-group">
-              <div class="redeem-title">${t('redeem_title')}</div>
+              <div class="redeem-title">${t('redeem_code')}</div>
               <div class="redeem-subtitle">${t('redeem_subtitle')}</div>
             </div>
           </div>
@@ -2667,7 +2399,6 @@
       const redeemInput = document.getElementById('redeem');
       const charCount = document.getElementById('charCount');
       redeemInput.addEventListener('input', () => {
-        triggerHaptic('light');
         const len = redeemInput.value.length;
         charCount.textContent = `${len}/8`;
         if (len === 8) {
@@ -2677,65 +2408,55 @@
         }
       });
       
-      document.getElementById('copyUid').onclick=()=>{
-        triggerHaptic('light');
-        copy(userId);
-      };
+      document.getElementById('copyUid').onclick=()=>copy(userId);
       
-      document.getElementById('supportBtn').onclick = () => {
-        triggerHaptic('medium');
-        window.open('https://t.me/BlockOrbit_Support', '_blank');
-      };
-
-      document.getElementById('langSelect').onchange = (e) => {
-        triggerHaptic('light');
-        save({ language: e.target.value });
-      };
-      
-      document.getElementById('redeemGo').onclick=()=>{
-        triggerHaptic('medium');
+      document.getElementById('redeemGo').onclick=()=>{ haptic();
         const code=document.getElementById('redeem').value.trim().toUpperCase(); 
-        if(code.length!==8){ notify(t('invalid_code')); triggerHaptic('error'); return; }
+        if(code.length!==8){ notify('Enter valid 8-digit code'); return; }
         database.ref('redeemCodes/'+code).once('value').then(s=>{
-          if(!s.exists()){ notify(t('invalid_code')); triggerHaptic('error'); return; }
+          if(!s.exists()){ notify('Invalid or used code'); return; }
           const codeData = s.val();
-          if (codeData.used >= codeData.maxUsers) { notify(t('code_limit')); triggerHaptic('error'); return; }
+          if (codeData.used >= codeData.maxUsers) { notify('Code limit reached'); return; }
           const reward = Math.random() * (0.20 - 0.01) + 0.01;
           database.ref('redeemCodes/' + code).update({ used: codeData.used + 1 });
           tonBalance = tonBalance + reward;
           save({ tonBalance: tonBalance });
-          notify(`${t('claim_reward')} ${fmt(reward)} TON`);
+          notify(`Redeemed ${fmt(reward)} TON`);
           document.getElementById('redeem').value='';
           charCount.textContent = '0/8';
           charCount.style.color = 'var(--text-muted)';
         });
       };
+
+      // Language Buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.onclick = () => {
+          haptic();
+          currentLang = btn.dataset.lang;
+          save({ lang: currentLang });
+          updateUILanguage();
+          renderProfile(); // Re-render to apply language changes immediately
+        };
+      });
+
+      // Support Button
+      document.getElementById('supportBtn').onclick = () => {
+        haptic();
+        window.open('https://t.me/BlockOrbit_Support', '_blank');
+      };
     }
 
     // Modal Close
-    const closeIds = ['closeReferralModal', 'referralModal', 'closeDepositModal', 'closeWithdrawModal', 'closeDepositHistoryModal', 'closeWithdrawHistoryModal', 'closeActivitiesModal', 'closeTradesModal'];
-    closeIds.forEach(id => {
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.onclick = (e) => {
-        triggerHaptic('light');
-        if(id === 'referralModal' && e.target.id === 'referralModal') {
-            e.target.style.display = 'none';
-        } else if (id.startsWith('close')) {
-            el.closest('.fullscreen-modal').style.display = 'none';
-            el.closest('.modal-overlay').style.display = 'none';
-        } else {
-            document.getElementById(id).style.display = 'none';
-        }
-      };
-    });
+    document.getElementById('closeDepositModal').onclick = () => { haptic(); document.getElementById('deposit-modal').style.display = 'none'; };
+    document.getElementById('closeWithdrawModal').onclick = () => { haptic(); document.getElementById('withdraw-modal').style.display = 'none'; };
+    document.getElementById('closeDepositHistoryModal').onclick = () => { haptic(); document.getElementById('deposit-history-modal').style.display = 'none'; };
+    document.getElementById('closeWithdrawHistoryModal').onclick = () => { haptic(); document.getElementById('withdraw-history-modal').style.display = 'none'; };
+    document.getElementById('closeActivitiesModal').onclick = () => { haptic(); document.getElementById('activities-modal').style.display = 'none'; };
+    document.getElementById('closeTradesModal').onclick = () => { haptic(); document.getElementById('trades-modal').style.display = 'none'; };
 
     // Nav events
     document.querySelectorAll('.nav-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{ 
-        triggerHaptic('light');
-        showTab(btn.dataset.tab); 
-      });
+      btn.addEventListener('click', ()=>showTab(btn.dataset.tab));
     });
 
     // Bootstrap
@@ -2744,15 +2465,13 @@
       await loadCryptoPrices();
       try{
         userData = await loadUser();
-        if(userData.language) {
-          currentLang = userData.language;
-        }
+        if(userData.lang) currentLang = userData.lang;
       }catch{
         const loc = localStorage.getItem('blockorbit_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
-          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false, language: 'en'
+          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false, lang: 'EN'
         };
-        if(userData.language) currentLang = userData.language;
+        if(userData.lang) currentLang = userData.lang;
       }
       tonBalance = userData.tonBalance||0;
       purchasedPlans = userData.purchasedPlans||{};
@@ -2768,7 +2487,6 @@
       });
 
       document.getElementById('tonBalance').textContent = fmt(tonBalance);
-      updateUIText();
 
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
