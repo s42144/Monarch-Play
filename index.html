@@ -937,7 +937,7 @@
       color: #fff;
     }
 
-    /* Affiliate Page */
+    /* Affiliate Page - Redesigned */
     .affiliate-card {
       background: linear-gradient(135deg, #1E2329 0%, #2B3139 100%);
       border: 1px solid var(--primary);
@@ -1006,41 +1006,41 @@
       text-overflow: ellipsis;
     }
 
-    /* NEW: Direct Referral List Styles */
+    /* NEW: Referral List Items (Inline) */
     .referral-list-container {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-top: 20px;
+      padding-bottom: 20px;
     }
 
     .referral-list-item {
       background: var(--bg-card);
-      border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 16px;
+      border: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       gap: 16px;
       box-shadow: var(--shadow);
     }
-
-    .referral-list-avatar {
-      width: 56px;
-      height: 56px;
+    
+    .referral-avatar {
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       border: 2px solid var(--primary);
       object-fit: cover;
       flex-shrink: 0;
     }
-
-    .referral-list-info {
+    
+    .referral-info {
       flex: 1;
       min-width: 0;
     }
-
-    .referral-list-name {
-      font-size: 16px;
+    
+    .referral-name {
+      font-size: 15px;
       font-weight: 700;
       color: var(--text-main);
       margin-bottom: 4px;
@@ -1048,53 +1048,24 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
-    .referral-list-id {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-bottom: 4px;
+    
+    .referral-id {
+      font-size: 11px;
+      color: var(--text-muted);
       font-family: monospace;
-    }
-
-    .referral-list-balance {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--primary);
-    }
-
-    /* Profile Features */
-    .profile-header {
-      text-align: center;
-      padding: 20px 0;
+      margin-bottom: 4px;
     }
     
-    .profile-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid var(--primary);
-      margin-bottom: 12px;
-      object-fit: cover;
-    }
-
-    .profile-name {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-
-    .profile-id {
-      font-size: 14px;
-      color: var(--text-secondary);
-      font-family: monospace;
-      background: var(--bg-input);
-      padding: 4px 12px;
-      border-radius: 8px;
-      display: inline-flex;
+    .referral-commission {
+      font-size: 12px;
+      color: var(--accent-green);
+      font-weight: 600;
+      display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
     }
 
+    /* Profile Additions */
     .settings-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -1102,45 +1073,48 @@
       padding: 20px;
       margin-bottom: 16px;
     }
-
-    .setting-row {
+    
+    .setting-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 16px;
     }
-
-    .setting-row:last-child { border-bottom: none; }
-
+    
+    .setting-item:last-child { margin-bottom: 0; }
+    
     .setting-label {
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 14px;
       color: var(--text-main);
+      font-weight: 600;
     }
-
+    
     .language-select {
       background: var(--bg-input);
       color: var(--text-main);
       border: 1px solid var(--border-color);
       padding: 8px 12px;
       border-radius: 8px;
-      font-family: inherit;
+      font-size: 14px;
       outline: none;
+      cursor: pointer;
     }
-
+    
     .support-btn {
+      background: var(--accent-blue);
+      color: white;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      background: var(--accent-blue);
-      color: white;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: opacity 0.2s;
+      margin-top: 12px;
     }
     
     .support-btn:hover { opacity: 0.9; }
@@ -1180,7 +1154,7 @@
   <div id="loading-screen">
     <img src="https://i.postimg.cc/pVwtddgY/1000060090-Picsart-Background-Remover.png" class="loading-logo" alt="BlockOrbit" />
     <div class="loading-text">BlockOrbit</div>
-    <div class="loading-subtext">Initializing...</div>
+    <div class="loading-subtext" data-i18n="loading">Initializing...</div>
     <div class="loading-spinner"></div>
   </div>
 
@@ -1196,142 +1170,273 @@
 
     <!-- Navigation Bar -->
     <div class="nav-bar">
-      <button class="nav-btn active" data-tab="home">
+      <button class="nav-btn active haptic" data-tab="home">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGNUQ1MDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" alt="Trade" class="nav-icon" />
-        <span class="nav-label" id="nav-home">Trade Plans</span>
+        <span class="nav-label" data-i18n="nav_trade">Trade Plans</span>
       </button>
-      <button class="nav-btn" data-tab="wallet">
+      <button class="nav-btn haptic" data-tab="wallet">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIyIiB5PSI3IiB3aWR0aD0iMjAiIGhlaWdodD0iMTQiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik0xNiAyMUg4YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDhsMiAyaDZhMiAyIDAgMCAxIDIgMnYxMmEyIDIgMCAwIDEtMiAyeiI+PC9wYXRoPjwvc3ZnPg==" alt="Wallet" class="nav-icon" />
-        <span class="nav-label" id="nav-wallet">Wallet</span>
+        <span class="nav-label" data-i18n="nav_wallet">Wallet</span>
       </button>
-      <button class="nav-btn" data-tab="earn">
+      <button class="nav-btn haptic" data-tab="earn">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PGxpbmUgeDE9IjEyIiB5MT0iOCIgeDI9IjEyIiB5Mj0iMTIiPjwvbGluZT48bGluZSB4MT0iMTIiIHkxPSIxNiIgeDI9IjEyLjAxIiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" alt="Tasks" class="nav-icon" />
-        <span class="nav-label" id="nav-earn">Tasks</span>
+        <span class="nav-label" data-i18n="nav_tasks">Tasks</span>
       </button>
-      <button class="nav-btn" data-tab="affiliate">
+      <button class="nav-btn haptic" data-tab="affiliate">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTcgMjFoLTJ2LTJhMiAyIDAgMCAxIDItMmgyYTIgMiAwIDAgMSAyIDJ2MmgtMnptMCAwaDIiLz48cGF0aCBkPSJNOSAyMUg3di0yYTIgMiAwIDAgMSAyLTJoMmEyIDIgMCAwIDEgMiAydjJIOSIvPjxwYXRoIGQ9Ik0xMiAxNmwzLTNoLTVsMy0zIi8+PC9zdmc+" alt="Affiliate" class="nav-icon" />
-        <span class="nav-label" id="nav-affiliate">Affiliate</span>
+        <span class="nav-label" data-i18n="nav_affiliate">Affiliate</span>
       </button>
-      <button class="nav-btn" data-tab="profile">
+      <button class="nav-btn haptic" data-tab="profile">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" alt="Profile" class="nav-icon" />
-        <span class="nav-label" id="nav-profile">Profile</span>
+        <span class="nav-label" data-i18n="nav_profile">Profile</span>
       </button>
+    </div>
+  </div>
+
+  <!-- Referral List Modal (Deprecated logic, kept for structure but not used in new flow) -->
+  <div class="modal-overlay" id="referralModal">
+    <div class="modal-content-box">
+      <div class="modal-header" style="padding: 0; border: none; margin-bottom: 20px;">
+        <div class="modal-title">My Referrals</div>
+        <button class="modal-close haptic" id="closeReferralModal">×</button>
+      </div>
+      <div id="referralListContent"></div>
     </div>
   </div>
 
   <!-- Full Screen Modals -->
   <div class="fullscreen-modal" id="deposit-modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-deposit-title">Deposit TON</div>
-      <button class="modal-close" id="closeDepositModal">×</button>
+      <div class="modal-title" data-i18n="deposit_title">Deposit TON</div>
+      <button class="modal-close haptic" id="closeDepositModal">×</button>
     </div>
     <div class="modal-content" id="deposit-content"></div>
   </div>
 
   <div class="fullscreen-modal" id="withdraw-modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-withdraw-title">Withdraw TON</div>
-      <button class="modal-close" id="closeWithdrawModal">×</button>
+      <div class="modal-title" data-i18n="withdraw_title">Withdraw TON</div>
+      <button class="modal-close haptic" id="closeWithdrawModal">×</button>
     </div>
     <div class="modal-content" id="withdraw-content"></div>
   </div>
   
   <div class="fullscreen-modal" id="deposit-history-modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-deposit-history-title">Deposit History</div>
-      <button class="modal-close" id="closeDepositHistoryModal">×</button>
+      <div class="modal-title" data-i18n="deposit_history">Deposit History</div>
+      <button class="modal-close haptic" id="closeDepositHistoryModal">×</button>
     </div>
     <div class="modal-content" id="deposit-history-content"></div>
   </div>
 
   <div class="fullscreen-modal" id="withdraw-history-modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-withdraw-history-title">Withdraw History</div>
-      <button class="modal-close" id="closeWithdrawHistoryModal">×</button>
+      <div class="modal-title" data-i18n="withdraw_history">Withdraw History</div>
+      <button class="modal-close haptic" id="closeWithdrawHistoryModal">×</button>
     </div>
     <div class="modal-content" id="withdraw-history-content"></div>
   </div>
   
   <div class="fullscreen-modal" id="activities-modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-activities-title">Activities</div>
-      <button class="modal-close" id="closeActivitiesModal">×</button>
+      <div class="modal-title" data-i18n="activities">Activities</div>
+      <button class="modal-close haptic" id="closeActivitiesModal">×</button>
     </div>
     <div class="modal-content" id="activities-content"></div>
   </div>
 
   <div class="fullscreen-modal" id="trades-modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-trades-title">Active Trades</div>
-      <button class="modal-close" id="closeTradesModal">×</button>
+      <div class="modal-title" data-i18n="active_trades">Active Trades</div>
+      <button class="modal-close haptic" id="closeTradesModal">×</button>
     </div>
     <div class="modal-content" id="trades-content"></div>
   </div>
 
   <script>
     // --- Translations ---
-    const translations = {
+    const i18n = {
       en: {
-        nav: { home: "Trade Plans", wallet: "Wallet", earn: "Tasks", affiliate: "Affiliate", profile: "Profile" },
-        home: { title: "Trade Plans", subtitle: "Invest TON and claim earnings every 24 hours" },
-        wallet: { title: "Wallet", deposit: "Deposit", withdraw: "Withdraw", depHistory: "Deposit History", wdHistory: "Withdraw History", activities: "Activities", trades: "Active Trades" },
-        earn: { title: "Tasks", subtitle: "Complete tasks to earn extra TON rewards" },
-        affiliate: { title: "Affiliate Program", subtitle: "Invite friends and earn lifetime commissions", earnings: "Total Earnings", referrals: "Referrals", commission: "Commission (20%)", link: "Your Invite Link", listTitle: "My Referrals" },
-        profile: { title: "Profile", subtitle: "Account settings", settings: "Settings", language: "Language", support: "Support", supportLabel: "Contact Support", redeemTitle: "Redeem Code", redeemSubtitle: "Enter your 8-character code to claim rewards", redeemBtn: "Claim Reward" },
-        common: { balance: "Total Balance", copy: "Copied to clipboard!", confirm: "Confirm", cancel: "Cancel" }
+        loading: "Initializing...",
+        nav_trade: "Trade Plans",
+        nav_wallet: "Wallet",
+        nav_tasks: "Tasks",
+        nav_affiliate: "Affiliate",
+        nav_profile: "Profile",
+        deposit_title: "Deposit TON",
+        withdraw_title: "Withdraw TON",
+        deposit_history: "Deposit History",
+        withdraw_history: "Withdraw History",
+        activities: "Activities",
+        active_trades: "Active Trades",
+        trade_plans_title: "Trade Plans",
+        trade_plans_subtitle: "Invest TON and claim earnings every 24 hours",
+        home_title: "Wallet",
+        wallet_subtitle: "Manage your assets",
+        earn_title: "Tasks",
+        earn_subtitle: "Complete tasks to earn extra TON rewards",
+        affiliate_title: "Affiliate Program",
+        affiliate_subtitle: "Invite friends and earn lifetime commissions",
+        profile_title: "Profile",
+        profile_subtitle: "Account settings",
+        total_balance: "Total Balance",
+        deposit: "Deposit",
+        withdraw: "Withdraw",
+        deposit_hist: "Deposit History",
+        withdraw_hist: "Withdraw History",
+        act: "Activities",
+        trades: "Active Trades",
+        your_invite_link: "Your Invite Link",
+        share_this_link: "Share this link to invite friends. You receive 20% of their earnings forever.",
+        total_earnings: "Total Earnings",
+        from_referrals: "From Referrals",
+        total_referrals: "Total Referrals",
+        commission: "Commission (20%)",
+        settings: "Settings",
+        language: "Language",
+        support: "Support",
+        redeem_code: "Redeem Code",
+        enter_code: "Enter your 8-character code to claim rewards",
+        claim_reward: "Claim Reward",
+        no_referrals: "You haven't referred anyone yet.",
+        view_referrals: "My Referrals List"
       },
       cn: {
-        nav: { home: "交易计划", wallet: "钱包", earn: "任务", affiliate: "联盟", profile: "个人资料" },
-        home: { title: "交易计划", subtitle: "投资 TON 并每 24 小时领取收益" },
-        wallet: { title: "钱包", deposit: "充值", withdraw: "提现", depHistory: "充值记录", wdHistory: "提现记录", activities: "活动", trades: "活跃交易" },
-        earn: { title: "任务", subtitle: "完成任务赚取额外 TON 奖励" },
-        affiliate: { title: "联盟计划", subtitle: "邀请朋友并赚取终身佣金", earnings: "总收益", referrals: "推荐人数", commission: "佣金 (20%)", link: "您的邀请链接", listTitle: "我的推荐" },
-        profile: { title: "个人资料", subtitle: "账户设置", settings: "设置", language: "语言", support: "支持", supportLabel: "联系支持", redeemTitle: "兑换码", redeemSubtitle: "输入您的 8 位字符代码以领取奖励", redeemBtn: "领取奖励" },
-        common: { balance: "总余额", copy: "已复制到剪贴板！", confirm: "确认", cancel: "取消" }
+        loading: "初始化中...",
+        nav_trade: "交易计划",
+        nav_wallet: "钱包",
+        nav_tasks: "任务",
+        nav_affiliate: "联盟",
+        nav_profile: "个人资料",
+        deposit_title: "存款 TON",
+        withdraw_title: "提款 TON",
+        deposit_history: "存款记录",
+        withdraw_history: "提款记录",
+        activities: "活动",
+        active_trades: "活跃交易",
+        trade_plans_title: "交易计划",
+        trade_plans_subtitle: "投资 TON 并每 24 小时领取收益",
+        home_title: "钱包",
+        wallet_subtitle: "管理您的资产",
+        earn_title: "任务",
+        earn_subtitle: "完成任务以获得额外的 TON 奖励",
+        affiliate_title: "推荐计划",
+        affiliate_subtitle: "邀请朋友并获得终身佣金",
+        profile_title: "个人资料",
+        profile_subtitle: "账户设置",
+        total_balance: "总余额",
+        deposit: "存款",
+        withdraw: "提款",
+        deposit_hist: "存款记录",
+        withdraw_hist: "提款记录",
+        act: "活动",
+        trades: "活跃交易",
+        your_invite_link: "您的邀请链接",
+        share_this_link: "分享此链接邀请朋友。您将永远获得他们收益的 20%。",
+        total_earnings: "总收益",
+        from_referrals: "来自推荐",
+        total_referrals: "总推荐数",
+        commission: "佣金 (20%)",
+        settings: "设置",
+        language: "语言",
+        support: "支持",
+        redeem_code: "兑换码",
+        enter_code: "输入您的 8 位代码以领取奖励",
+        claim_reward: "领取奖励",
+        no_referrals: "您还没有推荐任何人。",
+        view_referrals: "我的推荐列表"
       },
       bn: {
-        nav: { home: "ট্রেড প্ল্যান", wallet: "ওয়ালেট", earn: "কাজ", affiliate: "অ্যাফিলিয়েট", profile: "প্রোফাইল" },
-        home: { title: "ট্রেড প্ল্যান", subtitle: "TON বিনিয়োগ করুন এবং প্রতি ২৪ ঘন্টায় উপার্জন দাবি করুন" },
-        wallet: { title: "ওয়ালেট", deposit: "ডিপোজিট", withdraw: "উত্তোলন", depHistory: "ডিপোজিট ইতিহাস", wdHistory: "উত্তোলন ইতিহাস", activities: "কার্যকলাপ", trades: "সক্রিয় ট্রেড" },
-        earn: { title: "কাজ", subtitle: "অতিরিক্ত TON পুরস্কার অর্জন করতে কাজগুলি সম্পূর্ণ করুন" },
-        affiliate: { title: "অ্যাফিলিয়েট প্রোগ্রাম", subtitle: "বন্ধুদের আমন্ত্রণ জানান এবং আজীবন কমিশন উপার্জন করুন", earnings: "মোট উপার্জন", referrals: "রেফারেল", commission: "কমিশন (২০%)", link: "আপনার আমন্ত্রণ লিঙ্ক", listTitle: "আমার রেফারেল" },
-        profile: { title: "প্রোফাইল", subtitle: "অ্যাকাউন্ট সেটিংস", settings: "সেটিংস", language: "ভাষা", support: "সাপোর্ট", supportLabel: "সাপোর্টে যোগাযোগ করুন", redeemTitle: "রিডিম কোড", redeemSubtitle: "পুরস্কার পেতে আপনার ৮ সংখ্যার কোড লিখুন", redeemBtn: "পুরস্কার দাবি করুন" },
-        common: { balance: "মোট ব্যালেন্স", copy: "ক্লিপবোর্ডে কপি করা হয়েছে!", confirm: "নিশ্চিত করুন", cancel: "বাতিল" }
+        loading: "শুরু হচ্ছে...",
+        nav_trade: "ট্রেড প্ল্যান",
+        nav_wallet: "ওয়ালেট",
+        nav_tasks: "কাজ",
+        nav_affiliate: "অ্যাফিলিয়েট",
+        nav_profile: "প্রোফাইল",
+        deposit_title: "টন জমা দিন",
+        withdraw_title: "টন উত্তোলন করুন",
+        deposit_history: "জমা ইতিহাস",
+        withdraw_history: "উত্তোলন ইতিহাস",
+        activities: "কার্যকলাপ",
+        active_trades: "সক্রিয় ট্রেড",
+        trade_plans_title: "ট্রেড প্ল্যান",
+        trade_plans_subtitle: "TON বিনিয়োগ করুন এবং প্রতি ২৪ ঘন্টায় আয় দাবি করুন",
+        home_title: "ওয়ালেট",
+        wallet_subtitle: "আপনার সম্পদ পরিচালনা করুন",
+        earn_title: "কাজ",
+        earn_subtitle: "অতিরিক্ত TON পুরস্কার অর্জন করতে কাজগুলি সম্পন্ন করুন",
+        affiliate_title: "অ্যাফিলিয়েট প্রোগ্রাম",
+        affiliate_subtitle: "বন্ধুদের আমন্ত্রণ জানান এবং আজীবন কমিশন উপার্জন করুন",
+        profile_title: "প্রোফাইল",
+        profile_subtitle: "অ্যাকাউন্ট সেটিংস",
+        total_balance: "মোট ব্যালেন্স",
+        deposit: "জমা",
+        withdraw: "উত্তোলন",
+        deposit_hist: "জমা ইতিহাস",
+        withdraw_hist: "উত্তোলন ইতিহাস",
+        act: "কার্যকলাপ",
+        trades: "সক্রিয় ট্রেড",
+        your_invite_link: "আপনার আমন্ত্রণ লিঙ্ক",
+        share_this_link: "বন্ধুদের আমন্ত্রণ জানাতে এই লিঙ্কটি শেয়ার করুন। আপনি তাদের আয়ের 20% আজীবন পাবেন।",
+        total_earnings: "মোট আয়",
+        from_referrals: "রেফারেল থেকে",
+        total_referrals: "মোট রেফারেল",
+        commission: "কমিশন (২০%)",
+        settings: "সেটিংস",
+        language: "ভাষা",
+        support: "সমর্থন",
+        redeem_code: "কোড রিডিম করুন",
+        enter_code: "পুরস্কার দাবি করতে আপনার 8 সংখ্যার কোড লিখুন",
+        claim_reward: "পুরস্কার দাবি করুন",
+        no_referrals: "আপনি এখনো কাউকে রেফার করেননি।",
+        view_referrals: "আমার রেফারেল তালিকা"
       },
       ru: {
-        nav: { home: "Торговые планы", wallet: "Кошелек", earn: "Задания", affiliate: "Партнеры", profile: "Профиль" },
-        home: { title: "Торговые планы", subtitle: "Инвестируйте TON и получайте доход каждые 24 часа" },
-        wallet: { title: "Кошелек", deposit: "Депозит", withdraw: "Вывод", depHistory: "История депозитов", wdHistory: "История выводов", activities: "Активность", trades: "Активные сделки" },
-        earn: { title: "Задания", subtitle: "Выполняйте задания для получения дополнительных наград в TON" },
-        affiliate: { title: "Партнерская программа", subtitle: "Приглашайте друзей и пожизненно зарабатывайте комиссии", earnings: "Общий доход", referrals: "Рефералы", commission: "Комиссия (20%)", link: "Ваша реферальная ссылка", listTitle: "Мои рефералы" },
-        profile: { title: "Профиль", subtitle: "Настройки аккаунта", settings: "Настройки", language: "Язык", support: "Поддержка", supportLabel: "Связаться с поддержкой", redeemTitle: "Код погашения", redeemSubtitle: "Введите ваш 8-значный код для получения награды", redeemBtn: "Получить награду" },
-        common: { balance: "Общий баланс", copy: "Скопировано в буфер обмена!", confirm: "Подтвердить", cancel: "Отмена" }
+        loading: "Инициализация...",
+        nav_trade: "Торговые планы",
+        nav_wallet: "Кошелек",
+        nav_tasks: "Задания",
+        nav_affiliate: "Партнерская программа",
+        nav_profile: "Профиль",
+        deposit_title: "Депозит TON",
+        withdraw_title: "Вывод TON",
+        deposit_history: "История депозитов",
+        withdraw_history: "История выводов",
+        activities: "Активность",
+        active_trades: "Активные торги",
+        trade_plans_title: "Торговые планы",
+        trade_plans_subtitle: "Инвестируйте TON и получайте доход каждые 24 часа",
+        home_title: "Кошелек",
+        wallet_subtitle: "Управление активами",
+        earn_title: "Задания",
+        earn_subtitle: "Выполняйте задания для получения дополнительных вознаграждений в TON",
+        affiliate_title: "Партнерская программа",
+        affiliate_subtitle: "Приглашайте друзей и получайте пожизненные комиссии",
+        profile_title: "Профиль",
+        profile_subtitle: "Настройки аккаунта",
+        total_balance: "Общий баланс",
+        deposit: "Депозит",
+        withdraw: "Вывод",
+        deposit_hist: "История депозитов",
+        withdraw_hist: "История выводов",
+        act: "Активность",
+        trades: "Активные торги",
+        your_invite_link: "Ваша реферальная ссылка",
+        share_this_link: "Поделитесь этой ссылкой, чтобы пригласить друзей. Вы получаете 20% от их заработка навсегда.",
+        total_earnings: "Общий доход",
+        from_referrals: "От рефералов",
+        total_referrals: "Всего рефералов",
+        commission: "Комиссия (20%)",
+        settings: "Настройки",
+        language: "Язык",
+        support: "Поддержка",
+        redeem_code: "Код погашения",
+        enter_code: "Введите ваш 8-значный код для получения вознаграждения",
+        claim_reward: "Получить награду",
+        no_referrals: "Вы еще никого не пригласили.",
+        view_referrals: "Список рефералов"
       }
     };
-
-    let currentLang = 'en';
-
-    function t(path) {
-      const keys = path.split('.');
-      let obj = translations[currentLang];
-      for (let k of keys) {
-        if (obj && obj[k]) obj = obj[k];
-        else return translations['en'][path.split('.').reduce((o, i) => o?.[i], translations['en'])] || path;
-      }
-      return obj;
-    }
-
-    function updateLanguageUI() {
-      document.getElementById('nav-home').textContent = t('nav.home');
-      document.getElementById('nav-wallet').textContent = t('nav.wallet');
-      document.getElementById('nav-earn').textContent = t('nav.earn');
-      document.getElementById('nav-affiliate').textContent = t('nav.affiliate');
-      document.getElementById('nav-profile').textContent = t('nav.profile');
-      
-      // Re-render current tab to update internal text
-      const activeTab = document.querySelector('.nav-btn.active').dataset.tab;
-      showTab(activeTab);
-    }
 
     // Firebase Configuration
     const firebaseConfig = {
@@ -1352,17 +1457,6 @@
     const tg = window.Telegram?.WebApp || { expand:()=>{}, ready:()=>{}, initDataUnsafe:{}, HapticFeedback: { impactOccurred: ()=>{}, notificationOccurred: ()=>{} } };
     tg.expand(); tg.ready();
 
-    // Haptic Helper
-    function triggerHaptic(type = 'light') {
-      if (tg.HapticFeedback) {
-        if (type === 'light') tg.HapticFeedback.impactOccurred('light');
-        else if (type === 'medium') tg.HapticFeedback.impactOccurred('medium');
-        else if (type === 'heavy') tg.HapticFeedback.impactOccurred('heavy');
-        else if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
-        else if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
-      }
-    }
-
     // Bot
     const BOT_TOKEN = '8725017918:AAHDWjOcK0fP9kchQdAL7fZoumgwaKVMXO4';
     
@@ -1374,6 +1468,18 @@
           body: JSON.stringify({ chat_id: chatId || userId, text: msg, parse_mode: 'HTML' })
         });
       } catch (e) { console.warn('Bot send failed', e); }
+    };
+
+    // Haptic Feedback Helper
+    const hapticFeedback = () => {
+      try {
+        if (window.navigator.vibrate) {
+          window.navigator.vibrate(5); // Light vibration for Android
+        }
+        if (tg.HapticFeedback) {
+          tg.HapticFeedback.impactOccurred('light');
+        }
+      } catch(e) {}
     };
 
     // State
@@ -1389,25 +1495,36 @@
     let pendingTaskRewards={};
     let referralCount = 0;
     let totalReferralCommission = 0;
+    let currentLang = localStorage.getItem('blockorbit_lang') || 'en';
+    let referralListener = null; // Store listener to detach if needed
 
     // Utils
     const now = () => Math.floor(Date.now()/1000);
     const fmt = (n)=> Number(n||0).toFixed(6);
     const notify = (m, d=2500) => { 
+      hapticFeedback();
       const n=document.createElement('div'); 
       n.className='notification'; 
       n.textContent=m; 
       document.body.appendChild(n); 
       setTimeout(()=>n.remove(), d); 
-      triggerHaptic('error'); // Slight haptic on notify
     };
-    const copy = (txt)=> {
-      navigator.clipboard.writeText(txt).then(()=>{
-        notify(t('common.copy'));
-        triggerHaptic('success');
+    const copy = (t)=> navigator.clipboard.writeText(t).then(()=>notify('Copied to clipboard!'));
+    const generateId = () => 'TXN' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
+
+    // Translation Function
+    const t = (key) => {
+      return i18n[currentLang][key] || i18n['en'][key] || key;
+    };
+
+    const updateLanguageUI = () => {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[currentLang][key]) {
+          el.textContent = i18n[currentLang][key];
+        }
       });
     };
-    const generateId = () => 'TXN' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
 
     // Telegram User
     function getTelegramUserData() {
@@ -1486,7 +1603,7 @@
         avatar:userAvatar, name:userName, referrals:0, completedTasks:{},
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
         referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false,
-        language: 'en'
+        language: currentLang
       };
       await userRef(userId).set(init);
       return init;
@@ -1505,7 +1622,7 @@
       }
     }
 
-    // Referral Logic (Enhanced based on Shark Bounty logic)
+    // Referral Logic (Improved from Shark Bounty style)
     function awardReferralCommission(earnedAmount) {
       if (!userData.referredBy) return;
       const commission = earnedAmount * 0.2;
@@ -1515,43 +1632,30 @@
         if (refSnap.exists()) {
           const referrerData = refSnap.val();
           const newBalance = (referrerData.tonBalance || 0) + commission;
-          const newTotalComm = (referrerData.totalReferralCommission || 0) + commission;
           
-          database.ref('users/' + referrerId).update({ 
+          // Update commission tracking specifically
+          const updates = {
             tonBalance: newBalance, 
-            totalReferralCommission: newTotalComm 
-          });
+            totalReferralCommission: (referrerData.totalReferralCommission || 0) + commission
+          };
+          
+          // Deep update for specific user commission
+          updates[`referralCommissions/${userId}`] = (referrerData.referralCommissions?.[userId] || 0) + commission;
+          
+          database.ref('users/' + referrerId).update(updates);
         }
       });
     }
 
-    // Process Referral on Startup
-    async function processReferral() {
-      const startParam = tg?.initDataUnsafe?.start_param;
-      if (startParam && !userData.referredBy) {
-        const referrerId = startParam;
-        // Prevent self-referral
-        if (referrerId !== userId) {
-          // Verify referrer exists
-          const refSnap = await database.ref('users/' + referrerId).once('value');
-          if (refSnap.exists()) {
-            userData.referredBy = referrerId;
-            save({ referredBy: referrerId });
-            notify(t('affiliate.subtitle')); // Welcome feedback
-          }
-        }
-      }
-    }
-
     // Tabs
     function showTab(tab){
-      triggerHaptic('light');
       document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
       if(tab==='home') renderHome();
       if(tab==='wallet') renderWallet();
       if(tab==='earn') renderEarn();
       if(tab==='affiliate') renderAffiliate();
       if(tab==='profile') renderProfile();
+      hapticFeedback();
     }
 
     // Home
@@ -1563,8 +1667,8 @@
 
       const html = `
         <div class="section-header">
-          <div class="section-title">${t('home.title')}</div>
-          <div class="section-subtitle">${t('home.subtitle')}</div>
+          <div class="section-title" data-i18n="trade_plans_title">${t('trade_plans_title')}</div>
+          <div class="section-subtitle" data-i18n="trade_plans_subtitle">${t('trade_plans_subtitle')}</div>
         </div>
 
         <div class="live-prices">
@@ -1618,22 +1722,22 @@
                   <div class="progtext">Progress: ${tr.claimedDays}/${p.duration} days</div>
                 </div>
                 <div class="countdown" id="cd_${p.id}">Next claim in: ${formatTime(86400-(now()-tr.lastClaim))}</div>
-                <button class="btn-claim" id="claim_${p.id}" ${canClaim?'':'disabled'}>${canClaim?`Claim ${p.dailyEarning} TON`:'Wait'}</button>
+                <button class="btn-claim haptic" id="claim_${p.id}" ${canClaim?'':'disabled'}>${canClaim?`Claim ${p.dailyEarning} TON`:'Wait'}</button>
               ` : `
-                <button class="btn-primary" id="buy_${p.id}" ${purchased?'disabled':''}>${purchased?'Purchased':'Buy Plan'}</button>
+                <button class="btn-primary haptic" id="buy_${p.id}" ${purchased?'disabled':''}>${purchased?'Purchased':'Buy Plan'}</button>
               `}
             </div>
           `;
         }).join('')}
       `;
       document.getElementById('main-content').innerHTML = html;
+      updateLanguageUI(); // Ensure dynamic content is localized if keys were added inside plans
 
       TRADE_PLANS.forEach(p=>{
         const buy=document.getElementById(`buy_${p.id}`);
         const claim=document.getElementById(`claim_${p.id}`);
         if(buy){
           buy.addEventListener('click', ()=>{
-            triggerHaptic('medium');
             if (purchasedPlans[p.id]) { notify('Already purchased'); return; }
             if (tonBalance < p.price) { notify('Insufficient TON balance'); return; }
             const newBal=tonBalance - p.price;
@@ -1651,7 +1755,6 @@
         }
         if(claim){
           claim.addEventListener('click', ()=>{
-            triggerHaptic('heavy');
             const tr=activeTrades[p.id]; if(!tr) return;
             if ((now()-tr.lastClaim)<86400){ notify('Claim available every 24h'); return; }
             const earned=p.dailyEarning;
@@ -1692,7 +1795,7 @@
       const html = `
         <div class="wallet-dashboard">
           <div class="wallet-balance-card">
-            <div class="wb-label">${t('common.balance')}</div>
+            <div class="wb-label" data-i18n="total_balance">${t('total_balance')}</div>
             <div class="wb-value">
               <img src="https://i.postimg.cc/6qxHW6rX/download.png" alt="TON" />
               ${fmt(tonBalance)}
@@ -1700,41 +1803,41 @@
           </div>
 
           <div class="wallet-actions">
-            <div class="wallet-action-btn" id="w_dep">
+            <div class="wallet-action-btn haptic" id="w_dep">
               <div class="wab-icon">
                 <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSI1IiB4Mj0iMTIiIHkyPSIxOSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjE5IDEyIDEyIDE5IDUgMTIiPjwvcG9seWxpbmU+PC9zdmc+" alt="Deposit">
               </div>
-              <div class="wab-text">${t('wallet.deposit')}</div>
+              <div class="wab-text" data-i18n="deposit">${t('deposit')}</div>
             </div>
-            <div class="wallet-action-btn" id="w_wd">
+            <div class="wallet-action-btn haptic" id="w_wd">
               <div class="wab-icon">
                 <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIxOSIgeDI9IjEyIiB5Mj0iNSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjUgMTIgMTIgNSAxOSAxMiI+PC9wb2x5bGluZT48L3N2Zz4=" alt="Withdraw">
               </div>
-              <div class="wab-text">${t('wallet.withdraw')}</div>
+              <div class="wab-text" data-i18n="withdraw">${t('withdraw')}</div>
             </div>
           </div>
 
-          <div class="wallet-menu-item" id="w_deph">
+          <div class="wallet-menu-item haptic" id="w_deph">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMTIgNiAxMiAxMiAxNiAxNCI+PC9wb2x5bGluZT48L3N2Zz4=" class="wmi-icon" alt="Deposit History">
-            <div class="wmi-text">${t('wallet.depHistory')}</div>
+            <div class="wmi-text" data-i18n="deposit_hist">${t('deposit_hist')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
-          <div class="wallet-menu-item" id="w_wdh">
+          <div class="wallet-menu-item haptic" id="w_wdh">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMyAzdjE4aDE4Ij48L3BhdGg+PHBhdGggZD0iTTMgOWg5bDMgM2gtMTJ6Ij48L3BhdGg+PHBhdGggZD0iTTMgMTVoNmwzIDNoLTl6Ij48L3BhdGg+PC9zdmc+" class="wmi-icon" alt="Withdraw History">
-            <div class="wmi-text">${t('wallet.wdHistory')}</div>
+            <div class="wmi-text" data-i18n="withdraw_hist">${t('withdraw_hist')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
-          <div class="wallet-menu-item" id="w_act">
+          <div class="wallet-menu-item haptic" id="w_act">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIyMCIgeDI9IjEyIiB5Mj0iMTAiPjwvbGluZT48bGluZSB4MT0iMTgiIHkxPSIyMCIgeDI9IjE4IiB5Mj0iNCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iMjAiIHgyPSI2IiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" class="wmi-icon" alt="Activities">
-            <div class="wmi-text">${t('wallet.activities')}</div>
+            <div class="wmi-text" data-i18n="act">${t('act')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
-          <div class="wallet-menu-item" id="w_trd">
+          <div class="wallet-menu-item haptic" id="w_trd">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" class="wmi-icon" alt="Trades">
-            <div class="wmi-text">${t('wallet.trades')}</div>
+            <div class="wmi-text" data-i18n="trades">${t('trades')}</div>
             <div class="wmi-arrow">›</div>
           </div>
         </div>
@@ -1746,6 +1849,7 @@
       document.getElementById('w_wdh').onclick = showWithdrawHistoryModal;
       document.getElementById('w_act').onclick = showActivitiesModal;
       document.getElementById('w_trd').onclick = showTradesModal;
+      updateLanguageUI();
     }
 
     function showDepositModal() {
@@ -1753,15 +1857,16 @@
       const content = document.getElementById('deposit-content');
       content.innerHTML = `
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">${t('wallet.deposit')} TON</div>
+          <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700" data-i18n="deposit_title">${t('deposit_title')}</div>
           <div class="form-group">
             <label class="form-label">Amount (min 5 TON)</label>
             <input id="dep_amt" type="number" min="5" step="0.01" class="input" placeholder="Enter amount">
           </div>
-          <button class="btn-primary" id="dep_go">${t('common.confirm')}</button>
+          <button class="btn-primary haptic" id="dep_go">Continue</button>
         </div>
       `;
       modal.style.display = 'flex';
+      updateLanguageUI();
       document.getElementById('dep_go').onclick = processDeposit;
     }
 
@@ -1786,7 +1891,7 @@
             <label class="form-label">Network</label>
             <div class="row">
               <span style="font-weight:600">TON</span>
-              <button class="copy" onclick="navigator.clipboard.writeText('TON')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+              <button class="copy haptic" onclick="navigator.clipboard.writeText('TON')"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
             </div>
           </div>
 
@@ -1794,7 +1899,7 @@
             <label class="form-label">Deposit Address</label>
             <div class="row" style="font-size:11px">
               <span style="font-family:monospace">UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz</span>
-              <button class="copy" id="cp_addr"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+              <button class="copy haptic" id="cp_addr"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
             </div>
           </div>
 
@@ -1802,7 +1907,7 @@
             <label class="form-label">Amount</label>
             <div class="row">
               <span style="font-weight:700">${amt.toFixed(2)} TON</span>
-              <button class="copy" id="cp_amt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+              <button class="copy haptic" id="cp_amt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
             </div>
           </div>
 
@@ -1810,7 +1915,7 @@
             <label class="form-label">Memo (Required)</label>
             <div class="row" style="font-family:monospace;font-size:12px">
               <span>${memo}</span>
-              <button class="copy" id="cp_memo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+              <button class="copy haptic" id="cp_memo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
             </div>
           </div>
 
@@ -1819,7 +1924,7 @@
             <input id="txh" class="input" placeholder="Enter transaction hash after sending">
           </div>
 
-          <button class="btn-primary" id="dep_submit">${t('common.confirm')} Transaction</button>
+          <button class="btn-primary haptic" id="dep_submit">Confirm Transaction</button>
         </div>
       `;
       document.getElementById('cp_addr').onclick=()=>copy('UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz');
@@ -1850,7 +1955,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">${t('wallet.depHistory')}</div>
+              <div class="history-main-title" data-i18n="deposit_history">${t('deposit_history')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -1896,6 +2001,7 @@
         </div>
       `;
       modal.style.display = 'flex';
+      updateLanguageUI();
     }
 
     function showWithdrawModal() {
@@ -1908,7 +2014,7 @@
       
       content.innerHTML = `
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">${t('wallet.withdraw')} TON</div>
+          <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700" data-i18n="withdraw_title">${t('withdraw_title')}</div>
           <div class="form-group">
             <label class="form-label">TON Address</label>
             <input id="wd_addr" class="input" placeholder="Enter your TON wallet address">
@@ -1917,14 +2023,14 @@
             <label class="form-label">Amount (min 0.01 TON)</label>
             <input id="wd_amt" type="number" min="0.01" step="0.01" class="input" placeholder="Enter amount">
           </div>
-          <button class="btn-primary" id="wd_go" ${!canWithdraw ? 'disabled' : ''}>Withdraw</button>
+          <button class="btn-primary haptic" id="wd_go" ${!canWithdraw ? 'disabled' : ''}>Withdraw</button>
         </div>
       `;
       modal.style.display = 'flex';
+      updateLanguageUI();
       
       if (canWithdraw) {
         document.getElementById('wd_go').onclick = async ()=>{
-          triggerHaptic('medium');
           const addr=document.getElementById('wd_addr').value.trim();
           const amt=parseFloat(document.getElementById('wd_amt').value);
           if(!addr){ notify('Enter address'); return; }
@@ -1953,7 +2059,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">${t('wallet.wdHistory')}</div>
+              <div class="history-main-title" data-i18n="withdraw_history">${t('withdraw_history')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -1999,6 +2105,7 @@
         </div>
       `;
       modal.style.display = 'flex';
+      updateLanguageUI();
     }
 
     function showActivitiesModal(){
@@ -2013,7 +2120,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">${t('wallet.activities')}</div>
+              <div class="history-main-title" data-i18n="activities">${t('activities')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -2069,6 +2176,7 @@
         </div>
       `;
       modal.style.display = 'flex';
+      updateLanguageUI();
     }
 
     function showTradesModal(){
@@ -2085,7 +2193,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">${t('wallet.trades')}</div>
+              <div class="history-main-title" data-i18n="active_trades">${t('active_trades')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -2132,14 +2240,15 @@
         </div>
       `;
       modal.style.display = 'flex';
+      updateLanguageUI();
     }
 
     // Earn (Tasks)
     function renderEarn(){
       const html = `
         <div class="section-header">
-          <div class="section-title">${t('earn.title')}</div>
-          <div class="section-subtitle">${t('earn.subtitle')}</div>
+          <div class="section-title" data-i18n="earn_title">${t('earn_title')}</div>
+          <div class="section-subtitle" data-i18n="earn_subtitle">${t('earn_subtitle')}</div>
         </div>
         <div id="tasksContainer"></div>
       `;
@@ -2183,7 +2292,7 @@
                           +${t.amount} TON
                         </div>
                       </div>
-                      <button class="task-action-btn" data-id="${id}" ${done ? 'disabled' : ''}>${done ? 'Done' : 'Start'}</button>
+                      <button class="task-action-btn haptic" data-id="${id}" ${done ? 'disabled' : ''}>${done ? 'Done' : 'Start'}</button>
                     </div>
                   `;
                 }).join('')}
@@ -2198,7 +2307,6 @@
 
         document.querySelectorAll('.task-action-btn').forEach(btn=>{
           btn.onclick=()=>{
-            triggerHaptic('light');
             const id=btn.dataset.id; const t=tasks[id]; if(!t) return;
             if (userData.completedTasks && userData.completedTasks[id]){ window.open(t.link,'_blank'); return; }
             if (pendingTaskRewards[id]){ notify('Processing...'); return; }
@@ -2227,143 +2335,166 @@
       });
     }
 
-    // Affiliate Page
+    // Affiliate Page - Updated with Inline Referrals
     function renderAffiliate(){
       const refLink = `https://t.me/BlockOrbit_Bot/open?startapp=${userId}`;
+      
       const html=`
         <div class="section-header">
-          <div class="section-title">${t('affiliate.title')}</div>
-          <div class="section-subtitle">${t('affiliate.subtitle')}</div>
+          <div class="section-title" data-i18n="affiliate_title">${t('affiliate_title')}</div>
+          <div class="section-subtitle" data-i18n="affiliate_subtitle">${t('affiliate_subtitle')}</div>
         </div>
 
         <div class="affiliate-card">
-          <div style="font-size:14px;color:var(--text-secondary);font-weight:600;margin-bottom:8px">${t('affiliate.earnings')}</div>
+          <div style="font-size:14px;color:var(--text-secondary);font-weight:600;margin-bottom:8px" data-i18n="total_earnings">${t('total_earnings')}</div>
           <div style="font-size:32px;font-weight:800;color:var(--primary)">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} TON</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">${t('affiliate.referrals')}: ${referralCount||0}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px" data-i18n="from_referrals">${t('from_referrals')}</div>
         </div>
 
         <div class="affiliate-stats-grid">
           <div class="affiliate-stat-item">
             <div class="affiliate-stat-value">${referralCount||0}</div>
-            <div class="affiliate-stat-label">${t('affiliate.referrals')}</div>
+            <div class="affiliate-stat-label" data-i18n="total_referrals">${t('total_referrals')}</div>
           </div>
           <div class="affiliate-stat-item">
             <div class="affiliate-stat-value">${fmt(totalReferralCommission)} TON</div>
-            <div class="affiliate-stat-label">${t('affiliate.commission')}</div>
+            <div class="affiliate-stat-label" data-i18n="commission">${t('commission')}</div>
           </div>
         </div>
 
         <div class="card">
-          <div style="font-weight:800;margin-bottom:8px">${t('affiliate.link')}</div>
-          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Share this link to invite friends. You receive 20% of their earnings forever.</div>
+          <div style="font-weight:800;margin-bottom:8px" data-i18n="your_invite_link">${t('your_invite_link')}</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px" data-i18n="share_this_link">${t('share_this_link')}</div>
           
           <div class="referral-link-box">
             <div class="referral-link-text">${refLink}</div>
-            <button class="copy" id="copyRefLink"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+            <button class="copy haptic" id="copyRefLink"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
           </div>
         </div>
 
-        <div class="card">
-            <div class="section-title" style="font-size:18px;text-align:left;margin-bottom:16px;">${t('affiliate.listTitle')}</div>
-            <div id="directReferralList" class="referral-list-container">
-                <div class="empty-state" style="padding:20px;">
-                    <div class="empty-text">Loading...</div>
-                </div>
+        <div style="padding-top: 10px; border-top: 1px solid var(--border-color); margin-top: 20px;">
+            <div style="font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 16px;" data-i18n="view_referrals">${t('view_referrals')}</div>
+            <div id="affiliateReferralList" class="referral-list-container">
+                <!-- Referrals injected here -->
+                <div style="text-align:center; padding: 20px; color: var(--text-secondary);">Loading...</div>
             </div>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
       document.getElementById('copyRefLink').onclick=()=>copy(refLink);
+      updateLanguageUI();
       
-      // Load Referrals Directly
-      loadReferralsDirectly();
+      setupRealtimeReferrals(); // Uses new logic
     }
 
-    function loadReferralsDirectly() {
-        const listContainer = document.getElementById('directReferralList');
-        database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snapshot => {
-            if (snapshot.numChildren() === 0) {
-                listContainer.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">👥</div>
-                    <div class="empty-title">No Referrals Yet</div>
-                    <div class="empty-text">Share your link to start earning!</div>
-                </div>`;
-                return;
-            }
+    // NEW: Realtime Referral Listener (Shark Bounty Style)
+    function setupRealtimeReferrals() {
+      if (referralListener) {
+        database.ref('users').orderByChild('referredBy').equalTo(userId).off('value', referralListener);
+      }
 
-            let html = '';
-            snapshot.forEach(child => {
-                const u = child.val();
-                const uId = child.key;
-                const avatar = u.avatar || "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
-                const name = u.name || 'Unknown User';
-                const balance = u.tonBalance || 0;
-                
-                html += `
-                <div class="referral-list-item">
-                    <img src="${avatar}" class="referral-list-avatar" alt="Ref">
-                    <div class="referral-list-info">
-                        <div class="referral-list-name">${name}</div>
-                        <div class="referral-list-id">ID: ${uId}</div>
-                        <div class="referral-list-balance">${fmt(balance)} TON</div>
-                    </div>
+      const listContainer = document.getElementById('affiliateReferralList');
+      if (!listContainer) return;
+
+      referralListener = database.ref('users').orderByChild('referredBy').equalTo(userId).on('value', (snapshot) => {
+        const count = snapshot.numChildren();
+        referralCount = count;
+        
+        // Update stats in UI directly
+        const countEl = document.querySelector('.affiliate-stat-item:first-child .affiliate-stat-value');
+        if(countEl) countEl.textContent = count;
+
+        if (count === 0) {
+           listContainer.innerHTML = `<div class="empty-state"><div class="empty-text" data-i18n="no_referrals">${t('no_referrals')}</div></div>`;
+           return;
+        }
+
+        let html = '';
+        let totalComm = 0;
+
+        snapshot.forEach(child => {
+          const u = child.val();
+          const commission = userData.referralCommissions && userData.referralCommissions[child.key] ? userData.referralCommissions[child.key] : 0;
+          totalComm += commission;
+
+          html += `
+            <div class="referral-list-item">
+              <img src="${u.avatar || 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'}" class="referral-avatar" alt="Avatar">
+              <div class="referral-info">
+                <div class="referral-name">${u.name || 'Unknown User'}</div>
+                <div class="referral-id">ID: ${child.key}</div>
+                <div class="referral-commission">
+                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                   </svg>
+                   ${fmt(commission)} TON
                 </div>
-                `;
-            });
-            listContainer.innerHTML = html;
+              </div>
+            </div>
+          `;
         });
+
+        listContainer.innerHTML = html;
+        updateLanguageUI();
+      });
     }
+
 
     // Profile
     function renderProfile(){
       const html=`
-        <div class="profile-header">
-          <img src="${userAvatar}" class="profile-avatar" alt="avatar">
-          <div class="profile-name">${userName}</div>
-          <div class="profile-id">
-            <span>ID: ${userId}</span> 
-            <button class="copy" id="copyUid" style="border:none;background:transparent;padding:0;display:inline-flex;align-items:center"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGQ0Q1MzUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+        <div class="section-header">
+          <div class="section-title" data-i18n="profile_title">${t('profile_title')}</div>
+          <div class="section-subtitle" data-i18n="profile_subtitle">${t('profile_subtitle')}</div>
+        </div>
+
+        <div class="card" style="text-align:center">
+          <img src="${userAvatar}" alt="avatar" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--primary);object-fit:cover;margin-bottom:12px">
+          <div style="font-weight:800;font-size:18px">${userName}</div>
+          <div style="margin-top:8px;padding:8px 12px;background:var(--bg-input);border-radius:8px;display:inline-flex;align-items:center;gap:8px">
+            <span class="section-subtitle">ID:</span> 
+            <span style="color:var(--primary);font-weight:800">${userId}</span> 
+            <button class="copy haptic" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
           </div>
         </div>
 
         <div class="settings-card">
-            <div class="setting-row">
-                <div class="setting-label">${t('profile.language')}</div>
-                <select id="langSelect" class="language-select">
+            <div class="setting-item">
+                <div class="setting-label" data-i18n="language">${t('language')}</div>
+                <select id="langSelect" class="language-select haptic">
                     <option value="en" ${currentLang==='en'?'selected':''}>English</option>
-                    <option value="cn" ${currentLang==='cn'?'selected':''}>中文</option>
-                    <option value="bn" ${currentLang==='bn'?'selected':''}>বাংলা</option>
-                    <option value="ru" ${currentLang==='ru'?'selected':''}>Русский</option>
+                    <option value="cn" ${currentLang==='cn'?'selected':''}>中文 (CN)</option>
+                    <option value="bn" ${currentLang==='bn'?'selected':''}>বাংলা (BN)</option>
+                    <option value="ru" ${currentLang==='ru'?'selected':''}>Русский (RU)</option>
                 </select>
             </div>
-            <div class="setting-row">
-                 <div class="setting-label">${t('profile.support')}</div>
-                 <a href="https://t.me/BlockOrbit_Support" target="_blank" class="support-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    ${t('profile.supportLabel')}
-                 </a>
-            </div>
+            <button class="support-btn haptic" id="supportBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8.9L21 3l-1.9 5.7a8.38 8.38 0 0 1 .9 3.8z"></path>
+                </svg>
+                <span data-i18n="support">${t('support')}</span>
+            </button>
         </div>
 
         <div class="redeem-section">
           <div class="redeem-header">
             <div class="redeem-icon">🎁</div>
             <div class="redeem-title-group">
-              <div class="redeem-title">${t('profile.redeemTitle')}</div>
-              <div class="redeem-subtitle">${t('profile.redeemSubtitle')}</div>
+              <div class="redeem-title" data-i18n="redeem_code">${t('redeem_code')}</div>
+              <div class="redeem-subtitle" data-i18n="enter_code">${t('enter_code')}</div>
             </div>
           </div>
           <div class="redeem-input-wrapper">
             <input id="redeem" maxlength="8" class="redeem-input" placeholder="XXXXXXXX" autocomplete="off" spellcheck="false">
             <span class="redeem-char-count" id="charCount">0/8</span>
           </div>
-          <button class="redeem-btn" id="redeemGo">
-            <span>${t('profile.redeemBtn')}</span>
+          <button class="redeem-btn haptic" id="redeemGo">
+            <span data-i18n="claim_reward">${t('claim_reward')}</span>
           </button>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
+      updateLanguageUI();
       
       const redeemInput = document.getElementById('redeem');
       const charCount = document.getElementById('charCount');
@@ -2377,20 +2508,23 @@
         }
       });
       
-      document.getElementById('copyUid').onclick=()=>{
-          triggerHaptic('light');
-          copy(userId);
+      document.getElementById('copyUid').onclick=()=>copy(userId);
+      
+      document.getElementById('supportBtn').onclick = () => {
+        window.open('https://t.me/BlockOrbit_Support', '_blank');
       };
 
-      document.getElementById('langSelect').addEventListener('change', (e) => {
-          triggerHaptic('light');
-          currentLang = e.target.value;
-          save({ language: currentLang });
-          updateLanguageUI();
-      });
-      
+      document.getElementById('langSelect').onchange = (e) => {
+        currentLang = e.target.value;
+        localStorage.setItem('blockorbit_lang', currentLang);
+        save({ language: currentLang });
+        updateLanguageUI();
+        // Rerender current tab to update hardcoded texts
+        const activeTab = document.querySelector('.nav-btn.active').dataset.tab;
+        showTab(activeTab);
+      };
+
       document.getElementById('redeemGo').onclick=()=>{
-        triggerHaptic('medium');
         const code=document.getElementById('redeem').value.trim().toUpperCase(); 
         if(code.length!==8){ notify('Enter valid 8-digit code'); return; }
         database.ref('redeemCodes/'+code).once('value').then(s=>{
@@ -2410,6 +2544,8 @@
     }
 
     // Modal Close
+    document.getElementById('closeReferralModal').onclick = () => document.getElementById('referralModal').style.display = 'none';
+    document.getElementById('referralModal').onclick = (e) => { if(e.target.id === 'referralModal') e.target.style.display = 'none'; };
     document.getElementById('closeDepositModal').onclick = () => document.getElementById('deposit-modal').style.display = 'none';
     document.getElementById('closeWithdrawModal').onclick = () => document.getElementById('withdraw-modal').style.display = 'none';
     document.getElementById('closeDepositHistoryModal').onclick = () => document.getElementById('deposit-history-modal').style.display = 'none';
@@ -2421,21 +2557,35 @@
     document.querySelectorAll('.nav-btn').forEach(btn=>{
       btn.addEventListener('click', ()=>showTab(btn.dataset.tab));
     });
+    
+    // Global Haptic Delegate
+    document.body.addEventListener('click', (e) => {
+        if(e.target.closest('.haptic')) {
+            hapticFeedback();
+        }
+    });
 
     // Bootstrap
     async function bootstrap(){
       getTelegramUserData();
+      
+      // Load saved language
+      const savedLang = localStorage.getItem('blockorbit_lang');
+      if(savedLang && i18n[savedLang]) {
+        currentLang = savedLang;
+      }
+
       await loadCryptoPrices();
       try{
         userData = await loadUser();
-        // Load saved language
-        if(userData.language) {
-            currentLang = userData.language;
+        if(userData.language && i18n[userData.language]) {
+           currentLang = userData.language;
+           localStorage.setItem('blockorbit_lang', currentLang);
         }
       }catch{
         const loc = localStorage.getItem('blockorbit_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
-          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false, language: 'en'
+          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false, language: currentLang
         };
       }
       tonBalance = userData.tonBalance||0;
@@ -2446,21 +2596,11 @@
       tradeHistory = userData.tradeHistory||[];
       totalReferralCommission = userData.totalReferralCommission || 0;
       
-      // Process Referral Logic (Shark Bounty style)
-      await processReferral();
-
-      // Count referrals
-      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snap => {
-        referralCount = snap.numChildren();
-      });
-
       document.getElementById('tonBalance').textContent = fmt(tonBalance);
 
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
-      
-      updateLanguageUI(); // Apply initial language
-      
+      showTab('home');
       setInterval(loadCryptoPrices, 30000);
     }
 
