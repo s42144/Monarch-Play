@@ -12,9 +12,6 @@
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Monetag SDK -->
-  <script src='//libtl.com/sdk.js' data-zone='10116329' data-sdk='show_10116329'></script>
-
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -526,23 +523,6 @@
     .history-amount.positive { color: var(--accent-green); }
     .history-amount.negative { color: var(--accent-red); }
     
-    .history-status {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-    
-    .history-status.pending {
-      background: rgba(252, 213, 53, 0.15);
-      color: var(--primary);
-    }
-    
-    .history-status.completed {
-      background: rgba(14, 203, 129, 0.15);
-      color: var(--accent-green);
-    }
-    
     .history-details-row {
       display: flex;
       justify-content: space-between;
@@ -858,120 +838,312 @@
       box-shadow: none;
     }
 
-    /* Earn Section */
-    .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
-    .stat-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-    }
-    .stat-box-label { font-size: 12px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; }
-    .stat-box-value { font-size: 20px; font-weight: 800; color: var(--primary); margin-top: 8px; }
-    
-    .ad-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    .ad-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-    .ad-reward { font-size: 14px; color: var(--accent-green); font-weight: 700; margin-bottom: 20px; }
-
-    /* Milestone */
-    .milestone-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    
-    .milestone-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .milestone-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; font-size: 20px; }
-    .milestone-info { flex: 1; }
-    .milestone-title { font-size: 16px; font-weight: 800; }
-    .milestone-reward { font-size: 13px; color: var(--primary); font-weight: 700; }
-
-    /* Tasks */
-    .task-category {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    
-    .category-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .category-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; }
-    .category-title { font-size: 16px; font-weight: 800; }
-    
-    .task-card {
+    /* Tasks Section New Design */
+    .tasks-grid {
       display: flex;
+      flex-direction: column;
       gap: 12px;
-      align-items: center;
-      background: var(--bg-input);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 10px;
     }
     
-    .task-image { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border-color); }
-    .task-info { flex: 1; }
-    .task-name { font-size: 14px; font-weight: 700; }
-    .task-reward { font-size: 12px; color: var(--accent-green); font-weight: 800; }
+    .task-category-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
     
-    .task-btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
+    .task-category-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-secondary);
+    }
+    
+    .task-item-new {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .task-item-new:active { transform: scale(0.98); }
+    
+    .task-item-new.completed {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .task-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-input);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .task-icon-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .task-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .task-name-new {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    
+    .task-reward-new {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .task-action-btn {
       background: var(--primary);
       color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
       font-weight: 800;
-      font-size: 12px;
+      font-size: 13px;
       cursor: pointer;
       transition: all 0.2s;
     }
     
-    .task-btn.completed { background: var(--text-muted); color: #fff; cursor: not-allowed; }
+    .task-action-btn:disabled {
+      background: var(--text-muted);
+      color: #fff;
+    }
 
-    /* Referrals */
-    .referral-card {
+    /* Affiliate Page */
+    .affiliate-card {
+      background: linear-gradient(135deg, #1E2329 0%, #2B3139 100%);
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    
+    .affiliate-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent-green));
+    }
+    
+    .affiliate-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    
+    .affiliate-stat-item {
+      background: var(--bg-input);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .affiliate-stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    
+    .affiliate-stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .referral-link-box {
+      background: var(--bg-input);
+      padding: 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      gap: 8px;
+    }
+    
+    .referral-link-text {
+      font-size: 12px;
+      font-family: monospace;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* NEW: Direct Referral List Styles */
+    .referral-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .referral-list-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .referral-list-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .referral-list-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .referral-list-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .referral-list-id {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      font-family: monospace;
+    }
+
+    .referral-list-balance {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Profile Features */
+    .profile-header {
+      text-align: center;
+      padding: 20px 0;
+    }
+    
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid var(--primary);
+      margin-bottom: 12px;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .profile-id {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-family: monospace;
+      background: var(--bg-input);
+      padding: 4px 12px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settings-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 20px;
       margin-bottom: 16px;
     }
-    
-    .referral-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .referral-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; }
-    .referral-title { font-size: 16px; font-weight: 800; }
-    
-    .referral-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .referral-stat { background: var(--bg-input); border-radius: 12px; padding: 14px; text-align: center; }
-    .referral-stat-label { font-size: 12px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; }
-    .referral-stat-value { font-size: 18px; font-weight: 800; color: var(--primary); margin-top: 6px; }
 
-    .referral-item {
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .setting-row:last-child { border-bottom: none; }
+
+    .setting-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .language-select {
+      background: var(--bg-input);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .support-btn {
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: var(--bg-input);
-      border-radius: 12px;
+      justify-content: center;
+      gap: 8px;
+      background: var(--accent-blue);
+      color: white;
       padding: 14px;
-      margin-bottom: 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s;
     }
     
-    .referral-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); }
-    .referral-info { flex: 1; }
-    .referral-name { font-size: 14px; font-weight: 700; }
-    .referral-id { font-size: 12px; color: var(--text-secondary); }
-    .referral-balance { font-size: 14px; font-weight: 800; color: var(--primary); }
-    .referral-commission { font-size: 12px; color: var(--accent-blue); font-weight: 700; }
+    .support-btn:hover { opacity: 0.9; }
 
     /* Empty State */
     .empty-state {
@@ -999,13 +1171,14 @@
 
     @media(max-width:360px){
       .live-prices{grid-template-columns:1fr}
+      .nav-label { font-size: 10px; }
     }
   </style>
 </head>
 <body>
   <!-- Loading Screen -->
   <div id="loading-screen">
-    <img src="https://i.postimg.cc/6qxHW6rX/download.png" class="loading-logo" alt="BlockOrbit" />
+    <img src="https://i.postimg.cc/pVwtddgY/1000060090-Picsart-Background-Remover.png" class="loading-logo" alt="BlockOrbit" />
     <div class="loading-text">BlockOrbit</div>
     <div class="loading-subtext">Initializing...</div>
     <div class="loading-spinner"></div>
@@ -1025,38 +1198,31 @@
     <div class="nav-bar">
       <button class="nav-btn active" data-tab="home">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGNUQ1MDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" alt="Trade" class="nav-icon" />
-        <span class="nav-label">Trade Plans</span>
+        <span class="nav-label" id="nav-home">Trade Plans</span>
       </button>
       <button class="nav-btn" data-tab="wallet">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIyIiB5PSI3IiB3aWR0aD0iMjAiIGhlaWdodD0iMTQiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik0xNiAyMUg4YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDhsMiAyaDZhMiAyIDAgMCAxIDIgMnYxMmEyIDIgMCAwIDEtMiAyeiI+PC9wYXRoPjwvc3ZnPg==" alt="Wallet" class="nav-icon" />
-        <span class="nav-label">Wallet</span>
+        <span class="nav-label" id="nav-wallet">Wallet</span>
       </button>
       <button class="nav-btn" data-tab="earn">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PGxpbmUgeDE9IjEyIiB5MT0iOCIgeDI9IjEyIiB5Mj0iMTIiPjwvbGluZT48bGluZSB4MT0iMTIiIHkxPSIxNiIgeDI9IjEyLjAxIiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" alt="Earn" class="nav-icon" />
-        <span class="nav-label">Earn</span>
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PGxpbmUgeDE9IjEyIiB5MT0iOCIgeDI9IjEyIiB5Mj0iMTIiPjwvbGluZT48bGluZSB4MT0iMTIiIHkxPSIxNiIgeDI9IjEyLjAxIiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" alt="Tasks" class="nav-icon" />
+        <span class="nav-label" id="nav-earn">Tasks</span>
+      </button>
+      <button class="nav-btn" data-tab="affiliate">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTcgMjFoLTJ2LTJhMiAyIDAgMCAxIDItMmgyYTIgMiAwIDAgMSAyIDJ2MmgtMnptMCAwaDIiLz48cGF0aCBkPSJNOSAyMUg3di0yYTIgMiAwIDAgMSAyLTJoMmEyIDIgMCAwIDEgMiAydjJIOSIvPjxwYXRoIGQ9Ik0xMiAxNmwzLTNoLTVsMy0zIi8+PC9zdmc+" alt="Affiliate" class="nav-icon" />
+        <span class="nav-label" id="nav-affiliate">Affiliate</span>
       </button>
       <button class="nav-btn" data-tab="profile">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" alt="Profile" class="nav-icon" />
-        <span class="nav-label">Profile</span>
+        <span class="nav-label" id="nav-profile">Profile</span>
       </button>
-    </div>
-  </div>
-
-  <!-- Referral List Modal -->
-  <div class="modal-overlay" id="referralModal">
-    <div class="modal-content-box">
-      <div class="modal-header" style="padding: 0; border: none; margin-bottom: 20px;">
-        <div class="modal-title">My Referrals</div>
-        <button class="modal-close" id="closeReferralModal">×</button>
-      </div>
-      <div id="referralListContent"></div>
     </div>
   </div>
 
   <!-- Full Screen Modals -->
   <div class="fullscreen-modal" id="deposit-modal">
     <div class="modal-header">
-      <div class="modal-title">Deposit TON</div>
+      <div class="modal-title" id="modal-deposit-title">Deposit TON</div>
       <button class="modal-close" id="closeDepositModal">×</button>
     </div>
     <div class="modal-content" id="deposit-content"></div>
@@ -1064,7 +1230,7 @@
 
   <div class="fullscreen-modal" id="withdraw-modal">
     <div class="modal-header">
-      <div class="modal-title">Withdraw TON</div>
+      <div class="modal-title" id="modal-withdraw-title">Withdraw TON</div>
       <button class="modal-close" id="closeWithdrawModal">×</button>
     </div>
     <div class="modal-content" id="withdraw-content"></div>
@@ -1072,7 +1238,7 @@
   
   <div class="fullscreen-modal" id="deposit-history-modal">
     <div class="modal-header">
-      <div class="modal-title">Deposit History</div>
+      <div class="modal-title" id="modal-deposit-history-title">Deposit History</div>
       <button class="modal-close" id="closeDepositHistoryModal">×</button>
     </div>
     <div class="modal-content" id="deposit-history-content"></div>
@@ -1080,7 +1246,7 @@
 
   <div class="fullscreen-modal" id="withdraw-history-modal">
     <div class="modal-header">
-      <div class="modal-title">Withdraw History</div>
+      <div class="modal-title" id="modal-withdraw-history-title">Withdraw History</div>
       <button class="modal-close" id="closeWithdrawHistoryModal">×</button>
     </div>
     <div class="modal-content" id="withdraw-history-content"></div>
@@ -1088,7 +1254,7 @@
   
   <div class="fullscreen-modal" id="activities-modal">
     <div class="modal-header">
-      <div class="modal-title">Activities</div>
+      <div class="modal-title" id="modal-activities-title">Activities</div>
       <button class="modal-close" id="closeActivitiesModal">×</button>
     </div>
     <div class="modal-content" id="activities-content"></div>
@@ -1096,13 +1262,77 @@
 
   <div class="fullscreen-modal" id="trades-modal">
     <div class="modal-header">
-      <div class="modal-title">Active Trades</div>
+      <div class="modal-title" id="modal-trades-title">Active Trades</div>
       <button class="modal-close" id="closeTradesModal">×</button>
     </div>
     <div class="modal-content" id="trades-content"></div>
   </div>
 
   <script>
+    // --- Translations ---
+    const translations = {
+      en: {
+        nav: { home: "Trade Plans", wallet: "Wallet", earn: "Tasks", affiliate: "Affiliate", profile: "Profile" },
+        home: { title: "Trade Plans", subtitle: "Invest TON and claim earnings every 24 hours" },
+        wallet: { title: "Wallet", deposit: "Deposit", withdraw: "Withdraw", depHistory: "Deposit History", wdHistory: "Withdraw History", activities: "Activities", trades: "Active Trades" },
+        earn: { title: "Tasks", subtitle: "Complete tasks to earn extra TON rewards" },
+        affiliate: { title: "Affiliate Program", subtitle: "Invite friends and earn lifetime commissions", earnings: "Total Earnings", referrals: "Referrals", commission: "Commission (20%)", link: "Your Invite Link", listTitle: "My Referrals" },
+        profile: { title: "Profile", subtitle: "Account settings", settings: "Settings", language: "Language", support: "Support", supportLabel: "Contact Support", redeemTitle: "Redeem Code", redeemSubtitle: "Enter your 8-character code to claim rewards", redeemBtn: "Claim Reward" },
+        common: { balance: "Total Balance", copy: "Copied to clipboard!", confirm: "Confirm", cancel: "Cancel" }
+      },
+      cn: {
+        nav: { home: "交易计划", wallet: "钱包", earn: "任务", affiliate: "联盟", profile: "个人资料" },
+        home: { title: "交易计划", subtitle: "投资 TON 并每 24 小时领取收益" },
+        wallet: { title: "钱包", deposit: "充值", withdraw: "提现", depHistory: "充值记录", wdHistory: "提现记录", activities: "活动", trades: "活跃交易" },
+        earn: { title: "任务", subtitle: "完成任务赚取额外 TON 奖励" },
+        affiliate: { title: "联盟计划", subtitle: "邀请朋友并赚取终身佣金", earnings: "总收益", referrals: "推荐人数", commission: "佣金 (20%)", link: "您的邀请链接", listTitle: "我的推荐" },
+        profile: { title: "个人资料", subtitle: "账户设置", settings: "设置", language: "语言", support: "支持", supportLabel: "联系支持", redeemTitle: "兑换码", redeemSubtitle: "输入您的 8 位字符代码以领取奖励", redeemBtn: "领取奖励" },
+        common: { balance: "总余额", copy: "已复制到剪贴板！", confirm: "确认", cancel: "取消" }
+      },
+      bn: {
+        nav: { home: "ট্রেড প্ল্যান", wallet: "ওয়ালেট", earn: "কাজ", affiliate: "অ্যাফিলিয়েট", profile: "প্রোফাইল" },
+        home: { title: "ট্রেড প্ল্যান", subtitle: "TON বিনিয়োগ করুন এবং প্রতি ২৪ ঘন্টায় উপার্জন দাবি করুন" },
+        wallet: { title: "ওয়ালেট", deposit: "ডিপোজিট", withdraw: "উত্তোলন", depHistory: "ডিপোজিট ইতিহাস", wdHistory: "উত্তোলন ইতিহাস", activities: "কার্যকলাপ", trades: "সক্রিয় ট্রেড" },
+        earn: { title: "কাজ", subtitle: "অতিরিক্ত TON পুরস্কার অর্জন করতে কাজগুলি সম্পূর্ণ করুন" },
+        affiliate: { title: "অ্যাফিলিয়েট প্রোগ্রাম", subtitle: "বন্ধুদের আমন্ত্রণ জানান এবং আজীবন কমিশন উপার্জন করুন", earnings: "মোট উপার্জন", referrals: "রেফারেল", commission: "কমিশন (২০%)", link: "আপনার আমন্ত্রণ লিঙ্ক", listTitle: "আমার রেফারেল" },
+        profile: { title: "প্রোফাইল", subtitle: "অ্যাকাউন্ট সেটিংস", settings: "সেটিংস", language: "ভাষা", support: "সাপোর্ট", supportLabel: "সাপোর্টে যোগাযোগ করুন", redeemTitle: "রিডিম কোড", redeemSubtitle: "পুরস্কার পেতে আপনার ৮ সংখ্যার কোড লিখুন", redeemBtn: "পুরস্কার দাবি করুন" },
+        common: { balance: "মোট ব্যালেন্স", copy: "ক্লিপবোর্ডে কপি করা হয়েছে!", confirm: "নিশ্চিত করুন", cancel: "বাতিল" }
+      },
+      ru: {
+        nav: { home: "Торговые планы", wallet: "Кошелек", earn: "Задания", affiliate: "Партнеры", profile: "Профиль" },
+        home: { title: "Торговые планы", subtitle: "Инвестируйте TON и получайте доход каждые 24 часа" },
+        wallet: { title: "Кошелек", deposit: "Депозит", withdraw: "Вывод", depHistory: "История депозитов", wdHistory: "История выводов", activities: "Активность", trades: "Активные сделки" },
+        earn: { title: "Задания", subtitle: "Выполняйте задания для получения дополнительных наград в TON" },
+        affiliate: { title: "Партнерская программа", subtitle: "Приглашайте друзей и пожизненно зарабатывайте комиссии", earnings: "Общий доход", referrals: "Рефералы", commission: "Комиссия (20%)", link: "Ваша реферальная ссылка", listTitle: "Мои рефералы" },
+        profile: { title: "Профиль", subtitle: "Настройки аккаунта", settings: "Настройки", language: "Язык", support: "Поддержка", supportLabel: "Связаться с поддержкой", redeemTitle: "Код погашения", redeemSubtitle: "Введите ваш 8-значный код для получения награды", redeemBtn: "Получить награду" },
+        common: { balance: "Общий баланс", copy: "Скопировано в буфер обмена!", confirm: "Подтвердить", cancel: "Отмена" }
+      }
+    };
+
+    let currentLang = 'en';
+
+    function t(path) {
+      const keys = path.split('.');
+      let obj = translations[currentLang];
+      for (let k of keys) {
+        if (obj && obj[k]) obj = obj[k];
+        else return translations['en'][path.split('.').reduce((o, i) => o?.[i], translations['en'])] || path;
+      }
+      return obj;
+    }
+
+    function updateLanguageUI() {
+      document.getElementById('nav-home').textContent = t('nav.home');
+      document.getElementById('nav-wallet').textContent = t('nav.wallet');
+      document.getElementById('nav-earn').textContent = t('nav.earn');
+      document.getElementById('nav-affiliate').textContent = t('nav.affiliate');
+      document.getElementById('nav-profile').textContent = t('nav.profile');
+      
+      // Re-render current tab to update internal text
+      const activeTab = document.querySelector('.nav-btn.active').dataset.tab;
+      showTab(activeTab);
+    }
+
     // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBfR97veh6idxb81mH6N5_Gq8-CpW2D7bE",
@@ -1119,8 +1349,19 @@
     const database = firebase.database();
 
     // Telegram WebApp Initialization
-    const tg = window.Telegram?.WebApp || { expand:()=>{}, ready:()=>{}, initDataUnsafe:{} };
+    const tg = window.Telegram?.WebApp || { expand:()=>{}, ready:()=>{}, initDataUnsafe:{}, HapticFeedback: { impactOccurred: ()=>{}, notificationOccurred: ()=>{} } };
     tg.expand(); tg.ready();
+
+    // Haptic Helper
+    function triggerHaptic(type = 'light') {
+      if (tg.HapticFeedback) {
+        if (type === 'light') tg.HapticFeedback.impactOccurred('light');
+        else if (type === 'medium') tg.HapticFeedback.impactOccurred('medium');
+        else if (type === 'heavy') tg.HapticFeedback.impactOccurred('heavy');
+        else if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
+        else if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
+      }
+    }
 
     // Bot
     const BOT_TOKEN = '8725017918:AAHDWjOcK0fP9kchQdAL7fZoumgwaKVMXO4';
@@ -1145,9 +1386,7 @@
     let withdrawHistory=[];
     let tradeHistory=[];
     let cryptoPrices={};
-    let adLoading=false;
     let pendingTaskRewards={};
-    let referralListener=null;
     let referralCount = 0;
     let totalReferralCommission = 0;
 
@@ -1160,8 +1399,14 @@
       n.textContent=m; 
       document.body.appendChild(n); 
       setTimeout(()=>n.remove(), d); 
+      triggerHaptic('error'); // Slight haptic on notify
     };
-    const copy = (t)=> navigator.clipboard.writeText(t).then(()=>notify('Copied to clipboard!'));
+    const copy = (txt)=> {
+      navigator.clipboard.writeText(txt).then(()=>{
+        notify(t('common.copy'));
+        triggerHaptic('success');
+      });
+    };
     const generateId = () => 'TXN' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
 
     // Telegram User
@@ -1195,7 +1440,7 @@
           BTC:{ price:d.bitcoin?.usd||30000, change:d.bitcoin?.usd_24h_change||0 },
           ETH:{ price:d.ethereum?.usd||2000, change:d.ethereum?.usd_24h_change||0 },
           BNB:{ price:d.binancecoin?.usd||300, change:d.binancecoin?.usd_24h_change||0 },
-          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24hr_change||0 },
+          ADA:{ price:d.cardano?.usd||0.5, change:d.cardano?.usd_24h_change||0 },
           SOL:{ price:d.solana?.usd||100, change:d.solana?.usd_24h_change||0 },
           DOT:{ price:d.polkadot?.usd||7, change:d.polkadot?.usd_24h_change||0 },
           TON:{ price:d['the-open-network']?.usd||2.5, change:d['the-open-network']?.usd_24h_change||0 },
@@ -1239,21 +1484,13 @@
         purchasedPlans:{}, activeTrades:{},
         depositHistory:[], withdrawHistory:[], tradeHistory:[],
         avatar:userAvatar, name:userName, referrals:0, completedTasks:{},
-        adStats:{ today:0, yesterday:0, thisWeek:0, thisMonth:0, lifetime:0, lastAdDate: todayISO(), lastWeekReset: weekStartISO(), lastMonthReset: monthStartISO() },
-        milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false },
         referralCommissions:{}, totalReferralCommission:0, createdAt: now(),
-        referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
+        referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false,
+        language: 'en'
       };
       await userRef(userId).set(init);
       return init;
     }
-
-    function todayISO(){ return new Date().toISOString().split('T')[0]; }
-    function weekStartISO(){
-      const d=new Date(); const day=d.getDay(); const diff=d.getDate()-day+(day===0?-6:1); d.setDate(diff);
-      return d.toISOString().split('T')[0];
-    }
-    function monthStartISO(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`; }
 
     function save(partial){
       userData = { ...userData, ...partial };
@@ -1261,31 +1498,82 @@
       localStorage.setItem('blockorbit_user_'+userId, JSON.stringify(userData));
       if (partial.tonBalance!==undefined) {
         tonBalance = partial.tonBalance;
-        document.getElementById('tonBalance').textContent = fmt(tonBalance);
+        const balanceEl = document.getElementById('tonBalance');
+        if (balanceEl) {
+          balanceEl.textContent = fmt(tonBalance);
+        }
       }
     }
 
-    // Referral Logic
+    // Referral Logic (Enhanced to ensure instant DB updates)
     function awardReferralCommission(earnedAmount) {
       if (!userData.referredBy) return;
       const commission = earnedAmount * 0.2;
       const referrerId = userData.referredBy;
       
+      // Fetch current referrer data to ensure atomic update
       database.ref('users/' + referrerId).once('value').then(refSnap => {
         if (refSnap.exists()) {
           const referrerData = refSnap.val();
-          const newBalance = (referrerData.tonBalance || 0) + commission;
-          database.ref('users/' + referrerId).update({ tonBalance: newBalance, totalReferralCommission: (referrerData.totalReferralCommission || 0) + commission });
+          const newBalance = (parseFloat(referrerData.tonBalance) || 0) + commission;
+          const newTotalComm = (parseFloat(referrerData.totalReferralCommission) || 0) + commission;
+          
+          // Instant DB Update
+          database.ref('users/' + referrerId).update({ 
+            tonBalance: newBalance, 
+            totalReferralCommission: newTotalComm 
+          }).then(() => {
+            console.log(`Commission ${commission} TON awarded to ${referrerId}`);
+          }).catch(err => {
+            console.error("Commission update failed", err);
+          });
         }
       });
     }
 
+    // Process Referral on Startup
+    async function processReferral() {
+      const startParam = tg?.initDataUnsafe?.start_param;
+      if (startParam && !userData.referredBy) {
+        const referrerId = startParam;
+        // Prevent self-referral
+        if (referrerId !== userId) {
+          // Verify referrer exists
+          const refSnap = await database.ref('users/' + referrerId).once('value');
+          if (refSnap.exists()) {
+            // 1. Set current user's referrer
+            userData.referredBy = referrerId;
+            save({ referredBy: referrerId });
+            
+            // 2. INSTANTLY AWARD 0.20 TON TO REFERRER
+            const referrerData = refSnap.val();
+            const signupBonus = 0.20;
+            const newBalance = (parseFloat(referrerData.tonBalance) || 0) + signupBonus;
+            const newTotalComm = (parseFloat(referrerData.totalReferralCommission) || 0) + signupBonus;
+
+            await database.ref('users/' + referrerId).update({
+              tonBalance: newBalance,
+              totalReferralCommission: newTotalComm
+            });
+
+            // Notify Admin/Bot about the bonus
+            console.log(`Awarded ${signupBonus} TON signup bonus to ${referrerId} for inviting ${userId}`);
+            sendBot(`New Referral Signup!\nReferrer ID: ${referrerId}\nNew User ID: ${userId}\nBonus Awarded: ${signupBonus} TON`);
+
+            notify(t('affiliate.subtitle')); // Welcome feedback to new user
+          }
+        }
+      }
+    }
+
     // Tabs
     function showTab(tab){
+      triggerHaptic('light');
       document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
       if(tab==='home') renderHome();
       if(tab==='wallet') renderWallet();
       if(tab==='earn') renderEarn();
+      if(tab==='affiliate') renderAffiliate();
       if(tab==='profile') renderProfile();
     }
 
@@ -1298,8 +1586,8 @@
 
       const html = `
         <div class="section-header">
-          <div class="section-title">Trade Plans</div>
-          <div class="section-subtitle">Invest TON and claim earnings every 24 hours</div>
+          <div class="section-title">${t('home.title')}</div>
+          <div class="section-subtitle">${t('home.subtitle')}</div>
         </div>
 
         <div class="live-prices">
@@ -1368,11 +1656,14 @@
         const claim=document.getElementById(`claim_${p.id}`);
         if(buy){
           buy.addEventListener('click', ()=>{
+            triggerHaptic('medium');
             if (purchasedPlans[p.id]) { notify('Already purchased'); return; }
             if (tonBalance < p.price) { notify('Insufficient TON balance'); return; }
             const newBal=tonBalance - p.price;
             const newPurchased = { ...purchasedPlans, [p.id]:true };
             const newTrades = { ...activeTrades, [p.id]:{ planId:p.id, purchasedAt:now(), lastClaim:now(), claimedDays:0, totalEarned:0 } };
+            purchasedPlans = newPurchased;
+            activeTrades = newTrades;
             save({ tonBalance:newBal, purchasedPlans:newPurchased, activeTrades:newTrades });
             tradeHistory.push({ type:'purchase', planId:p.id, planName:p.name, amount:p.price, timestamp:now() });
             save({ tradeHistory });
@@ -1383,20 +1674,24 @@
         }
         if(claim){
           claim.addEventListener('click', ()=>{
+            triggerHaptic('heavy');
             const tr=activeTrades[p.id]; if(!tr) return;
             if ((now()-tr.lastClaim)<86400){ notify('Claim available every 24h'); return; }
             const earned=p.dailyEarning;
             const newBal=tonBalance+earned;
             tr.lastClaim=now(); tr.claimedDays+=1; tr.totalEarned+=earned;
             
+            // Award 20% Commission on earnings
             awardReferralCommission(earned);
             
             if (tr.claimedDays>=p.duration){
               const copy={...activeTrades}; delete copy[p.id];
+              activeTrades = copy;
               save({ tonBalance:newBal, activeTrades:copy });
               notify(`Plan completed. Total earned ${tr.totalEarned} TON`);
               sendBot(`Plan Completed\nPlan: ${p.name}\nTotal Earned: ${tr.totalEarned} TON`);
             }else{
+              activeTrades = {...activeTrades};
               save({ tonBalance:newBal, activeTrades:{...activeTrades} });
               notify(`Claimed ${earned} TON from ${p.name}`);
               sendBot(`Daily Claimed\nPlan: ${p.name}\nEarned: ${earned} TON`);
@@ -1421,7 +1716,7 @@
       const html = `
         <div class="wallet-dashboard">
           <div class="wallet-balance-card">
-            <div class="wb-label">Total Balance</div>
+            <div class="wb-label">${t('common.balance')}</div>
             <div class="wb-value">
               <img src="https://i.postimg.cc/6qxHW6rX/download.png" alt="TON" />
               ${fmt(tonBalance)}
@@ -1433,37 +1728,37 @@
               <div class="wab-icon">
                 <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSI1IiB4Mj0iMTIiIHkyPSIxOSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjE5IDEyIDEyIDE5IDUgMTIiPjwvcG9seWxpbmU+PC9zdmc+" alt="Deposit">
               </div>
-              <div class="wab-text">Deposit</div>
+              <div class="wab-text">${t('wallet.deposit')}</div>
             </div>
             <div class="wallet-action-btn" id="w_wd">
               <div class="wab-icon">
                 <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIxOSIgeDI9IjEyIiB5Mj0iNSI+PC9saW5lPjxwb2x5bGluZSBwb2ludHM9IjUgMTIgMTIgNSAxOSAxMiI+PC9wb2x5bGluZT48L3N2Zz4=" alt="Withdraw">
               </div>
-              <div class="wab-text">Withdraw</div>
+              <div class="wab-text">${t('wallet.withdraw')}</div>
             </div>
           </div>
 
           <div class="wallet-menu-item" id="w_deph">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMTIgNiAxMiAxMiAxNiAxNCI+PC9wb2x5bGluZT48L3N2Zz4=" class="wmi-icon" alt="Deposit History">
-            <div class="wmi-text">Deposit History</div>
+            <div class="wmi-text">${t('wallet.depHistory')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
           <div class="wallet-menu-item" id="w_wdh">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMyAzdjE4aDE4Ij48L3BhdGg+PHBhdGggZD0iTTMgOWg5bDMgM2gtMTJ6Ij48L3BhdGg+PHBhdGggZD0iTTMgMTVoNmwzIDNoLTl6Ij48L3BhdGg+PC9zdmc+" class="wmi-icon" alt="Withdraw History">
-            <div class="wmi-text">Withdraw History</div>
+            <div class="wmi-text">${t('wallet.wdHistory')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
           <div class="wallet-menu-item" id="w_act">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iMTIiIHkxPSIyMCIgeDI9IjEyIiB5Mj0iMTAiPjwvbGluZT48bGluZSB4MT0iMTgiIHkxPSIyMCIgeDI9IjE4IiB5Mj0iNCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iMjAiIHgyPSI2IiB5Mj0iMTYiPjwvbGluZT48L3N2Zz4=" class="wmi-icon" alt="Activities">
-            <div class="wmi-text">Activities</div>
+            <div class="wmi-text">${t('wallet.activities')}</div>
             <div class="wmi-arrow">›</div>
           </div>
 
           <div class="wallet-menu-item" id="w_trd">
             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRDUwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cG9seWxpbmUgcG9pbnRzPSIyMiAxMiAxOCAxMiAxNSAyMSA5IDMgNiAxMiAyIDEyIj48L3BvbHlsaW5lPjwvc3ZnPg==" class="wmi-icon" alt="Trades">
-            <div class="wmi-text">Active Trades</div>
+            <div class="wmi-text">${t('wallet.trades')}</div>
             <div class="wmi-arrow">›</div>
           </div>
         </div>
@@ -1482,12 +1777,12 @@
       const content = document.getElementById('deposit-content');
       content.innerHTML = `
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">Deposit TON</div>
+          <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">${t('wallet.deposit')} TON</div>
           <div class="form-group">
             <label class="form-label">Amount (min 5 TON)</label>
             <input id="dep_amt" type="number" min="5" step="0.01" class="input" placeholder="Enter amount">
           </div>
-          <button class="btn-primary" id="dep_go">Continue</button>
+          <button class="btn-primary" id="dep_go">${t('common.confirm')}</button>
         </div>
       `;
       modal.style.display = 'flex';
@@ -1548,7 +1843,7 @@
             <input id="txh" class="input" placeholder="Enter transaction hash after sending">
           </div>
 
-          <button class="btn-primary" id="dep_submit">Confirm Transaction</button>
+          <button class="btn-primary" id="dep_submit">${t('common.confirm')} Transaction</button>
         </div>
       `;
       document.getElementById('cp_addr').onclick=()=>copy('UQBWOgFgB4B8qBCo8CNjDUNAtvUSosw4v7v9gkt0GVOaNLSz');
@@ -1579,7 +1874,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">Deposit History</div>
+              <div class="history-main-title">${t('wallet.depHistory')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -1604,7 +1899,6 @@
                 </div>
                 <div class="history-amount-row">
                   <div class="history-amount positive">+${d.amount} TON</div>
-                  <div class="history-status pending">Pending</div>
                 </div>
                 <div class="history-details-row">
                   <div class="history-detail-label">Transaction ID</div>
@@ -1632,14 +1926,13 @@
       const modal = document.getElementById('withdraw-modal');
       const content = document.getElementById('withdraw-content');
       
-      // Allow first withdrawal without deposit, subsequent require deposit
       const withdrawCount = userData.withdrawCount || 0;
       const hasDeposit = userData.hasDeposit || false;
       const canWithdraw = withdrawCount === 0 || hasDeposit;
       
       content.innerHTML = `
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">Withdraw TON</div>
+          <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">${t('wallet.withdraw')} TON</div>
           <div class="form-group">
             <label class="form-label">TON Address</label>
             <input id="wd_addr" class="input" placeholder="Enter your TON wallet address">
@@ -1655,6 +1948,7 @@
       
       if (canWithdraw) {
         document.getElementById('wd_go').onclick = async ()=>{
+          triggerHaptic('medium');
           const addr=document.getElementById('wd_addr').value.trim();
           const amt=parseFloat(document.getElementById('wd_amt').value);
           if(!addr){ notify('Enter address'); return; }
@@ -1683,7 +1977,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">Withdraw History</div>
+              <div class="history-main-title">${t('wallet.wdHistory')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -1708,7 +2002,6 @@
                 </div>
                 <div class="history-amount-row">
                   <div class="history-amount negative">-${w.amount} TON</div>
-                  <div class="history-status pending">Pending</div>
                 </div>
                 <div class="history-details-row">
                   <div class="history-detail-label">Transaction ID</div>
@@ -1744,7 +2037,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">All Activities</div>
+              <div class="history-main-title">${t('wallet.activities')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -1816,7 +2109,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">Active Trades</div>
+              <div class="history-main-title">${t('wallet.trades')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -1844,7 +2137,6 @@
                   </div>
                   <div class="history-amount-row">
                     <div class="history-amount" style="color:var(--primary)">${p.price} TON</div>
-                    <div class="history-status completed">${t.totalEarned.toFixed(2)} Earned</div>
                   </div>
                   <div class="prog" style="margin-top:12px">
                     <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
@@ -1866,172 +2158,23 @@
       modal.style.display = 'flex';
     }
 
-    // Earn
+    // Earn (Tasks)
     function renderEarn(){
-      const a = userData.adStats||{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0};
       const html = `
         <div class="section-header">
-          <div class="section-title">Earn TON</div>
-          <div class="section-subtitle">Watch ads and complete tasks to earn rewards</div>
+          <div class="section-title">${t('earn.title')}</div>
+          <div class="section-subtitle">${t('earn.subtitle')}</div>
         </div>
-
-        <div class="stats-row">
-          <div class="stat-box"><div class="stat-box-label">Today</div><div class="stat-box-value">${a.today||0}</div></div>
-          <div class="stat-box"><div class="stat-box-value">${a.lifetime||0}</div><div class="stat-box-label">Lifetime</div></div>
-        </div>
-
-        <div class="ad-card">
-          <div class="ad-title">Watch Advertisement</div>
-          <div class="ad-reward">Earn 0.0001 TON per ad</div>
-          <button class="btn-primary" id="watchAd">${adLoading?'Loading...':'Watch Ad'}</button>
-        </div>
-
-        <div class="milestone-card">
-          <div class="milestone-header">
-            <div class="milestone-icon">🏆</div>
-            <div class="milestone-info">
-              <div class="milestone-title">Milestone Rewards</div>
-              <div class="milestone-reward">Complete ads to unlock rewards</div>
-            </div>
-          </div>
-          ${[
-            {id:'m1500', need:1500, amt:0.5, label:'1,500 Ads'},
-            {id:'m2500', need:2500, amt:1.0, label:'2,500 Ads'},
-            {id:'m5500', need:5500, amt:2.5, label:'5,500 Ads'}
-          ].map(m=>{
-            const can = (a.lifetime||0)>=m.need && !userData.milestones?.[`milestone${m.need}Claimed`];
-            const txt = userData.milestones?.[`milestone${m.need}Claimed`] ? 'Claimed' : (can?'Claim Now!':`${a.lifetime||0}/${m.need}`);
-            const prog = Math.min((a.lifetime||0)/m.need*100, 100);
-            return `
-              <div class="milestone-progress" style="margin-top:16px">
-                <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-                  <div style="font-weight:700;font-size:14px">${m.label}</div>
-                  <div style="color:var(--accent-green);font-weight:700;font-size:14px">+${m.amt} TON</div>
-                </div>
-                <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
-                <div class="progtext">${a.lifetime||0}/${m.need} ads completed</div>
-                <button class="btn-primary" style="margin-top:10px" id="${m.id}" ${can?'':'disabled'}>${txt}</button>
-              </div>
-            `;
-          }).join('')}
-        </div>
-
-        <div id="tasksList"></div>
+        <div id="tasksContainer"></div>
       `;
       document.getElementById('main-content').innerHTML = html;
-
-      document.getElementById('watchAd').onclick = ()=>{
-        if (adLoading) return;
-        adLoading = true; 
-        document.getElementById('watchAd').textContent='Loading...';
-        
-        // Check if SDK exists
-        if (typeof window.show_10116329 === 'function') {
-          try {
-            const adPromise = window.show_10116329();
-            
-            // Handle both Promise and non-Promise returns
-            if (adPromise && typeof adPromise.then === 'function') {
-              adPromise.then(() => {
-                processAdReward();
-              }).catch((err) => {
-                // Even if promise rejects, the ad might have shown
-                // Give benefit of doubt and reward user
-                console.log('Ad promise rejected, but processing reward anyway');
-                processAdReward();
-              });
-            } else {
-              // SDK returned something else, assume ad was shown
-              setTimeout(() => {
-                processAdReward();
-              }, 1000);
-            }
-          } catch (e) {
-            console.error('Ad SDK error:', e);
-            // Still try to reward
-            processAdReward();
-          }
-        } else {
-          // SDK not available, simulate reward for testing
-          adLoading = false;
-          document.getElementById('watchAd').textContent = 'Watch Ad';
-          notify('Ad service loading... Please try again');
-        }
-      };
-
-      const setMilestone=(need,amt)=>{
-        const key=`milestone${need}Claimed`;
-        if ((userData.adStats?.lifetime||0)>=need && !userData.milestones?.[key]){
-          const ms={...(userData.milestones||{}), [key]:true };
-          save({ tonBalance: tonBalance+amt, milestones: ms });
-          notify(`Claimed ${amt} TON milestone reward!`);
-          renderEarn();
-        }
-      };
-      document.getElementById('m1500')?.addEventListener('click', ()=>setMilestone(1500,0.5));
-      document.getElementById('m2500')?.addEventListener('click', ()=>setMilestone(2500,1.0));
-      document.getElementById('m5500')?.addEventListener('click', ()=>setMilestone(5500,2.5));
-
       loadTasks();
-    }
-    
-    function processAdReward() {
-      adLoading = false;
-      const btn = document.getElementById('watchAd');
-      if (btn) btn.textContent = 'Watch Ad';
-      
-      const reward = 0.0001;
-      const today = todayISO();
-      const ws = weekStartISO();
-      const ms = monthStartISO();
-      
-      // Reset daily/weekly/monthly counters if needed
-      if (userData.adStats.lastAdDate !== today) { 
-        userData.adStats.yesterday = userData.adStats.today; 
-        userData.adStats.today = 0; 
-        userData.adStats.lastAdDate = today; 
-      }
-      if (userData.adStats.lastWeekReset !== ws) { 
-        userData.adStats.thisWeek = 0; 
-        userData.adStats.lastWeekReset = ws; 
-      }
-      if (userData.adStats.lastMonthReset !== ms) { 
-        userData.adStats.thisMonth = 0; 
-        userData.adStats.lastMonthReset = ms; 
-      }
-      
-      // Increment counters
-      userData.adStats.today++; 
-      userData.adStats.thisWeek++; 
-      userData.adStats.thisMonth++; 
-      userData.adStats.lifetime++;
-      
-      // Calculate new balance
-      const newBalance = tonBalance + reward;
-      
-      // Save everything
-      save({ 
-        tonBalance: newBalance, 
-        adStats: userData.adStats 
-      });
-      
-      // Update local state
-      tonBalance = newBalance;
-      
-      // Award referral commission
-      awardReferralCommission(reward);
-      
-      // Notify user
-      notify(`Earned ${reward} TON`);
-      
-      // Log to bot
-      sendBot(`Ad Watched\nUser: ${userName}\nEarned: ${reward} TON\nTotal Ads: ${userData.adStats.lifetime}`);
-      
-      // Re-render earn page
-      renderEarn();
     }
 
     function loadTasks(){
+      const container = document.getElementById('tasksContainer');
+      container.innerHTML = '<div style="text-align:center;padding:20px"><div class="loading-spinner" style="margin:0 auto"></div></div>';
+      
       database.ref('tasks').once('value').then(s=>{
         const tasks=s.exists()?s.val():{};
         const categories = ['Project', 'Partner', 'Advertise'];
@@ -2041,21 +2184,30 @@
           const categoryTasks = Object.keys(tasks).filter(id => tasks[id].category === category);
           if(categoryTasks.length > 0){
             html += `
-              <div class="task-category">
-                <div class="category-header">
-                  <div class="category-icon">📂</div>
-                  <div class="category-title">${category}</div>
-                </div>
+              <div class="task-category-header">
+                <div style="width:4px;height:16px;background:var(--primary);border-radius:2px"></div>
+                <div class="task-category-title">${category} Tasks</div>
+              </div>
+              <div class="tasks-grid">
                 ${categoryTasks.map(id=>{
-                  const t=tasks[id]; const done = !!(userData.completedTasks&&userData.completedTasks[id]);
+                  const t=tasks[id]; 
+                  const done = !!(userData.completedTasks&&userData.completedTasks[id]);
                   return `
-                    <div class="task-card">
-                      <img src="${t.photo}" class="task-image" alt="${t.name}">
-                      <div class="task-info">
-                        <div class="task-name">${t.name}</div>
-                        <div class="task-reward">+${t.amount} TON</div>
+                    <div class="task-item-new ${done ? 'completed' : ''}" id="taskItem_${id}">
+                      <div class="task-icon-box">
+                        <img src="${t.photo}" alt="${t.name}">
                       </div>
-                      <button class="task-btn ${done?'completed':''}" data-id="${id}">${done?'Done':'Start'}</button>
+                      <div class="task-details">
+                        <div class="task-name-new">${t.name}</div>
+                        <div class="task-reward-new">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v12M6 12h12"></path>
+                          </svg>
+                          +${t.amount} TON
+                        </div>
+                      </div>
+                      <button class="task-action-btn" data-id="${id}" ${done ? 'disabled' : ''}>${done ? 'Done' : 'Start'}</button>
                     </div>
                   `;
                 }).join('')}
@@ -2064,85 +2216,169 @@
           }
         });
         
-        const c=document.createElement('div'); 
-        c.className='card'; 
-        c.innerHTML=`<div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">Tasks</div>${html||'<div class="section-subtitle" style="text-align:center;padding:20px 0">No tasks available</div>'}`;
-        document.getElementById('main-content').appendChild(c);
+        if(!html) html = '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">No Tasks Available</div><div class="empty-text">Check back later for new tasks</div></div>';
+        
+        container.innerHTML = html;
 
-        document.querySelectorAll('.task-btn').forEach(btn=>{
+        document.querySelectorAll('.task-action-btn').forEach(btn=>{
           btn.onclick=()=>{
+            triggerHaptic('light');
             const id=btn.dataset.id; const t=tasks[id]; if(!t) return;
             if (userData.completedTasks && userData.completedTasks[id]){ window.open(t.link,'_blank'); return; }
             if (pendingTaskRewards[id]){ notify('Processing...'); return; }
-            pendingTaskRewards[id]=true; btn.disabled=true; btn.textContent='Processing...';
+            pendingTaskRewards[id]=true; btn.disabled=true; btn.textContent='Wait...';
             window.open(t.link,'_blank');
+            
             setTimeout(()=>{
               if (!userData.completedTasks) userData.completedTasks={};
               userData.completedTasks[id]=true;
               const add=parseFloat(t.amount)||0;
+              tonBalance = tonBalance + add;
+              
+              // Award 20% commission on Task Earnings
               awardReferralCommission(add);
-              save({ tonBalance: tonBalance+add, completedTasks: userData.completedTasks });
-              pendingTaskRewards[id]=false; btn.textContent='Done'; notify(`+${add} TON`);
-            },15000);
+              
+              save({ tonBalance: tonBalance, completedTasks: userData.completedTasks });
+              pendingTaskRewards[id]=false; 
+              
+              // Update UI
+              btn.textContent = 'Done';
+              btn.disabled = true;
+              const item = document.getElementById(`taskItem_${id}`);
+              if(item) item.classList.add('completed');
+              
+              notify(`+${add} TON earned!`);
+            }, 15000);
           };
         });
       });
     }
 
-    // Profile
-    function renderProfile(){
+    // Affiliate Page
+    function renderAffiliate(){
+      const refLink = `https://t.me/BlockOrbit_Bot/open?startapp=${userId}`;
       const html=`
         <div class="section-header">
-          <div class="section-title">Profile</div>
-          <div class="section-subtitle">Account settings and referrals</div>
+          <div class="section-title">${t('affiliate.title')}</div>
+          <div class="section-subtitle">${t('affiliate.subtitle')}</div>
         </div>
 
-        <div class="card" style="text-align:center">
-          <img src="${userAvatar}" alt="avatar" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--primary);object-fit:cover;margin-bottom:12px">
-          <div style="font-weight:800;font-size:18px">${userName}</div>
-          <div style="margin-top:8px;padding:8px 12px;background:var(--bg-input);border-radius:8px;display:inline-flex;align-items:center;gap:8px">
-            <span class="section-subtitle">ID:</span> 
-            <span style="color:var(--primary);font-weight:800">${userId}</span> 
-            <button class="copy" id="copyUid"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+        <div class="affiliate-card">
+          <div style="font-size:14px;color:var(--text-secondary);font-weight:600;margin-bottom:8px">${t('affiliate.earnings')}</div>
+          <div style="font-size:32px;font-weight:800;color:var(--primary)">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} TON</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">${t('affiliate.referrals')}: ${referralCount||0}</div>
+        </div>
+
+        <div class="affiliate-stats-grid">
+          <div class="affiliate-stat-item">
+            <div class="affiliate-stat-value">${referralCount||0}</div>
+            <div class="affiliate-stat-label">${t('affiliate.referrals')}</div>
+          </div>
+          <div class="affiliate-stat-item">
+            <div class="affiliate-stat-value">${fmt(totalReferralCommission)} TON</div>
+            <div class="affiliate-stat-label">${t('affiliate.commission')}</div>
           </div>
         </div>
 
         <div class="card">
-          <div class="section-subtitle" style="text-align:center;margin-bottom:12px;font-weight:800">Referral Program</div>
-          <div class="row" style="margin-bottom:12px">
-            <div style="font-size:12px;color:var(--text-secondary)">Link</div>
-            <div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-family:monospace" id="refLink">https://t.me/blockorbit_bot/app?startapp=${userId}</div>
+          <div style="font-weight:800;margin-bottom:8px">${t('affiliate.link')}</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Share this link to invite friends. You receive 20% of their earnings forever.</div>
+          
+          <div class="referral-link-box">
+            <div class="referral-link-text">${refLink}</div>
+            <button class="copy" id="copyRefLink"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
           </div>
-          <button class="btn-primary" id="copyRef">Copy Referral Link</button>
         </div>
 
-        <div class="referral-card">
-          <div class="referral-header">
-            <div class="referral-icon">👥</div>
-            <div class="referral-title">My Referrals</div>
-          </div>
-          <div class="referral-stats">
-            <div class="referral-stat">
-              <div class="referral-stat-label">Refer Count</div>
-              <div class="referral-stat-value">${referralCount||0}</div>
+        <div class="card">
+            <div class="section-title" style="font-size:18px;text-align:left;margin-bottom:16px;">${t('affiliate.listTitle')}</div>
+            <div id="directReferralList" class="referral-list-container">
+                <div class="empty-state" style="padding:20px;">
+                    <div class="empty-text">Loading...</div>
+                </div>
             </div>
-            <div class="referral-stat">
-              <div class="referral-stat-label">Total Earnings</div>
-              <div class="referral-stat-value">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} TON</div>
+        </div>
+      `;
+      document.getElementById('main-content').innerHTML = html;
+      document.getElementById('copyRefLink').onclick=()=>copy(refLink);
+      
+      // Load Referrals Directly
+      loadReferralsDirectly();
+    }
+
+    function loadReferralsDirectly() {
+        const listContainer = document.getElementById('directReferralList');
+        database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snapshot => {
+            if (snapshot.numChildren() === 0) {
+                listContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">👥</div>
+                    <div class="empty-title">No Referrals Yet</div>
+                    <div class="empty-text">Share your link to start earning!</div>
+                </div>`;
+                return;
+            }
+
+            let html = '';
+            snapshot.forEach(child => {
+                const u = child.val();
+                const uId = child.key;
+                const avatar = u.avatar || "https://cdn-icons-png.flaticon.com/512/1077/1077114.png";
+                const name = u.name || 'Unknown User';
+                const balance = u.tonBalance || 0;
+                
+                html += `
+                <div class="referral-list-item">
+                    <img src="${avatar}" class="referral-list-avatar" alt="Ref">
+                    <div class="referral-list-info">
+                        <div class="referral-list-name">${name}</div>
+                        <div class="referral-list-id">ID: ${uId}</div>
+                        <div class="referral-list-balance">${fmt(balance)} TON</div>
+                    </div>
+                </div>
+                `;
+            });
+            listContainer.innerHTML = html;
+        });
+    }
+
+    // Profile
+    function renderProfile(){
+      const html=`
+        <div class="profile-header">
+          <img src="${userAvatar}" class="profile-avatar" alt="avatar">
+          <div class="profile-name">${userName}</div>
+          <div class="profile-id">
+            <span>ID: ${userId}</span> 
+            <button class="copy" id="copyUid" style="border:none;background:transparent;padding:0;display:inline-flex;align-items:center"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGQ0Q1MzUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSI5IiB5PSI5IiB3aWR0aD0iMTMiIGhlaWdodD0iMTMiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik01IDE1SDRhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoMTRhMiAyIDAgMCAxIDIgMnYxIj48L3BhdGg+PC9zdmc+" alt="Copy"></button>
+          </div>
+        </div>
+
+        <div class="settings-card">
+            <div class="setting-row">
+                <div class="setting-label">${t('profile.language')}</div>
+                <select id="langSelect" class="language-select">
+                    <option value="en" ${currentLang==='en'?'selected':''}>English</option>
+                    <option value="cn" ${currentLang==='cn'?'selected':''}>中文</option>
+                    <option value="bn" ${currentLang==='bn'?'selected':''}>বাংলা</option>
+                    <option value="ru" ${currentLang==='ru'?'selected':''}>Русский</option>
+                </select>
             </div>
-          </div>
-          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;text-align:center">
-            Earn 0.20 TON for each referral + 20% of their total earnings
-          </div>
-          <button class="btn-primary" id="viewReferralsBtn">View My Referrals</button>
+            <div class="setting-row">
+                 <div class="setting-label">${t('profile.support')}</div>
+                 <a href="https://t.me/BlockOrbit_Support" target="_blank" class="support-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    ${t('profile.supportLabel')}
+                 </a>
+            </div>
         </div>
 
         <div class="redeem-section">
           <div class="redeem-header">
             <div class="redeem-icon">🎁</div>
             <div class="redeem-title-group">
-              <div class="redeem-title">Redeem Code</div>
-              <div class="redeem-subtitle">Enter your 8-character code to claim rewards</div>
+              <div class="redeem-title">${t('profile.redeemTitle')}</div>
+              <div class="redeem-subtitle">${t('profile.redeemSubtitle')}</div>
             </div>
           </div>
           <div class="redeem-input-wrapper">
@@ -2150,13 +2386,12 @@
             <span class="redeem-char-count" id="charCount">0/8</span>
           </div>
           <button class="redeem-btn" id="redeemGo">
-            <span>Claim Reward</span>
+            <span>${t('profile.redeemBtn')}</span>
           </button>
         </div>
       `;
       document.getElementById('main-content').innerHTML = html;
       
-      // Character counter for redeem input
       const redeemInput = document.getElementById('redeem');
       const charCount = document.getElementById('charCount');
       redeemInput.addEventListener('input', () => {
@@ -2169,9 +2404,20 @@
         }
       });
       
-      document.getElementById('copyUid').onclick=()=>copy(userId);
-      document.getElementById('copyRef').onclick=()=>copy(document.getElementById('refLink').textContent);
+      document.getElementById('copyUid').onclick=()=>{
+          triggerHaptic('light');
+          copy(userId);
+      };
+
+      document.getElementById('langSelect').addEventListener('change', (e) => {
+          triggerHaptic('light');
+          currentLang = e.target.value;
+          save({ language: currentLang });
+          updateLanguageUI();
+      });
+      
       document.getElementById('redeemGo').onclick=()=>{
+        triggerHaptic('medium');
         const code=document.getElementById('redeem').value.trim().toUpperCase(); 
         if(code.length!==8){ notify('Enter valid 8-digit code'); return; }
         database.ref('redeemCodes/'+code).once('value').then(s=>{
@@ -2180,37 +2426,21 @@
           if (codeData.used >= codeData.maxUsers) { notify('Code limit reached'); return; }
           const reward = Math.random() * (0.20 - 0.01) + 0.01;
           database.ref('redeemCodes/' + code).update({ used: codeData.used + 1 });
-          save({ tonBalance: tonBalance + reward });
+          
+          // Award Commission on Redeem Earnings
+          awardReferralCommission(reward);
+          
+          tonBalance = tonBalance + reward;
+          save({ tonBalance: tonBalance });
           notify(`Redeemed ${fmt(reward)} TON`);
           document.getElementById('redeem').value='';
           charCount.textContent = '0/8';
           charCount.style.color = 'var(--text-muted)';
         });
       };
-      document.getElementById('viewReferralsBtn').onclick = showReferralList;
-    }
-
-    function showReferralList() {
-      const modal = document.getElementById('referralModal');
-      const content = document.getElementById('referralListContent');
-      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snapshot => {
-        if (snapshot.numChildren() === 0) {
-          content.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary)">You haven\'t referred anyone yet.</div>';
-        } else {
-          let html = '';
-          snapshot.forEach(child => {
-            const u = child.val();
-            html += `<div class="referral-item"><img src="${u.avatar}" class="referral-avatar"><div class="referral-info"><div class="referral-name">${u.name}</div><div class="referral-id">ID: ${child.key}</div><div class="referral-balance">${fmt(u.tonBalance||0)} TON</div></div></div>`;
-          });
-          content.innerHTML = html;
-        }
-        modal.style.display = 'flex';
-      });
     }
 
     // Modal Close
-    document.getElementById('closeReferralModal').onclick = () => document.getElementById('referralModal').style.display = 'none';
-    document.getElementById('referralModal').onclick = (e) => { if(e.target.id === 'referralModal') e.target.style.display = 'none'; };
     document.getElementById('closeDepositModal').onclick = () => document.getElementById('deposit-modal').style.display = 'none';
     document.getElementById('closeWithdrawModal').onclick = () => document.getElementById('withdraw-modal').style.display = 'none';
     document.getElementById('closeDepositHistoryModal').onclick = () => document.getElementById('deposit-history-modal').style.display = 'none';
@@ -2229,10 +2459,14 @@
       await loadCryptoPrices();
       try{
         userData = await loadUser();
+        // Load saved language
+        if(userData.language) {
+            currentLang = userData.language;
+        }
       }catch{
         const loc = localStorage.getItem('blockorbit_user_'+userId);
         userData = loc ? JSON.parse(loc) : { 
-          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, adStats:{today:0,yesterday:0,thisWeek:0,thisMonth:0,lifetime:0,lastAdDate:todayISO(),lastWeekReset:weekStartISO(),lastMonthReset:monthStartISO()}, milestones:{ milestone1500Claimed:false, milestone2500Claimed:false, milestone5500Claimed:false }, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false
+          tonBalance:0, purchasedPlans:{}, activeTrades:{}, depositHistory:[], withdrawHistory:[], tradeHistory:[], avatar:userAvatar, name:userName, referrals:0, completedTasks:{}, referralCommissions:{}, totalReferralCommission:0, createdAt: now(), referredBy: null, welcomed: false, withdrawCount: 0, hasDeposit: false, language: 'en'
         };
       }
       tonBalance = userData.tonBalance||0;
@@ -2241,11 +2475,23 @@
       depositHistory = userData.depositHistory||[];
       withdrawHistory = userData.withdrawHistory||[];
       tradeHistory = userData.tradeHistory||[];
+      totalReferralCommission = userData.totalReferralCommission || 0;
+      
+      // Process Referral Logic (Instant Bonus Fix)
+      await processReferral();
+
+      // Count referrals
+      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(snap => {
+        referralCount = snap.numChildren();
+      });
+
       document.getElementById('tonBalance').textContent = fmt(tonBalance);
 
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
-      showTab('home');
+      
+      updateLanguageUI(); // Apply initial language
+      
       setInterval(loadCryptoPrices, 30000);
     }
 
