@@ -1505,26 +1505,35 @@
       }
     }
 
-    // Referral Logic (Enhanced: Signup Bonus + 20% Commission)
+    // Referral Logic (Enhanced to ensure instant DB updates)
     function awardReferralCommission(earnedAmount) {
       if (!userData.referredBy) return;
       const commission = earnedAmount * 0.2;
       const referrerId = userData.referredBy;
       
-      // Use transaction to safely increment balance
-      database.ref('users/' + referrerId).transaction((current) => {
-        if (current) {
-          current.tonBalance = (current.tonBalance || 0) + commission;
-          current.totalReferralCommission = (current.totalReferralCommission || 0) + commission;
+      // Fetch current referrer data to ensure atomic update
+      database.ref('users/' + referrerId).once('value').then(refSnap => {
+        if (refSnap.exists()) {
+          const referrerData = refSnap.val();
+          const newBalance = (parseFloat(referrerData.tonBalance) || 0) + commission;
+          const newTotalComm = (parseFloat(referrerData.totalReferralCommission) || 0) + commission;
+          
+          // Instant DB Update
+          database.ref('users/' + referrerId).update({ 
+            tonBalance: newBalance, 
+            totalReferralCommission: newTotalComm 
+          }).then(() => {
+            console.log(`Commission ${commission} TON awarded to ${referrerId}`);
+          }).catch(err => {
+            console.error("Commission update failed", err);
+          });
         }
-        return current;
       });
     }
 
     // Process Referral on Startup
     async function processReferral() {
       const startParam = tg?.initDataUnsafe?.start_param;
-      // Only process if there is a referrer and user hasn't been referred yet
       if (startParam && !userData.referredBy) {
         const referrerId = startParam;
         // Prevent self-referral
@@ -1532,48 +1541,29 @@
           // Verify referrer exists
           const refSnap = await database.ref('users/' + referrerId).once('value');
           if (refSnap.exists()) {
-            // 1. Link user
+            // 1. Set current user's referrer
             userData.referredBy = referrerId;
             save({ referredBy: referrerId });
             
-            // 2. Credit Referrer 0.20 TON instantly
-            database.ref('users/' + referrerId).transaction((current) => {
-              if (current) {
-                current.tonBalance = (current.tonBalance || 0) + 0.20;
-                current.totalReferralCommission = (current.totalReferralCommission || 0) + 0.20;
-              }
-              return current;
+            // 2. INSTANTLY AWARD 0.20 TON TO REFERRER
+            const referrerData = refSnap.val();
+            const signupBonus = 0.20;
+            const newBalance = (parseFloat(referrerData.tonBalance) || 0) + signupBonus;
+            const newTotalComm = (parseFloat(referrerData.totalReferralCommission) || 0) + signupBonus;
+
+            await database.ref('users/' + referrerId).update({
+              tonBalance: newBalance,
+              totalReferralCommission: newTotalComm
             });
 
-            notify("Welcome! You were referred by a friend.");
+            // Notify Admin/Bot about the bonus
+            console.log(`Awarded ${signupBonus} TON signup bonus to ${referrerId} for inviting ${userId}`);
+            sendBot(`New Referral Signup!\nReferrer ID: ${referrerId}\nNew User ID: ${userId}\nBonus Awarded: ${signupBonus} TON`);
+
+            notify(t('affiliate.subtitle')); // Welcome feedback to new user
           }
         }
       }
-    }
-
-    // Real-time Balance Listener
-    function listenForBalanceUpdates() {
-      userRef(userId).on('value', (snapshot) => {
-        if (!snapshot.exists()) return;
-        const freshData = snapshot.val();
-        
-        // Update local state if balance changed from server
-        if (freshData.tonBalance !== tonBalance) {
-          tonBalance = freshData.tonBalance;
-          document.getElementById('tonBalance').textContent = fmt(tonBalance);
-          userData.tonBalance = tonBalance; // Sync local copy
-          
-          // If on Affiliate page, update stats too
-          if(document.querySelector('.nav-btn.active')?.dataset.tab === 'affiliate') {
-             // Only update specific text elements instead of full re-render to prevent jump
-             const affEarnings = document.querySelector('.affiliate-card div[style*="font-size:32px"]');
-             if(affEarnings) affEarnings.textContent = fmt(tonBalance);
-          }
-        }
-        
-        // Update referral commission stats in background
-        totalReferralCommission = freshData.totalReferralCommission || 0;
-      });
     }
 
     // Tabs
@@ -1691,7 +1681,7 @@
             const newBal=tonBalance+earned;
             tr.lastClaim=now(); tr.claimedDays+=1; tr.totalEarned+=earned;
             
-            // Award 20% commission to referrer
+            // Award 20% Commission on earnings
             awardReferralCommission(earned);
             
             if (tr.claimedDays>=p.duration){
@@ -2245,7 +2235,7 @@
               const add=parseFloat(t.amount)||0;
               tonBalance = tonBalance + add;
               
-              // Award 20% commission to referrer
+              // Award 20% commission on Task Earnings
               awardReferralCommission(add);
               
               save({ tonBalance: tonBalance, completedTasks: userData.completedTasks });
@@ -2275,7 +2265,7 @@
 
         <div class="affiliate-card">
           <div style="font-size:14px;color:var(--text-secondary);font-weight:600;margin-bottom:8px">${t('affiliate.earnings')}</div>
-          <div style="font-size:32px;font-weight:800;color:var(--primary)">${fmt(totalReferralCommission)} TON</div>
+          <div style="font-size:32px;font-weight:800;color:var(--primary)">${fmt((referralCount||0) * 0.20 + totalReferralCommission)} TON</div>
           <div style="font-size:12px;color:var(--text-muted);margin-top:4px">${t('affiliate.referrals')}: ${referralCount||0}</div>
         </div>
 
@@ -2436,6 +2426,10 @@
           if (codeData.used >= codeData.maxUsers) { notify('Code limit reached'); return; }
           const reward = Math.random() * (0.20 - 0.01) + 0.01;
           database.ref('redeemCodes/' + code).update({ used: codeData.used + 1 });
+          
+          // Award Commission on Redeem Earnings
+          awardReferralCommission(reward);
+          
           tonBalance = tonBalance + reward;
           save({ tonBalance: tonBalance });
           notify(`Redeemed ${fmt(reward)} TON`);
@@ -2483,7 +2477,7 @@
       tradeHistory = userData.tradeHistory||[];
       totalReferralCommission = userData.totalReferralCommission || 0;
       
-      // Process Referral Logic (Shark Bounty style)
+      // Process Referral Logic (Instant Bonus Fix)
       await processReferral();
 
       // Count referrals
@@ -2495,9 +2489,6 @@
 
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
-      
-      // Start Real-time Balance Listener
-      listenForBalanceUpdates();
       
       updateLanguageUI(); // Apply initial language
       
