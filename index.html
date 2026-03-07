@@ -522,8 +522,7 @@
     
     .history-amount.positive { color: var(--accent-green); }
     .history-amount.negative { color: var(--accent-red); }
-
-    /* History Status Badge */
+    
     .history-status {
       font-size: 11px;
       padding: 4px 10px;
@@ -1790,7 +1789,7 @@
       document.getElementById('w_trd').onclick = showTradesModal;
     }
 
-    // --- RESTORED OLD DEPOSIT MODAL FUNCTIONS ---
+    // --- DEPOSIT FUNCTIONS (RESTORED FROM OLD SCRIPT) ---
     function showDepositModal() {
       const modal = document.getElementById('deposit-modal');
       const content = document.getElementById('deposit-content');
@@ -1883,6 +1882,7 @@
         showDepositHistoryModal();
       };
     }
+    // -----------------------------------------------
 
     function showDepositHistoryModal() {
       const modal = document.getElementById('deposit-history-modal');
@@ -1893,7 +1893,7 @@
         <div class="history-container">
           <div class="history-header-section">
             <div class="history-title-row">
-              <div class="history-main-title">Deposit History</div>
+              <div class="history-main-title">${t('wallet.depHistory')}</div>
             </div>
             <div class="history-stats-grid">
               <div class="history-stat-card">
@@ -1941,7 +1941,6 @@
       `;
       modal.style.display = 'flex';
     }
-    // --- END RESTORED OLD DEPOSIT FUNCTIONS ---
 
     function showWithdrawModal() {
       const modal = document.getElementById('withdraw-modal');
@@ -2023,6 +2022,7 @@
                 </div>
                 <div class="history-amount-row">
                   <div class="history-amount negative">-${w.amount} TON</div>
+                  <div class="history-status pending">Pending</div>
                 </div>
                 <div class="history-details-row">
                   <div class="history-detail-label">Transaction ID</div>
@@ -2158,6 +2158,7 @@
                   </div>
                   <div class="history-amount-row">
                     <div class="history-amount" style="color:var(--primary)">${p.price} TON</div>
+                    <div class="history-status completed">${t.totalEarned.toFixed(2)} Earned</div>
                   </div>
                   <div class="prog" style="margin-top:12px">
                     <div class="progbar"><div class="progfill" style="width:${prog}%"></div></div>
