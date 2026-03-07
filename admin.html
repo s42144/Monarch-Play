@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1" />
-  <title>Exotix Trade | Admin Panel</title>
-  <link rel="icon" href="https://github.com/s42144/exotix-/blob/ce4cd9399ff673963389c393946138254a0edbe5/USDT-Ton-Wallet.png?raw=true" />
+  <title>BlockOrbit | Admin Panel</title>
+  <link rel="icon" href="https://i.postimg.cc/6qxHW6rX/download.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,21 +23,20 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     :root{
-      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      --secondary-gradient: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-      --success-gradient: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      --primary-gradient: linear-gradient(135deg, #FCD535 0%, #f0c020 100%);
+      --secondary-gradient: linear-gradient(135deg, #1E88E5 0%, #64B5F6 100%);
+      --success-gradient: linear-gradient(135deg, #0ECB81 0%, #34d399 100%);
       --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-      --danger-gradient: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-      --dark-bg: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
-      --card-bg: rgba(79, 70, 229, 0.15);
-      --card-border: rgba(139, 92, 246, 0.3);
-      --text-primary: #f1f5f9; 
-      --text-secondary: #cbd5e1;
-      --accent-blue: #3b82f6;
-      --accent-green: #10b981;
-      --accent-yellow: #f59e0b;
-      --accent-red: #ef4444;
-      --accent-purple: #8b5cf6;
+      --danger-gradient: linear-gradient(135deg, #F6465D 0%, #f87171 100%);
+      --dark-bg: linear-gradient(135deg, #0B0E11 0%, #1E2329 50%, #181A20 100%);
+      --card-bg: rgba(30, 35, 41, 0.8);
+      --card-border: rgba(252, 213, 53, 0.2);
+      --text-primary: #EAECEF; 
+      --text-secondary: #848E9C;
+      --accent-blue: #1E88E5;
+      --accent-green: #0ECB81;
+      --accent-yellow: #FCD535;
+      --accent-red: #F6465D;
       --shadow-md: 0 4px 16px rgba(0,0,0,0.3); 
       --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
     }
@@ -51,7 +50,7 @@
     
     .sidebar {
       width: 250px;
-      background: rgba(30, 27, 75, 0.95);
+      background: rgba(11, 14, 17, 0.95);
       backdrop-filter: blur(20px);
       border-right: 1px solid var(--card-border);
       padding: 20px 0;
@@ -96,9 +95,9 @@
     }
     
     .sidebar-link:hover, .sidebar-link.active {
-      background: rgba(59, 130, 246, 0.1);
-      color: var(--accent-blue);
-      border-left: 3px solid var(--accent-blue);
+      background: rgba(252, 213, 53, 0.1);
+      color: var(--accent-yellow);
+      border-left: 3px solid var(--accent-yellow);
     }
     
     .sidebar-link i {
@@ -119,7 +118,7 @@
     .content-title {
       font-size: 28px;
       font-weight: 800;
-      background: var(--secondary-gradient);
+      background: var(--primary-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -174,30 +173,11 @@
       font-size: 24px;
     }
     
-    .stat-icon.blue {
-      background: rgba(59, 130, 246, 0.2);
-      color: var(--accent-blue);
-    }
-    
-    .stat-icon.green {
-      background: rgba(16, 185, 129, 0.2);
-      color: var(--accent-green);
-    }
-    
-    .stat-icon.yellow {
-      background: rgba(245, 158, 11, 0.2);
-      color: var(--accent-yellow);
-    }
-    
-    .stat-icon.red {
-      background: rgba(239, 68, 68, 0.2);
-      color: var(--accent-red);
-    }
-    
-    .stat-icon.purple {
-      background: rgba(139, 92, 246, 0.2);
-      color: var(--accent-purple);
-    }
+    .stat-icon.blue { background: rgba(30, 136, 229, 0.2); color: var(--accent-blue); }
+    .stat-icon.green { background: rgba(14, 203, 129, 0.2); color: var(--accent-green); }
+    .stat-icon.yellow { background: rgba(252, 213, 53, 0.2); color: var(--accent-yellow); }
+    .stat-icon.red { background: rgba(246, 70, 93, 0.2); color: var(--accent-red); }
+    .stat-icon.purple { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
     
     .stat-value {
       font-size: 28px;
@@ -218,18 +198,11 @@
       gap: 5px;
     }
     
-    .stat-change.positive {
-      color: var(--accent-green);
-    }
-    
-    .stat-change.negative {
-      color: var(--accent-red);
-    }
+    .stat-change.positive { color: var(--accent-green); }
+    .stat-change.negative { color: var(--accent-red); }
     
     /* Tables */
-    .table-container {
-      overflow-x: auto;
-    }
+    .table-container { overflow-x: auto; }
     
     .data-table {
       width: 100%;
@@ -243,14 +216,12 @@
     }
     
     .data-table th {
-      background: rgba(59, 130, 246, 0.1);
+      background: rgba(252, 213, 53, 0.1);
       font-weight: 600;
-      color: var(--accent-blue);
+      color: var(--accent-yellow);
     }
     
-    .data-table tr:hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
+    .data-table tr:hover { background: rgba(255, 255, 255, 0.05); }
     
     .status-badge {
       display: inline-block;
@@ -260,35 +231,11 @@
       font-weight: 600;
     }
     
-    .status-badge.pending {
-      background: rgba(245, 158, 11, 0.2);
-      color: var(--accent-yellow);
-    }
-    
-    .status-badge.approved {
-      background: rgba(16, 185, 129, 0.2);
-      color: var(--accent-green);
-    }
-    
-    .status-badge.rejected {
-      background: rgba(239, 68, 68, 0.2);
-      color: var(--accent-red);
-    }
-    
-    .status-badge.paused {
-      background: rgba(139, 92, 246, 0.2);
-      color: var(--accent-purple);
-    }
-    
-    .status-badge.active {
-      background: rgba(16, 185, 129, 0.2);
-      color: var(--accent-green);
-    }
-    
-    .status-badge.banned {
-      background: rgba(139, 92, 246, 0.2);
-      color: var(--accent-purple);
-    }
+    .status-badge.pending { background: rgba(245, 158, 11, 0.2); color: var(--accent-yellow); }
+    .status-badge.approved, .status-badge.active { background: rgba(14, 203, 129, 0.2); color: var(--accent-green); }
+    .status-badge.rejected { background: rgba(246, 70, 93, 0.2); color: var(--accent-red); }
+    .status-badge.paused { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+    .status-badge.banned { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
     
     /* Buttons */
     .btn {
@@ -305,52 +252,18 @@
       transition: all 0.3s ease;
     }
     
-    .btn-primary {
-      background: var(--secondary-gradient);
-      color: white;
-    }
+    .btn-primary { background: var(--primary-gradient); color: #000; }
+    .btn-success { background: var(--success-gradient); color: #fff; }
+    .btn-danger { background: var(--danger-gradient); color: #fff; }
+    .btn-warning { background: var(--warning-gradient); color: #000; }
+    .btn-secondary { background: rgba(203, 213, 225, 0.2); color: var(--text-primary); }
     
-    .btn-success {
-      background: var(--success-gradient);
-      color: white;
-    }
-    
-    .btn-danger {
-      background: var(--danger-gradient);
-      color: white;
-    }
-    
-    .btn-warning {
-      background: var(--warning-gradient);
-      color: white;
-    }
-    
-    .btn-secondary {
-      background: rgba(203, 213, 225, 0.2);
-      color: var(--text-primary);
-    }
-    
-    .btn-sm {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
-    
-    .btn-group {
-      display: flex;
-      gap: 10px;
-    }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-group { display: flex; gap: 10px; }
     
     /* Forms */
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-secondary); }
     
     .form-control {
       width: 100%;
@@ -362,10 +275,7 @@
       transition: border-color 0.3s ease;
     }
     
-    .form-control:focus {
-      outline: none;
-      border-color: var(--accent-blue);
-    }
+    .form-control:focus { outline: none; border-color: var(--accent-yellow); }
     
     /* Modal */
     .modal {
@@ -381,12 +291,10 @@
       justify-content: center;
     }
     
-    .modal.active {
-      display: flex;
-    }
+    .modal.active { display: flex; }
     
     .modal-content {
-      background: var(--dark-bg);
+      background: #1E2329;
       border-radius: 16px;
       padding: 30px;
       max-width: 600px;
@@ -407,7 +315,7 @@
     .modal-title {
       font-size: 24px;
       font-weight: 800;
-      background: var(--secondary-gradient);
+      background: var(--primary-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -428,10 +336,7 @@
       transition: all 0.3s ease;
     }
     
-    .modal-close:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: rotate(90deg);
-    }
+    .modal-close:hover { background: rgba(255, 255, 255, 0.2); transform: rotate(90deg); }
     
     /* Tabs */
     .tabs {
@@ -449,24 +354,13 @@
       transition: all 0.3s ease;
     }
     
-    .tab.active {
-      color: var(--accent-blue);
-      border-bottom-color: var(--accent-blue);
-    }
+    .tab.active { color: var(--accent-yellow); border-bottom-color: var(--accent-yellow); }
     
-    .tab-content {
-      display: none;
-    }
-    
-    .tab-content.active {
-      display: block;
-    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
     
     /* Search */
-    .search-container {
-      position: relative;
-      margin-bottom: 20px;
-    }
+    .search-container { position: relative; margin-bottom: 20px; }
     
     .search-input {
       width: 100%;
@@ -492,27 +386,6 @@
       margin-bottom: 20px;
     }
     
-    /* Loading */
-    .loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 200px;
-    }
-    
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(255, 255, 255, 0.1);
-      border-top-color: var(--accent-blue);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
     /* Notification */
     .notification {
       position: fixed;
@@ -529,78 +402,20 @@
       transition: transform 0.3s ease;
     }
     
-    .notification.show {
-      transform: translateX(0);
-    }
-    
-    .notification.success {
-      border-left: 4px solid var(--accent-green);
-    }
-    
-    .notification.error {
-      border-left: 4px solid var(--accent-red);
-    }
-    
-    .notification.warning {
-      border-left: 4px solid var(--accent-yellow);
-    }
-    
-    /* Pagination */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      margin-top: 20px;
-    }
-    
-    .page-btn {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .page-btn:hover, .page-btn.active {
-      background: var(--accent-blue);
-      color: white;
-    }
+    .notification.show { transform: translateX(0); }
+    .notification.success { border-left: 4px solid var(--accent-green); }
+    .notification.error { border-left: 4px solid var(--accent-red); }
+    .notification.warning { border-left: 4px solid var(--accent-yellow); }
     
     /* Responsive */
     @media (max-width: 768px) {
-      .sidebar {
-        width: 70px;
-      }
-      
-      .sidebar-header {
-        padding: 0 10px 20px;
-      }
-      
-      .sidebar-title span {
-        display: none;
-      }
-      
-      .sidebar-link {
-        padding: 12px;
-        justify-content: center;
-      }
-      
-      .sidebar-link span {
-        display: none;
-      }
-      
-      .main-content {
-        padding: 15px;
-      }
-      
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
+      .sidebar { width: 70px; }
+      .sidebar-header { padding: 0 10px 20px; }
+      .sidebar-title span { display: none; }
+      .sidebar-link { padding: 12px; justify-content: center; }
+      .sidebar-link span { display: none; }
+      .main-content { padding: 15px; }
+      .stats-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -611,7 +426,7 @@
       <div class="sidebar-header">
         <div class="sidebar-title">
           <i class="fas fa-chart-line"></i>
-          <span>Admin Panel</span>
+          <span>BlockOrbit Admin</span>
         </div>
       </div>
       <ul class="sidebar-menu">
@@ -646,9 +461,21 @@
           </a>
         </li>
         <li class="sidebar-item">
+          <a href="#" class="sidebar-link" data-tab="trade-plans">
+            <i class="fas fa-coins"></i>
+            <span>Trade Plans</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
           <a href="#" class="sidebar-link" data-tab="promo-codes">
             <i class="fas fa-ticket-alt"></i>
             <span>Promo Codes</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="#" class="sidebar-link" data-tab="redeem-codes">
+            <i class="fas fa-gift"></i>
+            <span>Redeem Codes</span>
           </a>
         </li>
         <li class="sidebar-item">
@@ -678,120 +505,89 @@
       <div class="tab-content active" id="dashboard-tab">
         <div class="content-header">
           <h1 class="content-title">Dashboard</h1>
-          <p class="content-subtitle">Overview of your platform performance</p>
+          <p class="content-subtitle">Overview of BlockOrbit Platform</p>
         </div>
         
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-header">
-              <div class="stat-icon blue">
-                <i class="fas fa-users"></i>
-              </div>
+              <div class="stat-icon blue"><i class="fas fa-users"></i></div>
             </div>
             <div class="stat-value" id="total-users">0</div>
             <div class="stat-label">Total Users</div>
-            <div class="stat-change positive">
-              <i class="fas fa-arrow-up"></i>
-              <span id="new-users-today">0 new today</span>
-            </div>
+            <div class="stat-change positive"><i class="fas fa-arrow-up"></i><span id="new-users-today">0 new today</span></div>
           </div>
           
           <div class="stat-card">
             <div class="stat-header">
-              <div class="stat-icon green">
-                <i class="fas fa-user-check"></i>
-              </div>
+              <div class="stat-icon green"><i class="fas fa-user-check"></i></div>
             </div>
             <div class="stat-value" id="active-users">0</div>
-            <div class="stat-label">Daily Active Users</div>
-            <div class="stat-change positive">
-              <i class="fas fa-arrow-up"></i>
-              <span>12% from yesterday</span>
-            </div>
+            <div class="stat-label">Deposit Users</div>
+            <div class="stat-change positive"><i class="fas fa-arrow-up"></i><span id="deposit-users-count">0 total</span></div>
           </div>
           
           <div class="stat-card">
             <div class="stat-header">
-              <div class="stat-icon yellow">
-                <i class="fas fa-circle"></i>
-              </div>
+              <div class="stat-icon yellow"><i class="fas fa-wallet"></i></div>
             </div>
-            <div class="stat-value" id="online-users">0</div>
-            <div class="stat-label">Online Users</div>
-            <div class="stat-change positive">
-              <i class="fas fa-arrow-up"></i>
-              <span>Real-time</span>
-            </div>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-header">
-              <div class="stat-icon green">
-                <i class="fas fa-arrow-down"></i>
-              </div>
-            </div>
-            <div class="stat-value" id="total-deposits">0</div>
+            <div class="stat-value" id="total-deposits">0 TON</div>
             <div class="stat-label">Total Deposits</div>
-            <div class="stat-change positive">
-              <i class="fas fa-arrow-up"></i>
-              <span>8% from last week</span>
-            </div>
+            <div class="stat-change positive"><i class="fas fa-arrow-up"></i><span>Platform funds</span></div>
           </div>
           
           <div class="stat-card">
             <div class="stat-header">
-              <div class="stat-icon red">
-                <i class="fas fa-arrow-up"></i>
-              </div>
+              <div class="stat-icon red"><i class="fas fa-arrow-up"></i></div>
             </div>
-            <div class="stat-value" id="total-withdrawals">0</div>
+            <div class="stat-value" id="total-withdrawals">0 TON</div>
             <div class="stat-label">Total Withdrawals</div>
-            <div class="stat-change negative">
-              <i class="fas fa-arrow-down"></i>
-              <span>3% from last week</span>
-            </div>
+            <div class="stat-change negative"><i class="fas fa-arrow-down"></i><span>Paid out</span></div>
           </div>
           
           <div class="stat-card">
             <div class="stat-header">
-              <div class="stat-icon yellow">
-                <i class="fas fa-clock"></i>
-              </div>
+              <div class="stat-icon yellow"><i class="fas fa-clock"></i></div>
             </div>
             <div class="stat-value" id="pending-deposits">0</div>
             <div class="stat-label">Pending Deposits</div>
-            <div class="stat-change">
-              <i class="fas fa-minus"></i>
-              <span>Waiting for approval</span>
-            </div>
+            <div class="stat-change"><i class="fas fa-minus"></i><span>Waiting approval</span></div>
           </div>
           
           <div class="stat-card">
             <div class="stat-header">
-              <div class="stat-icon yellow">
-                <i class="fas fa-clock"></i>
-              </div>
+              <div class="stat-icon yellow"><i class="fas fa-clock"></i></div>
             </div>
             <div class="stat-value" id="pending-withdrawals">0</div>
             <div class="stat-label">Pending Withdrawals</div>
-            <div class="stat-change">
-              <i class="fas fa-minus"></i>
-              <span>Waiting for approval</span>
-            </div>
+            <div class="stat-change"><i class="fas fa-minus"></i><span>Waiting approval</span></div>
           </div>
           
           <div class="stat-card">
             <div class="stat-header">
-              <div class="stat-icon purple">
-                <i class="fas fa-ad"></i>
-              </div>
+              <div class="stat-icon purple"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="stat-value" id="total-referrals">0</div>
+            <div class="stat-label">Total Referrals</div>
+            <div class="stat-change positive"><i class="fas fa-arrow-up"></i><span>Network growth</span></div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon green"><i class="fas fa-hand-holding-usd"></i></div>
+            </div>
+            <div class="stat-value" id="total-commission">0 TON</div>
+            <div class="stat-label">Total Referral Payouts</div>
+            <div class="stat-change positive"><i class="fas fa-arrow-up"></i><span>20% Commissions</span></div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon blue"><i class="fas fa-ad"></i></div>
             </div>
             <div class="stat-value" id="total-ads">0</div>
-            <div class="stat-label">Total Ads Shown</div>
-            <div class="stat-change positive">
-              <i class="fas fa-arrow-up"></i>
-              <span>15% from last week</span>
-            </div>
+            <div class="stat-label">Tasks Completed</div>
+            <div class="stat-change positive"><i class="fas fa-arrow-up"></i><span>User engagement</span></div>
           </div>
         </div>
         
@@ -822,7 +618,7 @@
                 <tr>
                   <th>User ID</th>
                   <th>Name</th>
-                  <th>Balance (TON)</th>
+                  <th>Balance</th>
                   <th>Referrals</th>
                   <th>Join Date</th>
                   <th>Status</th>
@@ -833,10 +629,6 @@
                 <!-- Users will be loaded here -->
               </tbody>
             </table>
-          </div>
-          
-          <div class="pagination" id="users-pagination">
-            <!-- Pagination will be loaded here -->
           </div>
         </div>
       </div>
@@ -864,88 +656,27 @@
                     <th>ID</th>
                     <th>User</th>
                     <th>Amount</th>
-                    <th>Bonus</th>
-                    <th>Total</th>
                     <th>Date</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody id="pending-deposits-table-body">
-                  <!-- Pending deposits will be loaded here -->
-                </tbody>
+                <tbody id="pending-deposits-table-body"></tbody>
               </table>
             </div>
           </div>
         </div>
         
         <div class="tab-content" id="approved-deposits-content">
-          <div class="card">
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Amount</th>
-                    <th>Bonus</th>
-                    <th>Total</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody id="approved-deposits-table-body">
-                  <!-- Approved deposits will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div class="card"><div class="table-container"><table class="data-table"><thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead><tbody id="approved-deposits-table-body"></tbody></table></div></div>
         </div>
         
         <div class="tab-content" id="rejected-deposits-content">
-          <div class="card">
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Amount</th>
-                    <th>Bonus</th>
-                    <th>Total</th>
-                    <th>Date</th>
-                    <th>Reason</th>
-                  </tr>
-                </thead>
-                <tbody id="rejected-deposits-table-body">
-                  <!-- Rejected deposits will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div class="card"><div class="table-container"><table class="data-table"><thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Date</th><th>Reason</th></tr></thead><tbody id="rejected-deposits-table-body"></tbody></table></div></div>
         </div>
         
         <div class="tab-content" id="all-deposits-content">
-          <div class="card">
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Amount</th>
-                    <th>Bonus</th>
-                    <th>Total</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody id="all-deposits-table-body">
-                  <!-- All deposits will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div class="card"><div class="table-container"><table class="data-table"><thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead><tbody id="all-deposits-table-body"></tbody></table></div></div>
         </div>
       </div>
       
@@ -978,78 +709,22 @@
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody id="pending-withdrawals-table-body">
-                  <!-- Pending withdrawals will be loaded here -->
-                </tbody>
+                <tbody id="pending-withdrawals-table-body"></tbody>
               </table>
             </div>
           </div>
         </div>
         
         <div class="tab-content" id="approved-withdrawals-content">
-          <div class="card">
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Amount</th>
-                    <th>Address</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody id="approved-withdrawals-table-body">
-                  <!-- Approved withdrawals will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div class="card"><div class="table-container"><table class="data-table"><thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Address</th><th>Date</th><th>Status</th></tr></thead><tbody id="approved-withdrawals-table-body"></tbody></table></div></div>
         </div>
         
         <div class="tab-content" id="rejected-withdrawals-content">
-          <div class="card">
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Amount</th>
-                    <th>Address</th>
-                    <th>Date</th>
-                    <th>Reason</th>
-                  </tr>
-                </thead>
-                <tbody id="rejected-withdrawals-table-body">
-                  <!-- Rejected withdrawals will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div class="card"><div class="table-container"><table class="data-table"><thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Address</th><th>Date</th><th>Reason</th></tr></thead><tbody id="rejected-withdrawals-table-body"></tbody></table></div></div>
         </div>
         
         <div class="tab-content" id="all-withdrawals-content">
-          <div class="card">
-            <div class="table-container">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Amount</th>
-                    <th>Address</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody id="all-withdrawals-table-body">
-                  <!-- All withdrawals will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div class="card"><div class="table-container"><table class="data-table"><thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Address</th><th>Date</th><th>Status</th></tr></thead><tbody id="all-withdrawals-table-body"></tbody></table></div></div>
         </div>
       </div>
       
@@ -1063,26 +738,33 @@
         <div class="card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h3 style="font-size: 18px;">Tasks List</h3>
-            <button class="btn btn-primary" id="add-task-btn">
-              <i class="fas fa-plus"></i>
-              Add Task
-            </button>
+            <button class="btn btn-primary" id="add-task-btn"><i class="fas fa-plus"></i> Add Task</button>
           </div>
-          
           <div class="table-container">
             <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Photo</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Reward</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="tasks-table-body">
-                <!-- Tasks will be loaded here -->
-              </tbody>
+              <thead><tr><th>Photo</th><th>Name</th><th>Category</th><th>Reward</th><th>Actions</th></tr></thead>
+              <tbody id="tasks-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- NEW: Trade Plans Tab -->
+      <div class="tab-content" id="trade-plans-tab">
+        <div class="content-header">
+          <h1 class="content-title">Trade Plans</h1>
+          <p class="content-subtitle">Manage investment plans available to users</p>
+        </div>
+        
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-size: 18px;">Active Plans</h3>
+            <button class="btn btn-primary" id="add-plan-btn"><i class="fas fa-plus"></i> Add Plan</button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead><tr><th>Icon</th><th>Name</th><th>Price (TON)</th><th>Daily Earning</th><th>Duration</th><th>Actions</th></tr></thead>
+              <tbody id="trade-plans-table-body"></tbody>
             </table>
           </div>
         </div>
@@ -1092,34 +774,39 @@
       <div class="tab-content" id="promo-codes-tab">
         <div class="content-header">
           <h1 class="content-title">Promo Codes</h1>
-          <p class="content-subtitle">Manage promotional codes</p>
+          <p class="content-subtitle">Manage promotional codes for deposits</p>
         </div>
         
         <div class="card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h3 style="font-size: 18px;">Promo Codes List</h3>
-            <button class="btn btn-primary" id="add-promo-btn">
-              <i class="fas fa-plus"></i>
-              Add Promo Code
-            </button>
+            <button class="btn btn-primary" id="add-promo-btn"><i class="fas fa-plus"></i> Add Promo Code</button>
           </div>
-          
           <div class="table-container">
             <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Code</th>
-                  <th>Bonus %</th>
-                  <th>Max Users</th>
-                  <th>Used</th>
-                  <th>Left</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="promo-codes-table-body">
-                <!-- Promo codes will be loaded here -->
-              </tbody>
+              <thead><tr><th>Code</th><th>Bonus %</th><th>Max Users</th><th>Used</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="promo-codes-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- NEW: Redeem Codes Tab -->
+      <div class="tab-content" id="redeem-codes-tab">
+        <div class="content-header">
+          <h1 class="content-title">Redeem Codes</h1>
+          <p class="content-subtitle">Manage gift/redeem codes for users</p>
+        </div>
+        
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-size: 18px;">Redeem Codes List</h3>
+            <button class="btn btn-primary" id="add-redeem-btn"><i class="fas fa-plus"></i> Generate Code</button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead><tr><th>Code</th><th>Reward (TON)</th><th>Max Users</th><th>Used</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="redeem-codes-table-body"></tbody>
             </table>
           </div>
         </div>
@@ -1133,38 +820,15 @@
         </div>
         
         <div class="card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-size: 18px;">Send New Announcement</h3>
-          </div>
-          
+          <h3 style="font-size: 18px; margin-bottom: 20px;">Send New Announcement</h3>
           <div class="form-group">
             <label class="form-label">Message</label>
             <textarea class="form-control" id="announcement-message" rows="4" placeholder="Enter announcement message"></textarea>
           </div>
-          
           <div class="form-group">
-            <label class="form-label">Photo (Optional)</label>
-            <input type="file" class="form-control" id="announcement-photo" accept="image/*">
-            <input type="text" class="form-control" id="announcement-photo-url" placeholder="Or enter photo URL" style="margin-top: 10px;">
+            <label class="form-label">Photo URL (Optional)</label>
+            <input type="text" class="form-control" id="announcement-photo-url" placeholder="Enter photo URL">
           </div>
-          
-          <div class="form-group">
-            <label class="form-label">Buttons (Optional)</label>
-            <div id="announcement-buttons">
-              <div class="button-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <input type="text" class="form-control" placeholder="Button text">
-                <input type="text" class="form-control" placeholder="Button URL">
-                <button class="btn btn-danger btn-sm remove-button">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </div>
-            <button class="btn btn-secondary btn-sm" id="add-button">
-              <i class="fas fa-plus"></i>
-              Add Button
-            </button>
-          </div>
-          
           <div class="form-group">
             <label class="form-label">Send To</label>
             <select class="form-control" id="announcement-target">
@@ -1172,34 +836,19 @@
               <option value="specific">Specific Users</option>
             </select>
           </div>
-          
           <div class="form-group" id="specific-users-container" style="display: none;">
             <label class="form-label">User IDs (comma separated)</label>
-            <textarea class="form-control" id="specific-users" rows="3" placeholder="Enter user IDs separated by commas"></textarea>
+            <textarea class="form-control" id="specific-users" rows="3" placeholder="Enter user IDs"></textarea>
           </div>
-          
-          <button class="btn btn-primary" id="send-announcement">
-            <i class="fas fa-paper-plane"></i>
-            Send Announcement
-          </button>
+          <button class="btn btn-primary" id="send-announcement"><i class="fas fa-paper-plane"></i> Send Announcement</button>
         </div>
         
         <div class="card">
           <h3 style="font-size: 18px; margin-bottom: 20px;">Announcement History</h3>
-          
           <div class="table-container">
             <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Message</th>
-                  <th>Target</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="announcements-table-body">
-                <!-- Announcements will be loaded here -->
-              </tbody>
+              <thead><tr><th>Message</th><th>Target</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody id="announcements-table-body"></tbody>
             </table>
           </div>
         </div>
@@ -1214,89 +863,56 @@
         
         <div class="tabs">
           <div class="tab active" data-settings-tab="general">General</div>
-          <div class="tab" data-settings-tab="buttons">Buttons</div>
           <div class="tab" data-settings-tab="balances">Balances</div>
         </div>
         
         <div class="tab-content active" id="general-settings-content">
           <div class="card">
             <h3 style="font-size: 18px; margin-bottom: 20px;">General Settings</h3>
-            
             <div class="form-group">
               <label class="form-label">Platform Name</label>
-              <input type="text" class="form-control" id="platform-name" value="Exotix Trade">
+              <input type="text" class="form-control" id="platform-name" value="BlockOrbit">
             </div>
-            
             <div class="form-group">
-              <label class="form-label">Platform Logo URL</label>
-              <input type="text" class="form-control" id="platform-logo" value="https://github.com/s42144/exotix-/blob/ce4cd9399ff673963389c393946138254a0edbe5/USDT-Ton-Wallet.png?raw=true">
+              <label class="form-label">Deposit Wallet Address (TON)</label>
+              <input type="text" class="form-control" id="deposit-wallet" placeholder="UQB...">
             </div>
-            
+            <div class="form-group">
+              <label class="form-label">TON Price (USD) - For Display</label>
+              <input type="number" class="form-control" id="ton-price" value="2.50" step="0.01">
+            </div>
             <div class="form-group">
               <label class="form-label">Minimum Deposit (TON)</label>
-              <input type="number" class="form-control" id="min-deposit" value="5" step="0.01">
+              <input type="number" class="form-control" id="min-deposit" value="5" step="0.1">
             </div>
-            
             <div class="form-group">
               <label class="form-label">Minimum Withdrawal (TON)</label>
-              <input type="number" class="form-control" id="min-withdrawal" value="0.10" step="0.01">
+              <input type="number" class="form-control" id="min-withdrawal" value="0.01" step="0.01">
             </div>
-            
             <div class="form-group">
-              <label class="form-label">Service Fee (%)</label>
-              <input type="number" class="form-control" id="service-fee" value="10" step="0.1">
+              <label class="form-label">Support Link</label>
+              <input type="text" class="form-control" id="support-link" placeholder="https://t.me/support">
             </div>
-            
-            <button class="btn btn-primary" id="save-general-settings">
-              <i class="fas fa-save"></i>
-              Save Settings
-            </button>
-          </div>
-        </div>
-        
-        <div class="tab-content" id="buttons-settings-content">
-          <div class="card">
-            <h3 style="font-size: 18px; margin-bottom: 20px;">Button Settings</h3>
-            
-            <div id="buttons-container">
-              <!-- Buttons will be loaded here -->
-            </div>
-            
-            <button class="btn btn-secondary" id="add-button-setting">
-              <i class="fas fa-plus"></i>
-              Add Button
-            </button>
-            
-            <button class="btn btn-primary" id="save-button-settings" style="margin-left: 10px;">
-              <i class="fas fa-save"></i>
-              Save Settings
-            </button>
+            <button class="btn btn-primary" id="save-general-settings"><i class="fas fa-save"></i> Save Settings</button>
           </div>
         </div>
         
         <div class="tab-content" id="balances-settings-content">
           <div class="card">
             <h3 style="font-size: 18px; margin-bottom: 20px;">Adjust User Balances</h3>
-            
             <div class="form-group">
               <label class="form-label">User ID</label>
               <input type="text" class="form-control" id="balance-user-id" placeholder="Enter user ID">
             </div>
-            
             <div class="form-group">
-              <label class="form-label">TON Balance Adjustment</label>
-              <input type="number" class="form-control" id="ton-balance-adjustment" placeholder="Enter amount (positive to add, negative to subtract)" step="0.000001">
+              <label class="form-label">TON Balance Adjustment (+/-)</label>
+              <input type="number" class="form-control" id="ton-balance-adjustment" placeholder="Enter amount" step="0.000001">
             </div>
-            
             <div class="form-group">
               <label class="form-label">Reason</label>
-              <textarea class="form-control" id="balance-adjustment-reason" rows="3" placeholder="Enter reason for balance adjustment"></textarea>
+              <textarea class="form-control" id="balance-adjustment-reason" rows="3" placeholder="Enter reason"></textarea>
             </div>
-            
-            <button class="btn btn-primary" id="adjust-balances">
-              <i class="fas fa-balance-scale"></i>
-              Adjust Balances
-            </button>
+            <button class="btn btn-primary" id="adjust-balances"><i class="fas fa-balance-scale"></i> Adjust Balances</button>
           </div>
         </div>
       </div>
@@ -1306,52 +922,6 @@
         <div class="content-header">
           <h1 class="content-title">Analytics</h1>
           <p class="content-subtitle">Platform analytics and insights</p>
-        </div>
-        
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-header">
-              <div class="stat-icon blue">
-                <i class="fas fa-globe"></i>
-              </div>
-            </div>
-            <div class="stat-value" id="total-countries">0</div>
-            <div class="stat-label">Countries</div>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-header">
-              <div class="stat-icon green">
-                <i class="fas fa-mobile-alt"></i>
-              </div>
-            </div>
-            <div class="stat-value" id="mobile-users">0</div>
-            <div class="stat-label">Mobile Users</div>
-          </div>
-          
-          <div class="stat-card">
-            <div class="stat-header">
-              <div class="stat-icon yellow">
-                <i class="fas fa-desktop"></i>
-              </div>
-            </div>
-            <div class="stat-value" id="desktop-users">0</div>
-            <div class="stat-label">Desktop Users</div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <h3 style="margin-bottom: 20px; font-size: 18px;">User Distribution by Country</h3>
-          <div class="chart-container">
-            <canvas id="countryChart"></canvas>
-          </div>
-        </div>
-        
-        <div class="card">
-          <h3 style="margin-bottom: 20px; font-size: 18px;">Device Statistics</h3>
-          <div class="chart-container">
-            <canvas id="deviceChart"></canvas>
-          </div>
         </div>
         
         <div class="card">
@@ -1364,21 +934,17 @@
     </main>
   </div>
   
-  <!-- User Details Modal -->
+  <!-- Modals -->
   <div class="modal" id="user-details-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2 class="modal-title">User Details</h2>
-        <button class="modal-close" id="close-user-details">
-          <i class="fas fa-times"></i>
-        </button>
+        <button class="modal-close" id="close-user-details"><i class="fas fa-times"></i></button>
       </div>
-      
       <div class="tabs">
         <div class="tab active" data-user-tab="info">Info</div>
         <div class="tab" data-user-tab="balance">Balance</div>
         <div class="tab" data-user-tab="referrals">Referrals</div>
-        <div class="tab" data-user-tab="history">History</div>
       </div>
       
       <div class="tab-content active" id="user-info-content">
@@ -1386,27 +952,18 @@
           <label class="form-label">User ID</label>
           <input type="text" class="form-control" id="detail-user-id" readonly>
         </div>
-        
         <div class="form-group">
           <label class="form-label">Name</label>
           <input type="text" class="form-control" id="detail-user-name">
         </div>
-        
         <div class="form-group">
-          <label class="form-label">TON Wallet</label>
-          <input type="text" class="form-control" id="detail-user-ton">
+          <label class="form-label">Language</label>
+          <input type="text" class="form-control" id="detail-user-language" readonly>
         </div>
-        
         <div class="form-group">
-          <label class="form-label">IP Address</label>
-          <input type="text" class="form-control" id="detail-user-ip" readonly>
+          <label class="form-label">Referred By</label>
+          <input type="text" class="form-control" id="detail-user-referred-by" readonly>
         </div>
-        
-        <div class="form-group">
-          <label class="form-label">Device Model</label>
-          <input type="text" class="form-control" id="detail-user-device" readonly>
-        </div>
-        
         <div class="form-group">
           <label class="form-label">Status</label>
           <select class="form-control" id="detail-user-status">
@@ -1414,36 +971,19 @@
             <option value="banned">Banned</option>
           </select>
         </div>
-        
-        <button class="btn btn-primary" id="save-user-details">
-          <i class="fas fa-save"></i>
-          Save Changes
-        </button>
+        <button class="btn btn-primary" id="save-user-details"><i class="fas fa-save"></i> Save Changes</button>
       </div>
       
       <div class="tab-content" id="user-balance-content">
         <div class="form-group">
           <label class="form-label">TON Balance</label>
-          <div style="display: flex; gap: 10px;">
-            <input type="number" class="form-control" id="detail-ton-balance" step="0.000001">
-            <button class="btn btn-success" id="increase-ton">
-              <i class="fas fa-plus"></i>
-            </button>
-            <button class="btn btn-danger" id="decrease-ton">
-              <i class="fas fa-minus"></i>
-            </button>
-          </div>
+          <input type="number" class="form-control" id="detail-ton-balance" step="0.000001">
         </div>
-        
         <div class="form-group">
           <label class="form-label">Reason</label>
-          <textarea class="form-control" id="balance-reason" rows="3" placeholder="Enter reason for balance adjustment"></textarea>
+          <textarea class="form-control" id="balance-reason" rows="3"></textarea>
         </div>
-        
-        <button class="btn btn-primary" id="save-balance-changes">
-          <i class="fas fa-save"></i>
-          Save Changes
-        </button>
+        <button class="btn btn-primary" id="save-balance-changes"><i class="fas fa-save"></i> Save Changes</button>
       </div>
       
       <div class="tab-content" id="user-referrals-content">
@@ -1451,131 +991,32 @@
           <label class="form-label">Total Referrals</label>
           <input type="text" class="form-control" id="detail-total-referrals" readonly>
         </div>
-        
         <div class="form-group">
-          <label class="form-label">Total Referral Commission</label>
+          <label class="form-label">Total Commission</label>
           <input type="text" class="form-control" id="detail-total-commission" readonly>
         </div>
-        
         <h4 style="margin: 20px 0 10px;">Referral List</h4>
         <div class="table-container">
           <table class="data-table">
-            <thead>
-              <tr>
-                <th>User ID</th>
-                <th>Name</th>
-                <th>Balance</th>
-                <th>Commission</th>
-              </tr>
-            </thead>
-            <tbody id="referrals-table-body">
-              <!-- Referrals will be loaded here -->
-            </tbody>
+            <thead><tr><th>User ID</th><th>Name</th><th>Balance</th></tr></thead>
+            <tbody id="referrals-table-body"></tbody>
           </table>
-        </div>
-      </div>
-      
-      <div class="tab-content" id="user-history-content">
-        <div class="tabs">
-          <div class="tab active" data-history-tab="deposits">Deposits</div>
-          <div class="tab" data-history-tab="withdrawals">Withdrawals</div>
-          <div class="tab" data-history-tab="trades">Trades</div>
-          <div class="tab" data-history-tab="all">All</div>
-        </div>
-        
-        <div class="tab-content active" id="history-deposits-content">
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Amount</th>
-                  <th>Bonus</th>
-                  <th>Total</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="user-deposits-table-body">
-                <!-- User deposits will be loaded here -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div class="tab-content" id="history-withdrawals-content">
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Amount</th>
-                  <th>Address</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="user-withdrawals-table-body">
-                <!-- User withdrawals will be loaded here -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div class="tab-content" id="history-trades-content">
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Plan</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody id="user-trades-table-body">
-                <!-- User trades will be loaded here -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div class="tab-content" id="history-all-content">
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Details</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody id="user-all-table-body">
-                <!-- All user activities will be loaded here -->
-              </tbody>
-            </table>
-          </div>
         </div>
       </div>
     </div>
   </div>
-  
+
   <!-- Add Task Modal -->
   <div class="modal" id="add-task-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2 class="modal-title">Add Task</h2>
-        <button class="modal-close" id="close-add-task">
-          <i class="fas fa-times"></i>
-        </button>
+        <button class="modal-close" id="close-add-task"><i class="fas fa-times"></i></button>
       </div>
-      
       <div class="form-group">
         <label class="form-label">Task Name</label>
-        <input type="text" class="form-control" id="task-name" placeholder="Enter task name">
+        <input type="text" class="form-control" id="task-name">
       </div>
-      
       <div class="form-group">
         <label class="form-label">Task Category</label>
         <select class="form-control" id="task-category">
@@ -1584,133 +1025,102 @@
           <option value="Advertise">Advertise</option>
         </select>
       </div>
-      
       <div class="form-group">
         <label class="form-label">Reward (TON)</label>
-        <input type="number" class="form-control" id="task-reward" placeholder="Enter reward amount" step="0.000001">
+        <input type="number" class="form-control" id="task-reward" step="0.000001">
       </div>
-      
       <div class="form-group">
         <label class="form-label">Task Link</label>
-        <input type="text" class="form-control" id="task-link" placeholder="Enter task link">
+        <input type="text" class="form-control" id="task-link">
       </div>
-      
       <div class="form-group">
-        <label class="form-label">Task Photo</label>
-        <input type="file" class="form-control" id="task-photo" accept="image/*">
-        <input type="text" class="form-control" id="task-photo-url" placeholder="Or enter photo URL" style="margin-top: 10px;">
+        <label class="form-label">Task Photo URL</label>
+        <input type="text" class="form-control" id="task-photo-url">
       </div>
-      
-      <button class="btn btn-primary" id="save-task">
-        <i class="fas fa-save"></i>
-        Save Task
-      </button>
+      <button class="btn btn-primary" id="save-task"><i class="fas fa-save"></i> Save Task</button>
     </div>
   </div>
   
-  <!-- Edit Task Modal -->
-  <div class="modal" id="edit-task-modal">
+  <!-- Add Plan Modal -->
+  <div class="modal" id="add-plan-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title">Edit Task</h2>
-        <button class="modal-close" id="close-edit-task">
-          <i class="fas fa-times"></i>
-        </button>
+        <h2 class="modal-title">Add Trade Plan</h2>
+        <button class="modal-close" id="close-add-plan"><i class="fas fa-times"></i></button>
       </div>
-      
       <div class="form-group">
-        <label class="form-label">Task ID</label>
-        <input type="text" class="form-control" id="edit-task-id" readonly>
+        <label class="form-label">Plan Name (e.g. BTC/USDT)</label>
+        <input type="text" class="form-control" id="plan-name">
       </div>
-      
       <div class="form-group">
-        <label class="form-label">Task Name</label>
-        <input type="text" class="form-control" id="edit-task-name" placeholder="Enter task name">
+        <label class="form-label">Icon Symbol (e.g. BTC)</label>
+        <input type="text" class="form-control" id="plan-icon">
       </div>
-      
       <div class="form-group">
-        <label class="form-label">Task Category</label>
-        <select class="form-control" id="edit-task-category">
-          <option value="Project">Project</option>
-          <option value="Partner">Partner</option>
-          <option value="Advertise">Advertise</option>
-        </select>
+        <label class="form-label">Price (TON)</label>
+        <input type="number" class="form-control" id="plan-price">
       </div>
-      
       <div class="form-group">
-        <label class="form-label">Reward (TON)</label>
-        <input type="number" class="form-control" id="edit-task-reward" placeholder="Enter reward amount" step="0.000001">
+        <label class="form-label">Daily Earning (TON)</label>
+        <input type="number" class="form-control" id="plan-earning" step="0.1">
       </div>
-      
       <div class="form-group">
-        <label class="form-label">Task Link</label>
-        <input type="text" class="form-control" id="edit-task-link" placeholder="Enter task link">
+        <label class="form-label">Duration (Days)</label>
+        <input type="number" class="form-control" id="plan-duration" value="30">
       </div>
-      
-      <div class="form-group">
-        <label class="form-label">Task Photo</label>
-        <input type="file" class="form-control" id="edit-task-photo" accept="image/*">
-        <input type="text" class="form-control" id="edit-task-photo-url" placeholder="Or enter photo URL" style="margin-top: 10px;">
-      </div>
-      
-      <button class="btn btn-primary" id="update-task">
-        <i class="fas fa-save"></i>
-        Update Task
-      </button>
+      <button class="btn btn-primary" id="save-plan"><i class="fas fa-save"></i> Save Plan</button>
     </div>
   </div>
-  
-  <!-- Add Promo Code Modal -->
+
+  <!-- Add Promo Modal -->
   <div class="modal" id="add-promo-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2 class="modal-title">Add Promo Code</h2>
-        <button class="modal-close" id="close-add-promo">
-          <i class="fas fa-times"></i>
-        </button>
+        <button class="modal-close" id="close-add-promo"><i class="fas fa-times"></i></button>
       </div>
-      
       <div class="form-group">
         <label class="form-label">Promo Code</label>
-        <input type="text" class="form-control" id="promo-code" placeholder="Enter promo code">
-        <button class="btn btn-secondary btn-sm" id="generate-promo-code" style="margin-top: 10px;">
-          <i class="fas fa-sync"></i>
-          Generate Code
-        </button>
+        <input type="text" class="form-control" id="promo-code">
       </div>
-      
       <div class="form-group">
         <label class="form-label">Bonus Percentage (%)</label>
-        <input type="number" class="form-control" id="promo-bonus" placeholder="Enter bonus percentage" step="0.1">
+        <input type="number" class="form-control" id="promo-bonus">
       </div>
-      
       <div class="form-group">
         <label class="form-label">Max Users</label>
-        <input type="number" class="form-control" id="promo-max-users" placeholder="Enter maximum users" step="1">
+        <input type="number" class="form-control" id="promo-max-users">
       </div>
-      
-      <div class="form-group">
-        <label class="form-label">Status</label>
-        <select class="form-control" id="promo-status">
-          <option value="active">Active</option>
-          <option value="paused">Paused</option>
-        </select>
-      </div>
-      
-      <button class="btn btn-primary" id="save-promo">
-        <i class="fas fa-save"></i>
-        Save Promo Code
-      </button>
+      <button class="btn btn-primary" id="save-promo"><i class="fas fa-save"></i> Save Promo Code</button>
     </div>
   </div>
   
-  <!-- Notification -->
-  <div class="notification" id="notification">
-    <div id="notification-message"></div>
+  <!-- Add Redeem Modal -->
+  <div class="modal" id="add-redeem-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Generate Redeem Code</h2>
+        <button class="modal-close" id="close-add-redeem"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Custom Code (Optional)</label>
+        <input type="text" class="form-control" id="redeem-code" placeholder="Leave blank to auto generate">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Reward Amount (TON)</label>
+        <input type="number" class="form-control" id="redeem-reward" step="0.01">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Max Uses</label>
+        <input type="number" class="form-control" id="redeem-max-users" value="1">
+      </div>
+      <button class="btn btn-primary" id="save-redeem"><i class="fas fa-save"></i> Generate Code</button>
+    </div>
   </div>
   
+  <div class="notification" id="notification"><div id="notification-message"></div></div>
+  
   <script>
-    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBfR97veh6idxb81mH6N5_Gq8-CpW2D7bE",
       authDomain: "jbhigfi.firebaseapp.com",
@@ -1722,34 +1132,29 @@
       measurementId: "G-ZZMHC9RTVT"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-    const storage = firebase.storage();
     
-    // Bot Token
     const BOT_TOKEN = '8725017918:AAHDWjOcK0fP9kchQdAL7fZoumgwaKVMXO4';
     
-    // Global Variables
     let currentTab = 'dashboard';
     let currentUser = null;
     let users = [];
     let deposits = [];
     let withdrawals = [];
     let tasks = [];
+    let tradePlans = [];
     let promoCodes = [];
+    let redeemCodes = [];
     let announcements = [];
     let settings = {};
     
-    // DOM Elements
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const tabContents = document.querySelectorAll('.tab-content');
     const notification = document.getElementById('notification');
     const notificationMessage = document.getElementById('notification-message');
     
-    // Initialize
     document.addEventListener('DOMContentLoaded', function() {
-      // Setup sidebar navigation
       sidebarLinks.forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -1758,2208 +1163,303 @@
         });
       });
       
-      // Load initial data
       loadDashboardData();
       loadUsers();
       loadDeposits();
       loadWithdrawals();
       loadTasks();
+      loadTradePlans(); // New
       loadPromoCodes();
+      loadRedeemCodes(); // New
       loadAnnouncements();
       loadSettings();
       
-      // Setup event listeners
       setupEventListeners();
-      
-      // Setup real-time listeners
       setupRealtimeListeners();
     });
     
-    // Switch Tab
     function switchTab(tab) {
-      // Update sidebar
       sidebarLinks.forEach(link => {
         link.classList.remove('active');
-        if (link.getAttribute('data-tab') === tab) {
-          link.classList.add('active');
-        }
+        if (link.getAttribute('data-tab') === tab) link.classList.add('active');
       });
       
-      // Update content
       tabContents.forEach(content => {
         content.classList.remove('active');
-        if (content.id === `${tab}-tab`) {
-          content.classList.add('active');
-        }
+        if (content.id === `${tab}-tab`) content.classList.add('active');
       });
       
       currentTab = tab;
-      
-      // Load tab-specific data
-      if (tab === 'dashboard') {
-        loadDashboardData();
-      } else if (tab === 'users') {
-        loadUsers();
-      } else if (tab === 'deposits') {
-        loadDeposits();
-      } else if (tab === 'withdrawals') {
-        loadWithdrawals();
-      } else if (tab === 'tasks') {
-        loadTasks();
-      } else if (tab === 'promo-codes') {
-        loadPromoCodes();
-      } else if (tab === 'announcements') {
-        loadAnnouncements();
-      } else if (tab === 'settings') {
-        loadSettings();
-      } else if (tab === 'analytics') {
-        loadAnalytics();
-      }
     }
     
-    // Setup Event Listeners
     function setupEventListeners() {
-      // Dashboard
-      // No specific event listeners for dashboard
-      
-      // Users
+      // Search
       document.getElementById('user-search').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         filterUsers(searchTerm);
       });
       
-      // Deposits
-      document.querySelectorAll('[data-deposit-tab]').forEach(tab => {
-        tab.addEventListener('click', function() {
-          const depositTab = this.getAttribute('data-deposit-tab');
-          switchDepositTab(depositTab);
-        });
-      });
-      
-      // Withdrawals
-      document.querySelectorAll('[data-withdrawal-tab]').forEach(tab => {
-        tab.addEventListener('click', function() {
-          const withdrawalTab = this.getAttribute('data-withdrawal-tab');
-          switchWithdrawalTab(withdrawalTab);
-        });
-      });
-      
-      // Tasks
-      document.getElementById('add-task-btn').addEventListener('click', function() {
-        document.getElementById('add-task-modal').classList.add('active');
-      });
-      
-      document.getElementById('close-add-task').addEventListener('click', function() {
-        document.getElementById('add-task-modal').classList.remove('active');
-      });
-      
+      // Tabs
+      document.querySelectorAll('[data-deposit-tab]').forEach(tab => tab.addEventListener('click', function() { switchDepositTab(this.getAttribute('data-deposit-tab')); }));
+      document.querySelectorAll('[data-withdrawal-tab]').forEach(tab => tab.addEventListener('click', function() { switchWithdrawalTab(this.getAttribute('data-withdrawal-tab')); }));
+      document.querySelectorAll('[data-settings-tab]').forEach(tab => tab.addEventListener('click', function() { switchSettingsTab(this.getAttribute('data-settings-tab')); }));
+      document.querySelectorAll('[data-user-tab]').forEach(tab => tab.addEventListener('click', function() { switchUserTab(this.getAttribute('data-user-tab')); }));
+
+      // Modals
+      document.getElementById('add-task-btn').addEventListener('click', () => document.getElementById('add-task-modal').classList.add('active'));
+      document.getElementById('close-add-task').addEventListener('click', () => document.getElementById('add-task-modal').classList.remove('active'));
       document.getElementById('save-task').addEventListener('click', saveTask);
       
-      document.getElementById('close-edit-task').addEventListener('click', function() {
-        document.getElementById('edit-task-modal').classList.remove('active');
-      });
-      
-      document.getElementById('update-task').addEventListener('click', updateTask);
-      
-      // Promo Codes
-      document.getElementById('add-promo-btn').addEventListener('click', function() {
-        document.getElementById('add-promo-modal').classList.add('active');
-      });
-      
-      document.getElementById('close-add-promo').addEventListener('click', function() {
-        document.getElementById('add-promo-modal').classList.remove('active');
-      });
-      
-      document.getElementById('generate-promo-code').addEventListener('click', generatePromoCode);
-      
+      document.getElementById('add-plan-btn').addEventListener('click', () => document.getElementById('add-plan-modal').classList.add('active'));
+      document.getElementById('close-add-plan').addEventListener('click', () => document.getElementById('add-plan-modal').classList.remove('active'));
+      document.getElementById('save-plan').addEventListener('click', saveTradePlan);
+
+      document.getElementById('add-promo-btn').addEventListener('click', () => document.getElementById('add-promo-modal').classList.add('active'));
+      document.getElementById('close-add-promo').addEventListener('click', () => document.getElementById('add-promo-modal').classList.remove('active'));
       document.getElementById('save-promo').addEventListener('click', savePromoCode);
-      
-      // Announcements
-      document.getElementById('add-button').addEventListener('click', addAnnouncementButton);
-      
-      document.getElementById('announcement-target').addEventListener('change', function() {
-        const specificUsersContainer = document.getElementById('specific-users-container');
-        if (this.value === 'specific') {
-          specificUsersContainer.style.display = 'block';
-        } else {
-          specificUsersContainer.style.display = 'none';
-        }
-      });
-      
-      document.getElementById('send-announcement').addEventListener('click', sendAnnouncement);
-      
-      // Settings
-      document.querySelectorAll('[data-settings-tab]').forEach(tab => {
-        tab.addEventListener('click', function() {
-          const settingsTab = this.getAttribute('data-settings-tab');
-          switchSettingsTab(settingsTab);
-        });
-      });
-      
-      document.getElementById('save-general-settings').addEventListener('click', saveGeneralSettings);
-      
-      document.getElementById('add-button-setting').addEventListener('click', addButtonSetting);
-      
-      document.getElementById('save-button-settings').addEventListener('click', saveButtonSettings);
-      
-      document.getElementById('adjust-balances').addEventListener('click', adjustBalances);
-      
-      // User Details Modal
-      document.getElementById('close-user-details').addEventListener('click', function() {
-        document.getElementById('user-details-modal').classList.remove('active');
-      });
-      
-      document.querySelectorAll('[data-user-tab]').forEach(tab => {
-        tab.addEventListener('click', function() {
-          const userTab = this.getAttribute('data-user-tab');
-          switchUserTab(userTab);
-        });
-      });
-      
+
+      document.getElementById('add-redeem-btn').addEventListener('click', () => document.getElementById('add-redeem-modal').classList.add('active'));
+      document.getElementById('close-add-redeem').addEventListener('click', () => document.getElementById('add-redeem-modal').classList.remove('active'));
+      document.getElementById('save-redeem').addEventListener('click', saveRedeemCode);
+
+      document.getElementById('close-user-details').addEventListener('click', () => document.getElementById('user-details-modal').classList.remove('active'));
       document.getElementById('save-user-details').addEventListener('click', saveUserDetails);
-      
-      document.getElementById('increase-ton').addEventListener('click', function() {
-        adjustUserBalance('ton', 'increase');
-      });
-      
-      document.getElementById('decrease-ton').addEventListener('click', function() {
-        adjustUserBalance('ton', 'decrease');
-      });
-      
       document.getElementById('save-balance-changes').addEventListener('click', saveBalanceChanges);
       
-      document.querySelectorAll('[data-history-tab]').forEach(tab => {
-        tab.addEventListener('click', function() {
-          const historyTab = this.getAttribute('data-history-tab');
-          switchHistoryTab(historyTab);
-        });
-      });
+      document.getElementById('save-general-settings').addEventListener('click', saveGeneralSettings);
+      document.getElementById('adjust-balances').addEventListener('click', adjustBalances);
+      document.getElementById('send-announcement').addEventListener('click', sendAnnouncement);
       
-      // Modal close buttons
-      document.querySelectorAll('.modal-close').forEach(button => {
-        button.addEventListener('click', function() {
-          this.closest('.modal').classList.remove('active');
-        });
-      });
-      
-      // Remove button for announcement buttons
-      document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-button')) {
-          e.target.closest('.button-row').remove();
-        }
+      document.getElementById('announcement-target').addEventListener('change', function() {
+          document.getElementById('specific-users-container').style.display = this.value === 'specific' ? 'block' : 'none';
       });
     }
     
-    // Setup Realtime Listeners
     function setupRealtimeListeners() {
-      // Users
       database.ref('users').on('value', function(snapshot) {
         if (snapshot.exists()) {
           users = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          if (currentTab === 'dashboard') {
-            updateDashboardStats();
-          } else if (currentTab === 'users') {
-            renderUsers();
-          }
+          if (currentTab === 'dashboard') updateDashboardStats();
+          else if (currentTab === 'users') renderUsers();
         }
       });
       
-      // Deposits
       database.ref('admin/deposits').on('value', function(snapshot) {
         if (snapshot.exists()) {
           deposits = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          if (currentTab === 'dashboard') {
-            updateDashboardStats();
-          } else if (currentTab === 'deposits') {
-            renderDeposits();
-          }
+          if (currentTab === 'dashboard') updateDashboardStats();
+          else if (currentTab === 'deposits') renderDeposits();
         }
       });
       
-      // Withdrawals
       database.ref('admin/withdrawals').on('value', function(snapshot) {
         if (snapshot.exists()) {
           withdrawals = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          if (currentTab === 'dashboard') {
-            updateDashboardStats();
-          } else if (currentTab === 'withdrawals') {
-            renderWithdrawals();
-          }
+          if (currentTab === 'dashboard') updateDashboardStats();
+          else if (currentTab === 'withdrawals') renderWithdrawals();
         }
       });
     }
     
-    // Load Dashboard Data
-    function loadDashboardData() {
-      updateDashboardStats();
-      renderUserActivityChart();
-    }
+    function loadDashboardData() { updateDashboardStats(); renderUserActivityChart(); }
     
-    // Update Dashboard Stats
     function updateDashboardStats() {
-      // Total Users
       document.getElementById('total-users').textContent = users.length;
       
-      // New Users Today
       const today = new Date().toISOString().split('T')[0];
-      const newUsersToday = users.filter(user => {
-        if (user.createdAt) {
-          const joinDate = new Date(user.createdAt * 1000).toISOString().split('T')[0];
-          return joinDate === today;
-        }
-        return false;
-      }).length;
+      const newUsersToday = users.filter(user => user.createdAt && new Date(user.createdAt * 1000).toISOString().split('T')[0] === today).length;
       document.getElementById('new-users-today').textContent = `${newUsersToday} new today`;
       
-      // Daily Active Users (simplified - users who have activity today)
-      const activeUsersToday = users.filter(user => {
-        // Check if user has any activity today
-        if (user.lastActive) {
-          const lastActiveDate = new Date(user.lastActive * 1000).toISOString().split('T')[0];
-          return lastActiveDate === today;
-        }
-        return false;
-      }).length;
-      document.getElementById('active-users').textContent = activeUsersToday;
+      const depositUsers = users.filter(user => user.hasDeposit).length;
+      document.getElementById('active-users').textContent = depositUsers;
+      document.getElementById('deposit-users-count').textContent = `${depositUsers} total`;
       
-      // Online Users (simplified - users who were active in the last 5 minutes)
-      const fiveMinutesAgo = Math.floor(Date.now() / 1000) - 300;
-      const onlineUsers = users.filter(user => {
-        return user.lastActive && user.lastActive > fiveMinutesAgo;
-      }).length;
-      document.getElementById('online-users').textContent = onlineUsers;
-      
-      // Total Deposits
-      const totalDeposits = deposits
-        .filter(deposit => deposit.status === 'approved')
-        .reduce((sum, deposit) => sum + (deposit.totalAmount || deposit.amount || 0), 0);
+      const totalDeposits = deposits.filter(d => d.status === 'approved').reduce((sum, d) => sum + (d.amount || 0), 0);
       document.getElementById('total-deposits').textContent = `${totalDeposits.toFixed(2)} TON`;
       
-      // Total Withdrawals
-      const totalWithdrawals = withdrawals
-        .filter(withdrawal => withdrawal.status === 'approved')
-        .reduce((sum, withdrawal) => sum + (withdrawal.amount || 0), 0);
+      const totalWithdrawals = withdrawals.filter(w => w.status === 'approved').reduce((sum, w) => sum + (w.amount || 0), 0);
       document.getElementById('total-withdrawals').textContent = `${totalWithdrawals.toFixed(2)} TON`;
       
-      // Pending Deposits
-      const pendingDeposits = deposits.filter(deposit => deposit.status === 'pending').length;
+      const pendingDeposits = deposits.filter(d => d.status === 'pending').length;
       document.getElementById('pending-deposits').textContent = pendingDeposits;
       
-      // Pending Withdrawals
-      const pendingWithdrawals = withdrawals.filter(withdrawal => withdrawal.status === 'pending').length;
+      const pendingWithdrawals = withdrawals.filter(w => w.status === 'pending').length;
       document.getElementById('pending-withdrawals').textContent = pendingWithdrawals;
       
-      // Total Ads Shown
-      const totalAds = users.reduce((sum, user) => {
-        return sum + (user.adStats?.lifetime || 0);
-      }, 0);
-      document.getElementById('total-ads').textContent = totalAds;
+      const totalReferrals = users.reduce((sum, u) => sum + (u.referrals || 0), 0);
+      document.getElementById('total-referrals').textContent = totalReferrals;
+      
+      const totalCommission = users.reduce((sum, u) => sum + (u.totalReferralCommission || 0), 0);
+      document.getElementById('total-commission').textContent = `${totalCommission.toFixed(2)} TON`;
+      
+      const totalCompletedTasks = users.reduce((sum, u) => sum + (u.completedTasks ? Object.keys(u.completedTasks).length : 0), 0);
+      document.getElementById('total-ads').textContent = totalCompletedTasks;
     }
     
-    // Render User Activity Chart
     function renderUserActivityChart() {
       const ctx = document.getElementById('userActivityChart').getContext('2d');
-      
-      // Get last 7 days
-      const dates = [];
-      const newUsersData = [];
-      const activeUsersData = [];
-      
+      const dates = []; const newUsersData = [];
       for (let i = 6; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
+        const date = new Date(); date.setDate(date.getDate() - i);
         const dateStr = date.toISOString().split('T')[0];
         dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-        
-        // New users on this day
-        const newUsers = users.filter(user => {
-          if (user.createdAt) {
-            const joinDate = new Date(user.createdAt * 1000).toISOString().split('T')[0];
-            return joinDate === dateStr;
-          }
-          return false;
-        }).length;
-        newUsersData.push(newUsers);
-        
-        // Active users on this day
-        const activeUsers = users.filter(user => {
-          if (user.lastActive) {
-            const lastActiveDate = new Date(user.lastActive * 1000).toISOString().split('T')[0];
-            return lastActiveDate === dateStr;
-          }
-          return false;
-        }).length;
-        activeUsersData.push(activeUsers);
+        newUsersData.push(users.filter(u => u.createdAt && new Date(u.createdAt * 1000).toISOString().split('T')[0] === dateStr).length);
       }
-      
       new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: dates,
-          datasets: [
-            {
-              label: 'New Users',
-              data: newUsersData,
-              borderColor: '#3b82f6',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              tension: 0.4,
-              fill: true
-            },
-            {
-              label: 'Active Users',
-              data: activeUsersData,
-              borderColor: '#10b981',
-              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              tension: 0.4,
-              fill: true
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: '#cbd5e1'
-              }
-            }
-          },
-          scales: {
-            x: {
-              grid: {
-                color: 'rgba(203, 213, 225, 0.1)'
-              },
-              ticks: {
-                color: '#cbd5e1'
-              }
-            },
-            y: {
-              grid: {
-                color: 'rgba(203, 213, 225, 0.1)'
-              },
-              ticks: {
-                color: '#cbd5e1'
-              }
-            }
-          }
-        }
+        type: 'line', data: { labels: dates, datasets: [{ label: 'New Users', data: newUsersData, borderColor: '#FCD535', backgroundColor: 'rgba(252, 213, 53, 0.1)', tension: 0.4, fill: true }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#848E9C' } } }, scales: { x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#848E9C' } }, y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#848E9C' } } } }
       });
     }
     
-    // Load Users
-    function loadUsers() {
-      database.ref('users').once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          users = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          renderUsers();
-        }
-      });
-    }
+    function loadUsers() { database.ref('users').once('value', s => { if(s.exists()){ users = Object.entries(s.val()).map(([id, data]) => ({ id, ...data })); renderUsers(); } }); }
     
-    // Render Users
     function renderUsers() {
-      const tbody = document.getElementById('users-table-body');
-      tbody.innerHTML = '';
-      
+      const tbody = document.getElementById('users-table-body'); tbody.innerHTML = '';
       users.forEach(user => {
         const tr = document.createElement('tr');
-        
-        const statusClass = user.banned ? 'banned' : 'active';
-        const statusText = user.banned ? 'Banned' : 'Active';
-        
-        tr.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.name || 'Unknown'}</td>
-          <td>${(user.tonBalance || 0).toFixed(6)} TON</td>
-          <td>${user.referrals || 0}</td>
-          <td>${user.createdAt ? new Date(user.createdAt * 1000).toLocaleDateString() : 'Unknown'}</td>
-          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-          <td>
-            <div class="btn-group">
-              <button class="btn btn-primary btn-sm view-user" data-user-id="${user.id}">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="btn btn-warning btn-sm adjust-balance" data-user-id="${user.id}">
-                <i class="fas fa-balance-scale"></i>
-              </button>
-              <button class="btn btn-danger btn-sm ${user.banned ? 'unban-user' : 'ban-user'}" data-user-id="${user.id}">
-                <i class="fas fa-${user.banned ? 'unlock' : 'ban'}"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        
+        tr.innerHTML = `<td>${user.id}</td><td>${user.name || 'Unknown'}</td><td>${(user.tonBalance || 0).toFixed(4)} TON</td><td>${user.referrals || 0}</td><td>${user.createdAt ? new Date(user.createdAt * 1000).toLocaleDateString() : 'N/A'}</td><td><span class="status-badge ${user.banned ? 'banned' : 'active'}">${user.banned ? 'Banned' : 'Active'}</span></td><td><div class="btn-group"><button class="btn btn-primary btn-sm view-user" data-user-id="${user.id}"><i class="fas fa-eye"></i></button><button class="btn btn-danger btn-sm ${user.banned ? 'unban-user' : 'ban-user'}" data-user-id="${user.id}"><i class="fas fa-${user.banned ? 'unlock' : 'ban'}"></i></button></div></td>`;
         tbody.appendChild(tr);
       });
-      
-      // Add event listeners to buttons
-      document.querySelectorAll('.view-user').forEach(button => {
-        button.addEventListener('click', function() {
-          const userId = this.getAttribute('data-user-id');
-          viewUserDetails(userId);
-        });
-      });
-      
-      document.querySelectorAll('.adjust-balance').forEach(button => {
-        button.addEventListener('click', function() {
-          const userId = this.getAttribute('data-user-id');
-          adjustUserBalanceModal(userId);
-        });
-      });
-      
-      document.querySelectorAll('.ban-user').forEach(button => {
-        button.addEventListener('click', function() {
-          const userId = this.getAttribute('data-user-id');
-          banUser(userId);
-        });
-      });
-      
-      document.querySelectorAll('.unban-user').forEach(button => {
-        button.addEventListener('click', function() {
-          const userId = this.getAttribute('data-user-id');
-          unbanUser(userId);
-        });
-      });
+      document.querySelectorAll('.view-user').forEach(btn => btn.addEventListener('click', function() { viewUserDetails(this.getAttribute('data-user-id')); }));
+      document.querySelectorAll('.ban-user').forEach(btn => btn.addEventListener('click', function() { banUser(this.getAttribute('data-user-id')); }));
+      document.querySelectorAll('.unban-user').forEach(btn => btn.addEventListener('click', function() { unbanUser(this.getAttribute('data-user-id')); }));
     }
     
-    // Filter Users
-    function filterUsers(searchTerm) {
-      const tbody = document.getElementById('users-table-body');
-      const rows = tbody.querySelectorAll('tr');
-      
-      rows.forEach(row => {
-        const userId = row.cells[0].textContent.toLowerCase();
-        const name = row.cells[1].textContent.toLowerCase();
-        
-        if (userId.includes(searchTerm) || name.includes(searchTerm)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    }
+    function filterUsers(term) { document.querySelectorAll('#users-table-body tr').forEach(r => r.style.display = (r.cells[0].textContent.toLowerCase().includes(term) || r.cells[1].textContent.toLowerCase().includes(term)) ? '' : 'none'); }
     
-    // View User Details
     function viewUserDetails(userId) {
-      currentUser = users.find(user => user.id === userId);
-      
-      if (!currentUser) return;
-      
-      // Set user info
+      currentUser = users.find(u => u.id === userId); if(!currentUser) return;
       document.getElementById('detail-user-id').value = currentUser.id;
       document.getElementById('detail-user-name').value = currentUser.name || '';
-      document.getElementById('detail-user-ton').value = currentUser.ton || '';
-      document.getElementById('detail-user-ip').value = currentUser.ip || 'Unknown';
-      document.getElementById('detail-user-device').value = currentUser.device || 'Unknown';
+      document.getElementById('detail-user-language').value = currentUser.language || 'en';
+      document.getElementById('detail-user-referred-by').value = currentUser.referredBy || 'None';
       document.getElementById('detail-user-status').value = currentUser.banned ? 'banned' : 'active';
-      
-      // Set balance info
       document.getElementById('detail-ton-balance').value = currentUser.tonBalance || 0;
-      
-      // Set referral info
       document.getElementById('detail-total-referrals').value = currentUser.referrals || 0;
-      document.getElementById('detail-total-commission').value = `${(currentUser.totalReferralCommission || 0).toFixed(6)} TON`;
+      document.getElementById('detail-total-commission').value = `${(currentUser.totalReferralCommission || 0).toFixed(4)} TON`;
       
-      // Load referrals
-      loadUserReferrals(userId);
+      const tbody = document.getElementById('referrals-table-body'); tbody.innerHTML = '';
+      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value', s => {
+        if(s.exists()) s.forEach(c => { const u = c.val(); const tr = document.createElement('tr'); tr.innerHTML = `<td>${c.key}</td><td>${u.name}</td><td>${(u.tonBalance || 0).toFixed(4)}</td>`; tbody.appendChild(tr); });
+      });
       
-      // Load user history
-      loadUserHistory(userId);
-      
-      // Show modal
       document.getElementById('user-details-modal').classList.add('active');
     }
     
-    // Load User Referrals
-    function loadUserReferrals(userId) {
-      const tbody = document.getElementById('referrals-table-body');
-      tbody.innerHTML = '';
-      
-      database.ref('users').orderByChild('referredBy').equalTo(userId).once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          snapshot.forEach(function(childSnapshot) {
-            const referral = childSnapshot.val();
-            const referralId = childSnapshot.key;
-            
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${referralId}</td>
-              <td>${referral.name || 'Unknown'}</td>
-              <td>${(referral.tonBalance || 0).toFixed(6)} TON</td>
-              <td>${((currentUser.referralCommissions && currentUser.referralCommissions[referralId]) || 0).toFixed(6)} TON</td>
-            `;
-            
-            tbody.appendChild(tr);
-          });
-        }
-      });
-    }
-    
-    // Load User History
-    function loadUserHistory(userId) {
-      // Load deposits
-      const depositsTbody = document.getElementById('user-deposits-table-body');
-      depositsTbody.innerHTML = '';
-      
-      database.ref('admin/deposits').orderByChild('userId').equalTo(userId).once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          snapshot.forEach(function(childSnapshot) {
-            const deposit = childSnapshot.val();
-            const depositId = childSnapshot.key;
-            
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${depositId}</td>
-              <td>${(deposit.amount || 0).toFixed(6)} TON</td>
-              <td>${(deposit.bonus || 0).toFixed(6)} TON</td>
-              <td>${(deposit.totalAmount || deposit.amount || 0).toFixed(6)} TON</td>
-              <td>${new Date(deposit.timestamp * 1000).toLocaleString()}</td>
-              <td><span class="status-badge ${deposit.status}">${deposit.status}</span></td>
-            `;
-            
-            depositsTbody.appendChild(tr);
-          });
-        }
-      });
-      
-      // Load withdrawals
-      const withdrawalsTbody = document.getElementById('user-withdrawals-table-body');
-      withdrawalsTbody.innerHTML = '';
-      
-      database.ref('admin/withdrawals').orderByChild('userId').equalTo(userId).once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          snapshot.forEach(function(childSnapshot) {
-            const withdrawal = childSnapshot.val();
-            const withdrawalId = childSnapshot.key;
-            
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${withdrawalId}</td>
-              <td>${(withdrawal.amount || 0).toFixed(6)} TON</td>
-              <td>${withdrawal.address || 'Unknown'}</td>
-              <td>${new Date(withdrawal.timestamp * 1000).toLocaleString()}</td>
-              <td><span class="status-badge ${withdrawal.status}">${withdrawal.status}</span></td>
-            `;
-            
-            withdrawalsTbody.appendChild(tr);
-          });
-        }
-      });
-      
-      // Load trades
-      const tradesTbody = document.getElementById('user-trades-table-body');
-      tradesTbody.innerHTML = '';
-      
-      if (currentUser.tradeHistory && currentUser.tradeHistory.length > 0) {
-        currentUser.tradeHistory.forEach(trade => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${trade.type || 'Unknown'}</td>
-            <td>${trade.planName || 'Unknown'}</td>
-            <td>${(trade.amount || 0).toFixed(6)} TON</td>
-            <td>${new Date(trade.timestamp * 1000).toLocaleString()}</td>
-          `;
-          
-          tradesTbody.appendChild(tr);
-        });
-      }
-      
-      // Load all activities
-      const allTbody = document.getElementById('user-all-table-body');
-      allTbody.innerHTML = '';
-      
-      // Combine all activities
-      const allActivities = [];
-      
-      // Add deposits
-      if (currentUser.depositHistory && currentUser.depositHistory.length > 0) {
-        currentUser.depositHistory.forEach(deposit => {
-          allActivities.push({
-            type: 'deposit',
-            details: `Deposit of ${(deposit.amount || 0).toFixed(6)} TON`,
-            amount: deposit.amount || 0,
-            timestamp: deposit.timestamp
-          });
-        });
-      }
-      
-      // Add withdrawals
-      if (currentUser.withdrawHistory && currentUser.withdrawHistory.length > 0) {
-        currentUser.withdrawHistory.forEach(withdrawal => {
-          allActivities.push({
-            type: 'withdrawal',
-            details: `Withdrawal of ${(withdrawal.amount || 0).toFixed(6)} TON`,
-            amount: withdrawal.amount || 0,
-            timestamp: withdrawal.timestamp
-          });
-        });
-      }
-      
-      // Add trades
-      if (currentUser.tradeHistory && currentUser.tradeHistory.length > 0) {
-        currentUser.tradeHistory.forEach(trade => {
-          allActivities.push({
-            type: trade.type || 'trade',
-            details: `${trade.planName || 'Unknown'} - ${(trade.amount || 0).toFixed(6)} TON`,
-            amount: trade.amount || 0,
-            timestamp: trade.timestamp
-          });
-        });
-      }
-      
-      // Sort by timestamp (newest first)
-      allActivities.sort((a, b) => b.timestamp - a.timestamp);
-      
-      // Render all activities
-      allActivities.forEach(activity => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${activity.type}</td>
-          <td>${activity.details}</td>
-          <td>${activity.amount.toFixed(6)} TON</td>
-          <td>${new Date(activity.timestamp * 1000).toLocaleString()}</td>
-        `;
-        
-        allTbody.appendChild(tr);
-      });
-    }
-    
-    // Switch User Tab
     function switchUserTab(tab) {
-      document.querySelectorAll('[data-user-tab]').forEach(userTab => {
-        userTab.classList.remove('active');
-        if (userTab.getAttribute('data-user-tab') === tab) {
-          userTab.classList.add('active');
-        }
-      });
-      
-      document.querySelectorAll('#user-details-modal .tab-content').forEach(content => {
-        content.classList.remove('active');
-        if (content.id === `user-${tab}-content`) {
-          content.classList.add('active');
-        }
-      });
+      document.querySelectorAll('[data-user-tab]').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-user-tab="${tab}"]`).classList.add('active');
+      document.querySelectorAll('#user-details-modal .tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(`user-${tab}-content`).classList.add('active');
     }
     
-    // Switch History Tab
-    function switchHistoryTab(tab) {
-      document.querySelectorAll('[data-history-tab]').forEach(historyTab => {
-        historyTab.classList.remove('active');
-        if (historyTab.getAttribute('data-history-tab') === tab) {
-          historyTab.classList.add('active');
-        }
-      });
-      
-      document.querySelectorAll('#user-history-content .tab-content').forEach(content => {
-        content.classList.remove('active');
-        if (content.id === `history-${tab}-content`) {
-          content.classList.add('active');
-        }
-      });
-    }
+    function saveUserDetails() { if(!currentUser) return; database.ref('users/' + currentUser.id).update({ name: document.getElementById('detail-user-name').value, banned: document.getElementById('detail-user-status').value === 'banned' }).then(() => showNotification('User updated', 'success')); }
     
-    // Save User Details
-    function saveUserDetails() {
-      if (!currentUser) return;
-      
-      const name = document.getElementById('detail-user-name').value;
-      const ton = document.getElementById('detail-user-ton').value;
-      const status = document.getElementById('detail-user-status').value;
-      
-      const updates = {
-        name: name,
-        ton: ton,
-        banned: status === 'banned'
-      };
-      
-      database.ref('users/' + currentUser.id).update(updates).then(function() {
-        showNotification('User details updated successfully', 'success');
-        
-        // Update local data
-        currentUser.name = name;
-        currentUser.ton = ton;
-        currentUser.banned = status === 'banned';
-        
-        // Refresh users list if on users tab
-        if (currentTab === 'users') {
-          renderUsers();
-        }
-      }).catch(function(error) {
-        console.error('Error updating user details:', error);
-        showNotification('Failed to update user details', 'error');
-      });
-    }
+    function saveBalanceChanges() { if(!currentUser) return; const newBal = parseFloat(document.getElementById('detail-ton-balance').value); const reason = document.getElementById('balance-reason').value; if(!reason) { showNotification('Reason required', 'error'); return; } database.ref('users/' + currentUser.id).update({ tonBalance: newBal }).then(() => { showNotification('Balance updated', 'success'); database.ref('admin/balanceAdjustments').push({ userId: currentUser.id, newBalance: newBal, reason: reason, timestamp: Date.now() }); }); }
     
-    // Adjust User Balance
-    function adjustUserBalance(type, action) {
-      if (!currentUser) return;
-      
-      const input = type === 'ton' ? 
-        document.getElementById('detail-ton-balance') : 
-        document.getElementById('detail-ton-balance');
-      
-      const currentValue = parseFloat(input.value) || 0;
-      const adjustment = parseFloat(prompt(`Enter amount to ${action}:`)) || 0;
-      
-      if (adjustment <= 0) return;
-      
-      const newValue = action === 'increase' ? 
-        currentValue + adjustment : 
-        Math.max(0, currentValue - adjustment);
-      
-      input.value = newValue;
-    }
+    function banUser(id) { if(confirm('Ban user?')) database.ref('users/' + id).update({ banned: true }).then(() => showNotification('User banned', 'success')); }
+    function unbanUser(id) { if(confirm('Unban user?')) database.ref('users/' + id).update({ banned: false }).then(() => showNotification('User unbanned', 'success')); }
     
-    // Save Balance Changes
-    function saveBalanceChanges() {
-      if (!currentUser) return;
-      
-      const tonBalance = parseFloat(document.getElementById('detail-ton-balance').value) || 0;
-      const reason = document.getElementById('balance-reason').value;
-      
-      if (!reason) {
-        showNotification('Please enter a reason for balance adjustment', 'error');
-        return;
-      }
-      
-      const updates = {
-        tonBalance: tonBalance
-      };
-      
-      database.ref('users/' + currentUser.id).update(updates).then(function() {
-        showNotification('Balance updated successfully', 'success');
-        
-        // Update local data
-        currentUser.tonBalance = tonBalance;
-        
-        // Log balance adjustment
-        database.ref('admin/balanceAdjustments').push({
-          userId: currentUser.id,
-          userName: currentUser.name,
-          previousTonBalance: currentUser.tonBalance,
-          newTonBalance: tonBalance,
-          reason: reason,
-          timestamp: Math.floor(Date.now() / 1000),
-          adminId: 'admin' // This would be the actual admin ID in a real system
-        });
-        
-        // Refresh users list if on users tab
-        if (currentTab === 'users') {
-          renderUsers();
-        }
-      }).catch(function(error) {
-        console.error('Error updating balance:', error);
-        showNotification('Failed to update balance', 'error');
-      });
-    }
+    function loadDeposits() { database.ref('admin/deposits').once('value', s => { if(s.exists()){ deposits = Object.entries(s.val()).map(([id, d]) => ({id, ...d})); renderDeposits(); }}); }
+    function renderDeposits() { renderPendingDeposits(); renderApprovedDeposits(); renderRejectedDeposits(); renderAllDeposits(); }
+    function renderPendingDeposits() { const tbody = document.getElementById('pending-deposits-table-body'); tbody.innerHTML = ''; deposits.filter(d => d.status === 'pending').forEach(d => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${d.id}</td><td>${d.userName} (${d.userId})</td><td>${d.amount} TON</td><td>${new Date(d.timestamp * 1000).toLocaleString()}</td><td><span class="status-badge pending">Pending</span></td><td><button class="btn btn-success btn-sm approve-deposit" data-id="${d.id}"><i class="fas fa-check"></i></button> <button class="btn btn-danger btn-sm reject-deposit" data-id="${d.id}"><i class="fas fa-times"></i></button></td>`; tbody.appendChild(tr); }); setupDepositListeners(); }
+    function renderApprovedDeposits() { const tbody = document.getElementById('approved-deposits-table-body'); tbody.innerHTML = ''; deposits.filter(d => d.status === 'approved').forEach(d => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${d.id}</td><td>${d.userName} (${d.userId})</td><td>${d.amount} TON</td><td>${new Date(d.timestamp * 1000).toLocaleString()}</td><td><span class="status-badge approved">Approved</span></td>`; tbody.appendChild(tr); }); }
+    function renderRejectedDeposits() { const tbody = document.getElementById('rejected-deposits-table-body'); tbody.innerHTML = ''; deposits.filter(d => d.status === 'rejected').forEach(d => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${d.id}</td><td>${d.userName} (${d.userId})</td><td>${d.amount} TON</td><td>${new Date(d.timestamp * 1000).toLocaleString()}</td><td>${d.reason || 'N/A'}</td>`; tbody.appendChild(tr); }); }
+    function renderAllDeposits() { const tbody = document.getElementById('all-deposits-table-body'); tbody.innerHTML = ''; deposits.forEach(d => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${d.id}</td><td>${d.userName} (${d.userId})</td><td>${d.amount} TON</td><td>${new Date(d.timestamp * 1000).toLocaleString()}</td><td><span class="status-badge ${d.status}">${d.status}</span></td>`; tbody.appendChild(tr); }); }
+    function setupDepositListeners() { document.querySelectorAll('.approve-deposit').forEach(btn => btn.onclick = function() { approveDeposit(this.dataset.id); }); document.querySelectorAll('.reject-deposit').forEach(btn => btn.onclick = function() { rejectDeposit(this.dataset.id); }); }
     
-    // Ban User
-    function banUser(userId) {
-      if (!confirm('Are you sure you want to ban this user?')) return;
-      
-      database.ref('users/' + userId).update({ banned: true }).then(function() {
-        showNotification('User banned successfully', 'success');
-        
-        // Refresh users list
-        if (currentTab === 'users') {
-          renderUsers();
-        }
-      }).catch(function(error) {
-        console.error('Error banning user:', error);
-        showNotification('Failed to ban user', 'error');
-      });
-    }
+    function switchDepositTab(tab) { document.querySelectorAll('[data-deposit-tab]').forEach(t => t.classList.remove('active')); document.querySelector(`[data-deposit-tab="${tab}"]`).classList.add('active'); document.querySelectorAll('#deposits-tab .tab-content').forEach(c => c.classList.remove('active')); document.getElementById(`${tab}-deposits-content`).classList.add('active'); }
     
-    // Unban User
-    function unbanUser(userId) {
-      if (!confirm('Are you sure you want to unban this user?')) return;
-      
-      database.ref('users/' + userId).update({ banned: false }).then(function() {
-        showNotification('User unbanned successfully', 'success');
-        
-        // Refresh users list
-        if (currentTab === 'users') {
-          renderUsers();
-        }
-      }).catch(function(error) {
-        console.error('Error unbanning user:', error);
-        showNotification('Failed to unban user', 'error');
-      });
-    }
-    
-    // Load Deposits
-    function loadDeposits() {
-      database.ref('admin/deposits').once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          deposits = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          renderDeposits();
-        }
-      });
-    }
-    
-    // Render Deposits
-    function renderDeposits() {
-      renderPendingDeposits();
-      renderApprovedDeposits();
-      renderRejectedDeposits();
-      renderAllDeposits();
-    }
-    
-    // Render Pending Deposits
-    function renderPendingDeposits() {
-      const tbody = document.getElementById('pending-deposits-table-body');
-      tbody.innerHTML = '';
-      
-      const pendingDeposits = deposits.filter(deposit => deposit.status === 'pending');
-      
-      pendingDeposits.forEach(deposit => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${deposit.id}</td>
-          <td>${deposit.userName || 'Unknown'} (${deposit.userId})</td>
-          <td>${(deposit.amount || 0).toFixed(6)} TON</td>
-          <td>${(deposit.bonus || 0).toFixed(6)} TON</td>
-          <td>${(deposit.totalAmount || deposit.amount || 0).toFixed(6)} TON</td>
-          <td>${new Date(deposit.timestamp * 1000).toLocaleString()}</td>
-          <td><span class="status-badge pending">Pending</span></td>
-          <td>
-            <div class="btn-group">
-              <button class="btn btn-success btn-sm approve-deposit" data-deposit-id="${deposit.id}">
-                <i class="fas fa-check"></i>
-              </button>
-              <button class="btn btn-danger btn-sm reject-deposit" data-deposit-id="${deposit.id}">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-      
-      // Add event listeners to buttons
-      document.querySelectorAll('.approve-deposit').forEach(button => {
-        button.addEventListener('click', function() {
-          const depositId = this.getAttribute('data-deposit-id');
-          approveDeposit(depositId);
-        });
-      });
-      
-      document.querySelectorAll('.reject-deposit').forEach(button => {
-        button.addEventListener('click', function() {
-          const depositId = this.getAttribute('data-deposit-id');
-          rejectDeposit(depositId);
-        });
-      });
-    }
-    
-    // Render Approved Deposits
-    function renderApprovedDeposits() {
-      const tbody = document.getElementById('approved-deposits-table-body');
-      tbody.innerHTML = '';
-      
-      const approvedDeposits = deposits.filter(deposit => deposit.status === 'approved');
-      
-      approvedDeposits.forEach(deposit => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${deposit.id}</td>
-          <td>${deposit.userName || 'Unknown'} (${deposit.userId})</td>
-          <td>${(deposit.amount || 0).toFixed(6)} TON</td>
-          <td>${(deposit.bonus || 0).toFixed(6)} TON</td>
-          <td>${(deposit.totalAmount || deposit.amount || 0).toFixed(6)} TON</td>
-          <td>${new Date(deposit.timestamp * 1000).toLocaleString()}</td>
-          <td><span class="status-badge approved">Approved</span></td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-    }
-    
-    // Render Rejected Deposits
-    function renderRejectedDeposits() {
-      const tbody = document.getElementById('rejected-deposits-table-body');
-      tbody.innerHTML = '';
-      
-      const rejectedDeposits = deposits.filter(deposit => deposit.status === 'rejected');
-      
-      rejectedDeposits.forEach(deposit => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${deposit.id}</td>
-          <td>${deposit.userName || 'Unknown'} (${deposit.userId})</td>
-          <td>${(deposit.amount || 0).toFixed(6)} TON</td>
-          <td>${(deposit.bonus || 0).toFixed(6)} TON</td>
-          <td>${(deposit.totalAmount || deposit.amount || 0).toFixed(6)} TON</td>
-          <td>${new Date(deposit.timestamp * 1000).toLocaleString()}</td>
-          <td>${deposit.reason || 'No reason provided'}</td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-    }
-    
-    // Render All Deposits
-    function renderAllDeposits() {
-      const tbody = document.getElementById('all-deposits-table-body');
-      tbody.innerHTML = '';
-      
-      deposits.forEach(deposit => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${deposit.id}</td>
-          <td>${deposit.userName || 'Unknown'} (${deposit.userId})</td>
-          <td>${(deposit.amount || 0).toFixed(6)} TON</td>
-          <td>${(deposit.bonus || 0).toFixed(6)} TON</td>
-          <td>${(deposit.totalAmount || deposit.amount || 0).toFixed(6)} TON</td>
-          <td>${new Date(deposit.timestamp * 1000).toLocaleString()}</td>
-          <td><span class="status-badge ${deposit.status}">${deposit.status}</span></td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-    }
-    
-    // Switch Deposit Tab
-    function switchDepositTab(tab) {
-      document.querySelectorAll('[data-deposit-tab]').forEach(depositTab => {
-        depositTab.classList.remove('active');
-        if (depositTab.getAttribute('data-deposit-tab') === tab) {
-          depositTab.classList.add('active');
-        }
-      });
-      
-      document.querySelectorAll('#deposits-tab .tab-content').forEach(content => {
-        content.classList.remove('active');
-        if (content.id === `${tab}-deposits-content`) {
-          content.classList.add('active');
-        }
-      });
-    }
-    
-    // Approve Deposit
-    function approveDeposit(depositId) {
-      const deposit = deposits.find(d => d.id === depositId);
-      if (!deposit) return;
-      
-      const totalAmount = deposit.totalAmount || deposit.amount || 0;
-      
-      database.ref('admin/deposits/' + depositId).update({ status: 'approved' }).then(function() {
-        // Update user balance
-        database.ref('users/' + deposit.userId).once('value').then(function(snapshot) {
-          if (snapshot.exists()) {
-            const user = snapshot.val();
-            const newBalance = (user.tonBalance || 0) + totalAmount;
-            
-            database.ref('users/' + deposit.userId).update({ 
-              tonBalance: newBalance,
-              hasDeposit: true
-            }).then(function() {
-              showNotification('Deposit approved successfully', 'success');
-              
-              // Send notification to user
-              sendBotMessage(
-                `✅ <b>Deposit Approved</b>\nAmount: ${totalAmount.toFixed(6)} TON\nNew balance: ${newBalance.toFixed(6)} TON`,
-                deposit.userId
-              );
+    function approveDeposit(id) {
+      const dep = deposits.find(d => d.id === id); if(!dep) return;
+      database.ref('admin/deposits/' + id).update({ status: 'approved' }).then(() => {
+        database.ref('users/' + dep.userId).once('value', s => {
+          if(s.exists()) {
+            const u = s.val();
+            const newBal = (u.tonBalance || 0) + dep.amount;
+            database.ref('users/' + dep.userId).update({ tonBalance: newBal, hasDeposit: true }).then(() => {
+              showNotification('Deposit approved', 'success');
+              sendBot(`Deposit Approved: ${dep.amount} TON`, dep.userId);
             });
           }
         });
-      }).catch(function(error) {
-        console.error('Error approving deposit:', error);
-        showNotification('Failed to approve deposit', 'error');
       });
     }
     
-    // Reject Deposit
-    function rejectDeposit(depositId) {
-      const deposit = deposits.find(d => d.id === depositId);
-      if (!deposit) return;
-      
-      const reason = prompt('Please enter a reason for rejection:');
-      if (!reason) return;
-      
-      database.ref('admin/deposits/' + depositId).update({ 
-        status: 'rejected',
-        reason: reason
-      }).then(function() {
-        showNotification('Deposit rejected successfully', 'success');
+    function rejectDeposit(id) {
+      const dep = deposits.find(d => d.id === id); if(!dep) return;
+      const reason = prompt('Reason:'); if(!reason) return;
+      database.ref('admin/deposits/' + id).update({ status: 'rejected', reason: reason }).then(() => { showNotification('Deposit rejected', 'success'); sendBot(`Deposit Rejected: ${reason}`, dep.userId); });
+    }
+    
+    function loadWithdrawals() { database.ref('admin/withdrawals').once('value', s => { if(s.exists()){ withdrawals = Object.entries(s.val()).map(([id, d]) => ({id, ...d})); renderWithdrawals(); }}); }
+    function renderWithdrawals() { renderPendingWithdrawals(); renderApprovedWithdrawals(); renderRejectedWithdrawals(); renderAllWithdrawals(); }
+    function renderPendingWithdrawals() { const tbody = document.getElementById('pending-withdrawals-table-body'); tbody.innerHTML = ''; withdrawals.filter(w => w.status === 'pending').forEach(w => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${w.id}</td><td>${w.userName} (${w.userId})</td><td>${w.amount} TON</td><td>${w.address}</td><td>${new Date(w.timestamp * 1000).toLocaleString()}</td><td><span class="status-badge pending">Pending</span></td><td><button class="btn btn-success btn-sm approve-withdrawal" data-id="${w.id}"><i class="fas fa-check"></i></button> <button class="btn btn-danger btn-sm reject-withdrawal" data-id="${w.id}"><i class="fas fa-times"></i></button></td>`; tbody.appendChild(tr); }); setupWithdrawalListeners(); }
+    function renderApprovedWithdrawals() { const tbody = document.getElementById('approved-withdrawals-table-body'); tbody.innerHTML = ''; withdrawals.filter(w => w.status === 'approved').forEach(w => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${w.id}</td><td>${w.userName} (${w.userId})</td><td>${w.amount} TON</td><td>${w.address}</td><td>${new Date(w.timestamp * 1000).toLocaleString()}</td><td><span class="status-badge approved">Approved</span></td>`; tbody.appendChild(tr); }); }
+    function renderRejectedWithdrawals() { const tbody = document.getElementById('rejected-withdrawals-table-body'); tbody.innerHTML = ''; withdrawals.filter(w => w.status === 'rejected').forEach(w => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${w.id}</td><td>${w.userName} (${w.userId})</td><td>${w.amount} TON</td><td>${w.address}</td><td>${new Date(w.timestamp * 1000).toLocaleString()}</td><td>${w.reason || 'N/A'}</td>`; tbody.appendChild(tr); }); }
+    function renderAllWithdrawals() { const tbody = document.getElementById('all-withdrawals-table-body'); tbody.innerHTML = ''; withdrawals.forEach(w => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${w.id}</td><td>${w.userName} (${w.userId})</td><td>${w.amount} TON</td><td>${w.address}</td><td>${new Date(w.timestamp * 1000).toLocaleString()}</td><td><span class="status-badge ${w.status}">${w.status}</span></td>`; tbody.appendChild(tr); }); }
+    function setupWithdrawalListeners() { document.querySelectorAll('.approve-withdrawal').forEach(btn => btn.onclick = function() { approveWithdrawal(this.dataset.id); }); document.querySelectorAll('.reject-withdrawal').forEach(btn => btn.onclick = function() { rejectWithdrawal(this.dataset.id); }); }
+    
+    function switchWithdrawalTab(tab) { document.querySelectorAll('[data-withdrawal-tab]').forEach(t => t.classList.remove('active')); document.querySelector(`[data-withdrawal-tab="${tab}"]`).classList.add('active'); document.querySelectorAll('#withdrawals-tab .tab-content').forEach(c => c.classList.remove('active')); document.getElementById(`${tab}-withdrawals-content`).classList.add('active'); }
+
+    function approveWithdrawal(id) { const w = withdrawals.find(x => x.id === id); if(!w) return; database.ref('admin/withdrawals/' + id).update({ status: 'approved' }).then(() => { showNotification('Withdrawal approved', 'success'); sendBot(`Withdrawal Approved: ${w.amount} TON`, w.userId); }); }
+    function rejectWithdrawal(id) { const w = withdrawals.find(x => x.id === id); if(!w) return; const reason = prompt('Reason:'); if(!reason) return; database.ref('admin/withdrawals/' + id).update({ status: 'rejected', reason: reason }).then(() => { database.ref('users/' + w.userId).once('value', s => { if(s.exists()) { const u = s.val(); database.ref('users/' + w.userId).update({ tonBalance: (u.tonBalance || 0) + w.amount }); }}); showNotification('Rejected & Refunded', 'success'); }); }
+
+    function loadTasks() { database.ref('tasks').once('value', s => { if(s.exists()){ tasks = Object.entries(s.val()).map(([id, d]) => ({id, ...d})); renderTasks(); }}); }
+    function renderTasks() { const tbody = document.getElementById('tasks-table-body'); tbody.innerHTML = ''; tasks.forEach(t => { const tr = document.createElement('tr'); tr.innerHTML = `<td><img src="${t.photo}" style="width:40px;height:40px;border-radius:8px;"></td><td>${t.name}</td><td>${t.category}</td><td>${t.amount} TON</td><td><button class="btn btn-danger btn-sm delete-task" data-id="${t.id}"><i class="fas fa-trash"></i></button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-task').forEach(btn => btn.onclick = function() { if(confirm('Delete?')) database.ref('tasks/' + this.dataset.id).remove().then(() => { showNotification('Deleted', 'success'); loadTasks(); }); }); }
+    function saveTask() { const data = { name: document.getElementById('task-name').value, category: document.getElementById('task-category').value, amount: parseFloat(document.getElementById('task-reward').value), link: document.getElementById('task-link').value, photo: document.getElementById('task-photo-url').value }; database.ref('tasks').push(data).then(() => { showNotification('Task added', 'success'); document.getElementById('add-task-modal').classList.remove('active'); loadTasks(); }); }
+
+    // NEW: Trade Plans
+    function loadTradePlans() { database.ref('settings/tradePlans').once('value', s => { if(s.exists()){ tradePlans = Object.entries(s.val()).map(([id, d]) => ({id, ...d})); renderTradePlans(); }}); }
+    function renderTradePlans() { const tbody = document.getElementById('trade-plans-table-body'); tbody.innerHTML = ''; tradePlans.forEach(p => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${p.icon}</td><td>${p.name}</td><td>${p.price} TON</td><td>${p.dailyEarning} TON</td><td>${p.duration} Days</td><td><button class="btn btn-danger btn-sm delete-plan" data-id="${p.id}"><i class="fas fa-trash"></i></button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-plan').forEach(btn => btn.onclick = function() { if(confirm('Delete?')) database.ref('settings/tradePlans/' + this.dataset.id).remove().then(() => { showNotification('Deleted', 'success'); loadTradePlans(); }); }); }
+    function saveTradePlan() { const data = { name: document.getElementById('plan-name').value, icon: document.getElementById('plan-icon').value, price: parseFloat(document.getElementById('plan-price').value), dailyEarning: parseFloat(document.getElementById('plan-earning').value), duration: parseInt(document.getElementById('plan-duration').value) }; database.ref('settings/tradePlans').push(data).then(() => { showNotification('Plan added', 'success'); document.getElementById('add-plan-modal').classList.remove('active'); loadTradePlans(); }); }
+
+    function loadPromoCodes() { database.ref('promoCodes').once('value', s => { if(s.exists()){ promoCodes = Object.entries(s.val()).map(([id, d]) => ({id, ...d})); renderPromoCodes(); }}); }
+    function renderPromoCodes() { const tbody = document.getElementById('promo-codes-table-body'); tbody.innerHTML = ''; promoCodes.forEach(p => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${p.id}</td><td>${p.percentage}%</td><td>${p.maxUsers}</td><td>${p.used || 0}</td><td><span class="status-badge ${p.status}">${p.status}</span></td><td><button class="btn btn-danger btn-sm delete-promo" data-id="${p.id}"><i class="fas fa-trash"></i></button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-promo').forEach(btn => btn.onclick = function() { if(confirm('Delete?')) database.ref('promoCodes/' + this.dataset.id).remove().then(() => { showNotification('Deleted', 'success'); loadPromoCodes(); }); }); }
+    function savePromoCode() { const id = document.getElementById('promo-code').value; const data = { percentage: parseFloat(document.getElementById('promo-bonus').value), maxUsers: parseInt(document.getElementById('promo-max-users').value), used: 0, status: 'active' }; database.ref('promoCodes/' + id).set(data).then(() => { showNotification('Promo added', 'success'); document.getElementById('add-promo-modal').classList.remove('active'); loadPromoCodes(); }); }
+
+    // NEW: Redeem Codes
+    function loadRedeemCodes() { database.ref('redeemCodes').once('value', s => { if(s.exists()){ redeemCodes = Object.entries(s.val()).map(([id, d]) => ({id, ...d})); renderRedeemCodes(); }}); }
+    function renderRedeemCodes() { const tbody = document.getElementById('redeem-codes-table-body'); tbody.innerHTML = ''; redeemCodes.forEach(r => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${r.id}</td><td>${r.amount} TON</td><td>${r.maxUsers}</td><td>${r.used || 0}</td><td><span class="status-badge ${r.used >= r.maxUsers ? 'paused' : 'active'}">${r.used >= r.maxUsers ? 'Used' : 'Active'}</span></td><td><button class="btn btn-danger btn-sm delete-redeem" data-id="${r.id}"><i class="fas fa-trash"></i></button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-redeem').forEach(btn => btn.onclick = function() { if(confirm('Delete?')) database.ref('redeemCodes/' + this.dataset.id).remove().then(() => { showNotification('Deleted', 'success'); loadRedeemCodes(); }); }); }
+    function saveRedeemCode() { let id = document.getElementById('redeem-code').value; if(!id) id = Math.random().toString(36).substr(2, 8).toUpperCase(); const data = { amount: parseFloat(document.getElementById('redeem-reward').value), maxUsers: parseInt(document.getElementById('redeem-max-users').value), used: 0 }; database.ref('redeemCodes/' + id).set(data).then(() => { showNotification('Code generated', 'success'); document.getElementById('add-redeem-modal').classList.remove('active'); loadRedeemCodes(); }); }
+
+    function loadAnnouncements() { database.ref('announcements').once('value', s => { if(s.exists()){ announcements = Object.entries(s.val()).map(([id, d]) => ({id, ...d})); renderAnnouncements(); }}); }
+    function renderAnnouncements() { const tbody = document.getElementById('announcements-table-body'); tbody.innerHTML = ''; announcements.forEach(a => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${a.message.substring(0,30)}...</td><td>${a.target}</td><td>${new Date(a.timestamp * 1000).toLocaleString()}</td><td><span class="status-badge active">Sent</span></td>`; tbody.appendChild(tr); }); }
+    function sendAnnouncement() { const msg = document.getElementById('announcement-message').value; const target = document.getElementById('announcement-target').value; if(!msg) return; const data = { message: msg, photo: document.getElementById('announcement-photo-url').value, target: target, timestamp: Date.now()/1000 }; database.ref('announcements').push(data).then(() => { showNotification('Announcement saved', 'success'); const chatIds = target === 'all' ? users.map(u => u.id) : document.getElementById('specific-users').value.split(','); chatIds.forEach(id => sendBot(msg, id)); }); }
+
+    function loadSettings() { database.ref('settings').once('value', s => { if(s.exists()){ settings = s.val(); renderSettings(); }}); }
+    function renderSettings() { if(settings.platformName) document.getElementById('platform-name').value = settings.platformName; if(settings.depositWallet) document.getElementById('deposit-wallet').value = settings.depositWallet; if(settings.tonPrice) document.getElementById('ton-price').value = settings.tonPrice; if(settings.minDeposit) document.getElementById('min-deposit').value = settings.minDeposit; if(settings.minWithdrawal) document.getElementById('min-withdrawal').value = settings.minWithdrawal; if(settings.supportLink) document.getElementById('support-link').value = settings.supportLink; }
+    function switchSettingsTab(tab) { document.querySelectorAll('[data-settings-tab]').forEach(t => t.classList.remove('active')); document.querySelector(`[data-settings-tab="${tab}"]`).classList.add('active'); document.querySelectorAll('#settings-tab .tab-content').forEach(c => c.classList.remove('active')); document.getElementById(`${tab}-settings-content`).classList.add('active'); }
+    function saveGeneralSettings() { const data = { platformName: document.getElementById('platform-name').value, depositWallet: document.getElementById('deposit-wallet').value, tonPrice: parseFloat(document.getElementById('ton-price').value), minDeposit: parseFloat(document.getElementById('min-deposit').value), minWithdrawal: parseFloat(document.getElementById('min-withdrawal').value), supportLink: document.getElementById('support-link').value }; database.ref('settings').update(data).then(() => showNotification('Settings saved', 'success')); }
+    function adjustBalances() { const uid = document.getElementById('balance-user-id').value; const amt = parseFloat(document.getElementById('ton-balance-adjustment').value); const reason = document.getElementById('balance-adjustment-reason').value; if(!uid || !reason) return; database.ref('users/' + uid).once('value', s => { if(s.exists()) { const u = s.val(); database.ref('users/' + uid).update({ tonBalance: (u.tonBalance || 0) + amt }).then(() => { showNotification('Balance adjusted', 'success'); database.ref('admin/balanceAdjustments').push({ userId: uid, amount: amt, reason: reason, time: Date.now() }); }); } }); }
+    
+    // Analytics
+    function renderAnalytics() {
+        const langCtx = document.getElementById('languageChart').getContext('2d');
+        const langs = { en: 0, cn: 0, bn: 0, ru: 0 };
+        users.forEach(u => { if(u.language) langs[u.language]++; });
         
-        // Send notification to user
-        sendBotMessage(
-          `❌ <b>Deposit Rejected</b>\nAmount: ${(deposit.amount || 0).toFixed(6)} TON\nReason: ${reason}`,
-          deposit.userId
-        );
-      }).catch(function(error) {
-        console.error('Error rejecting deposit:', error);
-        showNotification('Failed to reject deposit', 'error');
-      });
-    }
-    
-    // Load Withdrawals
-    function loadWithdrawals() {
-      database.ref('admin/withdrawals').once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          withdrawals = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          renderWithdrawals();
-        }
-      });
-    }
-    
-    // Render Withdrawals
-    function renderWithdrawals() {
-      renderPendingWithdrawals();
-      renderApprovedWithdrawals();
-      renderRejectedWithdrawals();
-      renderAllWithdrawals();
-    }
-    
-    // Render Pending Withdrawals
-    function renderPendingWithdrawals() {
-      const tbody = document.getElementById('pending-withdrawals-table-body');
-      tbody.innerHTML = '';
-      
-      const pendingWithdrawals = withdrawals.filter(withdrawal => withdrawal.status === 'pending');
-      
-      pendingWithdrawals.forEach(withdrawal => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${withdrawal.id}</td>
-          <td>${withdrawal.userName || 'Unknown'} (${withdrawal.userId})</td>
-          <td>${(withdrawal.amount || 0).toFixed(6)} TON</td>
-          <td>${withdrawal.address || 'Unknown'}</td>
-          <td>${new Date(withdrawal.timestamp * 1000).toLocaleString()}</td>
-          <td><span class="status-badge pending">Pending</span></td>
-          <td>
-            <div class="btn-group">
-              <button class="btn btn-success btn-sm approve-withdrawal" data-withdrawal-id="${withdrawal.id}">
-                <i class="fas fa-check"></i>
-              </button>
-              <button class="btn btn-danger btn-sm reject-withdrawal" data-withdrawal-id="${withdrawal.id}">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-      
-      // Add event listeners to buttons
-      document.querySelectorAll('.approve-withdrawal').forEach(button => {
-        button.addEventListener('click', function() {
-          const withdrawalId = this.getAttribute('data-withdrawal-id');
-          approveWithdrawal(withdrawalId);
-        });
-      });
-      
-      document.querySelectorAll('.reject-withdrawal').forEach(button => {
-        button.addEventListener('click', function() {
-          const withdrawalId = this.getAttribute('data-withdrawal-id');
-          rejectWithdrawal(withdrawalId);
-        });
-      });
-    }
-    
-    // Render Approved Withdrawals
-    function renderApprovedWithdrawals() {
-      const tbody = document.getElementById('approved-withdrawals-table-body');
-      tbody.innerHTML = '';
-      
-      const approvedWithdrawals = withdrawals.filter(withdrawal => withdrawal.status === 'approved');
-      
-      approvedWithdrawals.forEach(withdrawal => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${withdrawal.id}</td>
-          <td>${withdrawal.userName || 'Unknown'} (${withdrawal.userId})</td>
-          <td>${(withdrawal.amount || 0).toFixed(6)} TON</td>
-          <td>${withdrawal.address || 'Unknown'}</td>
-          <td>${new Date(withdrawal.timestamp * 1000).toLocaleString()}</td>
-          <td><span class="status-badge approved">Approved</span></td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-    }
-    
-    // Render Rejected Withdrawals
-    function renderRejectedWithdrawals() {
-      const tbody = document.getElementById('rejected-withdrawals-table-body');
-      tbody.innerHTML = '';
-      
-      const rejectedWithdrawals = withdrawals.filter(withdrawal => withdrawal.status === 'rejected');
-      
-      rejectedWithdrawals.forEach(withdrawal => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${withdrawal.id}</td>
-          <td>${withdrawal.userName || 'Unknown'} (${withdrawal.userId})</td>
-          <td>${(withdrawal.amount || 0).toFixed(6)} TON</td>
-          <td>${withdrawal.address || 'Unknown'}</td>
-          <td>${new Date(withdrawal.timestamp * 1000).toLocaleString()}</td>
-          <td>${withdrawal.reason || 'No reason provided'}</td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-    }
-    
-    // Render All Withdrawals
-    function renderAllWithdrawals() {
-      const tbody = document.getElementById('all-withdrawals-table-body');
-      tbody.innerHTML = '';
-      
-      withdrawals.forEach(withdrawal => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${withdrawal.id}</td>
-          <td>${withdrawal.userName || 'Unknown'} (${withdrawal.userId})</td>
-          <td>${(withdrawal.amount || 0).toFixed(6)} TON</td>
-          <td>${withdrawal.address || 'Unknown'}</td>
-          <td>${new Date(withdrawal.timestamp * 1000).toLocaleString()}</td>
-          <td><span class="status-badge ${withdrawal.status}">${withdrawal.status}</span></td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-    }
-    
-    // Switch Withdrawal Tab
-    function switchWithdrawalTab(tab) {
-      document.querySelectorAll('[data-withdrawal-tab]').forEach(withdrawalTab => {
-        withdrawalTab.classList.remove('active');
-        if (withdrawalTab.getAttribute('data-withdrawal-tab') === tab) {
-          withdrawalTab.classList.add('active');
-        }
-      });
-      
-      document.querySelectorAll('#withdrawals-tab .tab-content').forEach(content => {
-        content.classList.remove('active');
-        if (content.id === `${tab}-withdrawals-content`) {
-          content.classList.add('active');
-        }
-      });
-    }
-    
-    // Approve Withdrawal
-    function approveWithdrawal(withdrawalId) {
-      const withdrawal = withdrawals.find(w => w.id === withdrawalId);
-      if (!withdrawal) return;
-      
-      database.ref('admin/withdrawals/' + withdrawalId).update({ status: 'approved' }).then(function() {
-        showNotification('Withdrawal approved successfully', 'success');
-        
-        // Send notification to user
-        sendBotMessage(
-          `✅ <b>Withdrawal Approved</b>\nAmount: ${(withdrawal.amount || 0).toFixed(6)} TON`,
-          withdrawal.userId
-        );
-      }).catch(function(error) {
-        console.error('Error approving withdrawal:', error);
-        showNotification('Failed to approve withdrawal', 'error');
-      });
-    }
-    
-    // Reject Withdrawal
-    function rejectWithdrawal(withdrawalId) {
-      const withdrawal = withdrawals.find(w => w.id === withdrawalId);
-      if (!withdrawal) return;
-      
-      const reason = prompt('Please enter a reason for rejection:');
-      if (!reason) return;
-      
-      database.ref('admin/withdrawals/' + withdrawalId).update({ 
-        status: 'rejected',
-        reason: reason
-      }).then(function() {
-        // Refund to user balance
-        database.ref('users/' + withdrawal.userId).once('value').then(function(snapshot) {
-          if (snapshot.exists()) {
-            const user = snapshot.val();
-            const newBalance = (user.tonBalance || 0) + (withdrawal.amount || 0);
-            
-            database.ref('users/' + withdrawal.userId).update({ 
-              tonBalance: newBalance
-            }).then(function() {
-              showNotification('Withdrawal rejected successfully', 'success');
-              
-              // Send notification to user
-              sendBotMessage(
-                `❌ <b>Withdrawal Rejected</b>\nAmount: ${(withdrawal.amount || 0).toFixed(6)} TON\nReason: ${reason}\nAmount refunded to balance`,
-                withdrawal.userId
-              );
-            });
-          }
-        });
-      }).catch(function(error) {
-        console.error('Error rejecting withdrawal:', error);
-        showNotification('Failed to reject withdrawal', 'error');
-      });
-    }
-    
-    // Load Tasks
-    function loadTasks() {
-      database.ref('tasks').once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          tasks = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          renderTasks();
-        }
-      });
-    }
-    
-    // Render Tasks
-    function renderTasks() {
-      const tbody = document.getElementById('tasks-table-body');
-      tbody.innerHTML = '';
-      
-      tasks.forEach(task => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>
-            <img src="${task.photo || 'https://via.placeholder.com/50'}" alt="${task.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
-          </td>
-          <td>${task.name}</td>
-          <td>${task.category}</td>
-          <td>${(task.amount || 0).toFixed(6)} TON</td>
-          <td>
-            <div class="btn-group">
-              <button class="btn btn-primary btn-sm edit-task" data-task-id="${task.id}">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-danger btn-sm delete-task" data-task-id="${task.id}">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-      
-      // Add event listeners to buttons
-      document.querySelectorAll('.edit-task').forEach(button => {
-        button.addEventListener('click', function() {
-          const taskId = this.getAttribute('data-task-id');
-          editTask(taskId);
-        });
-      });
-      
-      document.querySelectorAll('.delete-task').forEach(button => {
-        button.addEventListener('click', function() {
-          const taskId = this.getAttribute('data-task-id');
-          deleteTask(taskId);
-        });
-      });
-    }
-    
-    // Save Task
-    function saveTask() {
-      const name = document.getElementById('task-name').value;
-      const category = document.getElementById('task-category').value;
-      const reward = parseFloat(document.getElementById('task-reward').value) || 0;
-      const link = document.getElementById('task-link').value;
-      const photoFile = document.getElementById('task-photo').files[0];
-      const photoUrl = document.getElementById('task-photo-url').value;
-      
-      if (!name || !category || reward <= 0 || !link) {
-        showNotification('Please fill all required fields', 'error');
-        return;
-      }
-      
-      const taskData = {
-        name: name,
-        category: category,
-        amount: reward,
-        link: link,
-        photo: photoUrl || ''
-      };
-      
-      // If photo file is provided, upload it
-      if (photoFile) {
-        const storageRef = storage.ref('tasks/' + Date.now() + '_' + photoFile.name);
-        storageRef.put(photoFile).then(function(snapshot) {
-          snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            taskData.photo = downloadURL;
-            
-            // Save task to database
-            database.ref('tasks').push(taskData).then(function() {
-              showNotification('Task added successfully', 'success');
-              document.getElementById('add-task-modal').classList.remove('active');
-              loadTasks();
-            }).catch(function(error) {
-              console.error('Error adding task:', error);
-              showNotification('Failed to add task', 'error');
-            });
-          });
-        });
-      } else {
-        // Save task to database
-        database.ref('tasks').push(taskData).then(function() {
-          showNotification('Task added successfully', 'success');
-          document.getElementById('add-task-modal').classList.remove('active');
-          loadTasks();
-        }).catch(function(error) {
-          console.error('Error adding task:', error);
-          showNotification('Failed to add task', 'error');
-        });
-      }
-    }
-    
-    // Edit Task
-    function editTask(taskId) {
-      const task = tasks.find(t => t.id === taskId);
-      if (!task) return;
-      
-      // Set task data in form
-      document.getElementById('edit-task-id').value = task.id;
-      document.getElementById('edit-task-name').value = task.name;
-      document.getElementById('edit-task-category').value = task.category;
-      document.getElementById('edit-task-reward').value = task.amount || 0;
-      document.getElementById('edit-task-link').value = task.link;
-      document.getElementById('edit-task-photo-url').value = task.photo || '';
-      
-      // Show modal
-      document.getElementById('edit-task-modal').classList.add('active');
-    }
-    
-    // Update Task
-    function updateTask() {
-      const taskId = document.getElementById('edit-task-id').value;
-      const name = document.getElementById('edit-task-name').value;
-      const category = document.getElementById('edit-task-category').value;
-      const reward = parseFloat(document.getElementById('edit-task-reward').value) || 0;
-      const link = document.getElementById('edit-task-link').value;
-      const photoFile = document.getElementById('edit-task-photo').files[0];
-      const photoUrl = document.getElementById('edit-task-photo-url').value;
-      
-      if (!taskId || !name || !category || reward <= 0 || !link) {
-        showNotification('Please fill all required fields', 'error');
-        return;
-      }
-      
-      const taskData = {
-        name: name,
-        category: category,
-        amount: reward,
-        link: link
-      };
-      
-      // If photo URL is provided, update it
-      if (photoUrl) {
-        taskData.photo = photoUrl;
-      }
-      
-      // If photo file is provided, upload it
-      if (photoFile) {
-        const storageRef = storage.ref('tasks/' + Date.now() + '_' + photoFile.name);
-        storageRef.put(photoFile).then(function(snapshot) {
-          snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            taskData.photo = downloadURL;
-            
-            // Update task in database
-            database.ref('tasks/' + taskId).update(taskData).then(function() {
-              showNotification('Task updated successfully', 'success');
-              document.getElementById('edit-task-modal').classList.remove('active');
-              loadTasks();
-            }).catch(function(error) {
-              console.error('Error updating task:', error);
-              showNotification('Failed to update task', 'error');
-            });
-          });
-        });
-      } else {
-        // Update task in database
-        database.ref('tasks/' + taskId).update(taskData).then(function() {
-          showNotification('Task updated successfully', 'success');
-          document.getElementById('edit-task-modal').classList.remove('active');
-          loadTasks();
-        }).catch(function(error) {
-          console.error('Error updating task:', error);
-          showNotification('Failed to update task', 'error');
-        });
-      }
-    }
-    
-    // Delete Task
-    function deleteTask(taskId) {
-      if (!confirm('Are you sure you want to delete this task?')) return;
-      
-      database.ref('tasks/' + taskId).remove().then(function() {
-        showNotification('Task deleted successfully', 'success');
-        loadTasks();
-      }).catch(function(error) {
-        console.error('Error deleting task:', error);
-        showNotification('Failed to delete task', 'error');
-      });
-    }
-    
-    // Load Promo Codes
-    function loadPromoCodes() {
-      database.ref('promoCodes').once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          promoCodes = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          renderPromoCodes();
-        }
-      });
-    }
-    
-    // Render Promo Codes
-    function renderPromoCodes() {
-      const tbody = document.getElementById('promo-codes-table-body');
-      tbody.innerHTML = '';
-      
-      promoCodes.forEach(promo => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${promo.id}</td>
-          <td>${promo.percentage || 0}%</td>
-          <td>${promo.maxUsers || 0}</td>
-          <td>${promo.used || 0}</td>
-          <td>${(promo.maxUsers || 0) - (promo.used || 0)}</td>
-          <td><span class="status-badge ${promo.status || 'active'}">${promo.status || 'active'}</span></td>
-          <td>
-            <div class="btn-group">
-              <button class="btn btn-primary btn-sm copy-promo" data-promo-code="${promo.id}">
-                <i class="fas fa-copy"></i>
-              </button>
-              <button class="btn btn-warning btn-sm ${promo.status === 'active' ? 'pause-promo' : 'resume-promo'}" data-promo-id="${promo.id}">
-                <i class="fas fa-${promo.status === 'active' ? 'pause' : 'play'}"></i>
-              </button>
-              <button class="btn btn-danger btn-sm delete-promo" data-promo-id="${promo.id}">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-      
-      // Add event listeners to buttons
-      document.querySelectorAll('.copy-promo').forEach(button => {
-        button.addEventListener('click', function() {
-          const promoCode = this.getAttribute('data-promo-code');
-          copyToClipboard(promoCode);
-          showNotification('Promo code copied to clipboard', 'success');
-        });
-      });
-      
-      document.querySelectorAll('.pause-promo').forEach(button => {
-        button.addEventListener('click', function() {
-          const promoId = this.getAttribute('data-promo-id');
-          pausePromoCode(promoId);
-        });
-      });
-      
-      document.querySelectorAll('.resume-promo').forEach(button => {
-        button.addEventListener('click', function() {
-          const promoId = this.getAttribute('data-promo-id');
-          resumePromoCode(promoId);
-        });
-      });
-      
-      document.querySelectorAll('.delete-promo').forEach(button => {
-        button.addEventListener('click', function() {
-          const promoId = this.getAttribute('data-promo-id');
-          deletePromoCode(promoId);
-        });
-      });
-    }
-    
-    // Generate Promo Code
-    function generatePromoCode() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let promoCode = '';
-      for (let i = 0; i < 8; i++) {
-        promoCode += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      document.getElementById('promo-code').value = promoCode;
-    }
-    
-    // Save Promo Code
-    function savePromoCode() {
-      const code = document.getElementById('promo-code').value;
-      const bonus = parseFloat(document.getElementById('promo-bonus').value) || 0;
-      const maxUsers = parseInt(document.getElementById('promo-max-users').value) || 0;
-      const status = document.getElementById('promo-status').value;
-      
-      if (!code || bonus <= 0 || maxUsers <= 0) {
-        showNotification('Please fill all required fields', 'error');
-        return;
-      }
-      
-      const promoData = {
-        percentage: bonus,
-        maxUsers: maxUsers,
-        used: 0,
-        status: status
-      };
-      
-      database.ref('promoCodes/' + code).set(promoData).then(function() {
-        showNotification('Promo code added successfully', 'success');
-        document.getElementById('add-promo-modal').classList.remove('active');
-        loadPromoCodes();
-      }).catch(function(error) {
-        console.error('Error adding promo code:', error);
-        showNotification('Failed to add promo code', 'error');
-      });
-    }
-    
-    // Pause Promo Code
-    function pausePromoCode(promoId) {
-      database.ref('promoCodes/' + promoId).update({ status: 'paused' }).then(function() {
-        showNotification('Promo code paused successfully', 'success');
-        loadPromoCodes();
-      }).catch(function(error) {
-        console.error('Error pausing promo code:', error);
-        showNotification('Failed to pause promo code', 'error');
-      });
-    }
-    
-    // Resume Promo Code
-    function resumePromoCode(promoId) {
-      database.ref('promoCodes/' + promoId).update({ status: 'active' }).then(function() {
-        showNotification('Promo code resumed successfully', 'success');
-        loadPromoCodes();
-      }).catch(function(error) {
-        console.error('Error resuming promo code:', error);
-        showNotification('Failed to resume promo code', 'error');
-      });
-    }
-    
-    // Delete Promo Code
-    function deletePromoCode(promoId) {
-      if (!confirm('Are you sure you want to delete this promo code?')) return;
-      
-      database.ref('promoCodes/' + promoId).remove().then(function() {
-        showNotification('Promo code deleted successfully', 'success');
-        loadPromoCodes();
-      }).catch(function(error) {
-        console.error('Error deleting promo code:', error);
-        showNotification('Failed to delete promo code', 'error');
-      });
-    }
-    
-    // Load Announcements
-    function loadAnnouncements() {
-      database.ref('announcements').once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          announcements = Object.entries(snapshot.val()).map(([id, data]) => ({ id, ...data }));
-          renderAnnouncements();
-        }
-      });
-    }
-    
-    // Render Announcements
-    function renderAnnouncements() {
-      const tbody = document.getElementById('announcements-table-body');
-      tbody.innerHTML = '';
-      
-      announcements.forEach(announcement => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${announcement.message.substring(0, 50)}${announcement.message.length > 50 ? '...' : ''}</td>
-          <td>${announcement.target || 'all'}</td>
-          <td>${new Date(announcement.timestamp * 1000).toLocaleString()}</td>
-          <td><span class="status-badge ${announcement.status || 'sent'}">${announcement.status || 'sent'}</span></td>
-        `;
-        
-        tbody.appendChild(tr);
-      });
-    }
-    
-    // Add Announcement Button
-    function addAnnouncementButton() {
-      const buttonsContainer = document.getElementById('announcement-buttons');
-      const buttonCount = buttonsContainer.querySelectorAll('.button-row').length;
-      
-      if (buttonCount >= 5) {
-        showNotification('Maximum 5 buttons allowed', 'error');
-        return;
-      }
-      
-      const buttonRow = document.createElement('div');
-      buttonRow.className = 'button-row';
-      buttonRow.style.display = 'flex';
-      buttonRow.style.gap = '10px';
-      buttonRow.style.marginBottom = '10px';
-      
-      buttonRow.innerHTML = `
-        <input type="text" class="form-control" placeholder="Button text">
-        <input type="text" class="form-control" placeholder="Button URL">
-        <button class="btn btn-danger btn-sm remove-button">
-          <i class="fas fa-trash"></i>
-        </button>
-      `;
-      
-      buttonsContainer.appendChild(buttonRow);
-    }
-    
-    // Send Announcement
-    function sendAnnouncement() {
-      const message = document.getElementById('announcement-message').value;
-      const photoFile = document.getElementById('announcement-photo').files[0];
-      const photoUrl = document.getElementById('announcement-photo-url').value;
-      const target = document.getElementById('announcement-target').value;
-      const specificUsers = document.getElementById('specific-users').value;
-      
-      if (!message) {
-        showNotification('Please enter a message', 'error');
-        return;
-      }
-      
-      // Get buttons
-      const buttons = [];
-      document.querySelectorAll('#announcement-buttons .button-row').forEach(row => {
-        const text = row.querySelector('input:nth-child(1)').value;
-        const url = row.querySelector('input:nth-child(2)').value;
-        
-        if (text && url) {
-          buttons.push({ text, url });
-        }
-      });
-      
-      const announcementData = {
-        message: message,
-        buttons: buttons,
-        target: target,
-        timestamp: Math.floor(Date.now() / 1000),
-        status: 'sent'
-      };
-      
-      // If photo file is provided, upload it
-      if (photoFile) {
-        const storageRef = storage.ref('announcements/' + Date.now() + '_' + photoFile.name);
-        storageRef.put(photoFile).then(function(snapshot) {
-          snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            announcementData.photo = downloadURL;
-            
-            // Save announcement to database
-            database.ref('announcements').push(announcementData).then(function() {
-              // Send announcement to users
-              if (target === 'all') {
-                sendAnnouncementToAllUsers(announcementData);
-              } else if (target === 'specific' && specificUsers) {
-                const userIds = specificUsers.split(',').map(id => id.trim());
-                sendAnnouncementToSpecificUsers(userIds, announcementData);
-              }
-              
-              showNotification('Announcement sent successfully', 'success');
-              loadAnnouncements();
-            }).catch(function(error) {
-              console.error('Error saving announcement:', error);
-              showNotification('Failed to save announcement', 'error');
-            });
-          });
-        });
-      } else if (photoUrl) {
-        announcementData.photo = photoUrl;
-        
-        // Save announcement to database
-        database.ref('announcements').push(announcementData).then(function() {
-          // Send announcement to users
-          if (target === 'all') {
-            sendAnnouncementToAllUsers(announcementData);
-          } else if (target === 'specific' && specificUsers) {
-            const userIds = specificUsers.split(',').map(id => id.trim());
-            sendAnnouncementToSpecificUsers(userIds, announcementData);
-          }
-          
-          showNotification('Announcement sent successfully', 'success');
-          loadAnnouncements();
-        }).catch(function(error) {
-          console.error('Error saving announcement:', error);
-          showNotification('Failed to save announcement', 'error');
-        });
-      } else {
-        // Save announcement to database
-        database.ref('announcements').push(announcementData).then(function() {
-          // Send announcement to users
-          if (target === 'all') {
-            sendAnnouncementToAllUsers(announcementData);
-          } else if (target === 'specific' && specificUsers) {
-            const userIds = specificUsers.split(',').map(id => id.trim());
-            sendAnnouncementToSpecificUsers(userIds, announcementData);
-          }
-          
-          showNotification('Announcement sent successfully', 'success');
-          loadAnnouncements();
-        }).catch(function(error) {
-          console.error('Error saving announcement:', error);
-          showNotification('Failed to save announcement', 'error');
-        });
-      }
-    }
-    
-    // Send Announcement to All Users
-    function sendAnnouncementToAllUsers(announcementData) {
-      users.forEach(user => {
-        sendBotMessage(announcementData.message, user.id, announcementData.buttons, announcementData.photo);
-      });
-    }
-    
-    // Send Announcement to Specific Users
-    function sendAnnouncementToSpecificUsers(userIds, announcementData) {
-      userIds.forEach(userId => {
-        sendBotMessage(announcementData.message, userId, announcementData.buttons, announcementData.photo);
-      });
-    }
-    
-    // Load Settings
-    function loadSettings() {
-      database.ref('settings').once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          settings = snapshot.val();
-          renderSettings();
-        }
-      });
-    }
-    
-    // Render Settings
-    function renderSettings() {
-      // General Settings
-      document.getElementById('platform-name').value = settings.platformName || 'Exotix Trade';
-      document.getElementById('platform-logo').value = settings.platformLogo || 'https://github.com/s42144/exotix-/blob/ce4cd9399ff673963389c393946138254a0edbe5/USDT-Ton-Wallet.png?raw=true';
-      document.getElementById('min-deposit').value = settings.minDeposit || 5;
-      document.getElementById('min-withdrawal').value = settings.minWithdrawal || 0.10;
-      document.getElementById('service-fee').value = settings.serviceFee || 10;
-      
-      // Button Settings
-      renderButtonSettings();
-    }
-    
-    // Render Button Settings
-    function renderButtonSettings() {
-      const buttonsContainer = document.getElementById('buttons-container');
-      buttonsContainer.innerHTML = '';
-      
-      if (settings.buttons && Array.isArray(settings.buttons)) {
-        settings.buttons.forEach((button, index) => {
-          const buttonDiv = document.createElement('div');
-          buttonDiv.className = 'form-group';
-          buttonDiv.innerHTML = `
-            <label class="form-label">Button ${index + 1}</label>
-            <div style="display: flex; gap: 10px;">
-              <input type="text" class="form-control button-text" placeholder="Button text" value="${button.text || ''}">
-              <input type="text" class="form-control button-url" placeholder="Button URL" value="${button.url || ''}">
-              <input type="file" class="form-control button-image" accept="image/*">
-              <button class="btn btn-danger btn-sm remove-button-setting" data-index="${index}">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          `;
-          
-          buttonsContainer.appendChild(buttonDiv);
-        });
-      }
-      
-      // Add event listeners to remove buttons
-      document.querySelectorAll('.remove-button-setting').forEach(button => {
-        button.addEventListener('click', function() {
-          const index = parseInt(this.getAttribute('data-index'));
-          removeButtonSetting(index);
-        });
-      });
-    }
-    
-    // Add Button Setting
-    function addButtonSetting() {
-      const buttonsContainer = document.getElementById('buttons-container');
-      const buttonCount = buttonsContainer.querySelectorAll('.form-group').length;
-      
-      const buttonDiv = document.createElement('div');
-      buttonDiv.className = 'form-group';
-      buttonDiv.innerHTML = `
-        <label class="form-label">Button ${buttonCount + 1}</label>
-        <div style="display: flex; gap: 10px;">
-          <input type="text" class="form-control button-text" placeholder="Button text">
-          <input type="text" class="form-control button-url" placeholder="Button URL">
-          <input type="file" class="form-control button-image" accept="image/*">
-          <button class="btn btn-danger btn-sm remove-button-setting">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      `;
-      
-      buttonsContainer.appendChild(buttonDiv);
-      
-      // Add event listener to remove button
-      buttonDiv.querySelector('.remove-button-setting').addEventListener('click', function() {
-        buttonDiv.remove();
-      });
-    }
-    
-    // Remove Button Setting
-    function removeButtonSetting(index) {
-      if (!confirm('Are you sure you want to remove this button?')) return;
-      
-      const buttonsContainer = document.getElementById('buttons-container');
-      const buttonDivs = buttonsContainer.querySelectorAll('.form-group');
-      
-      if (buttonDivs[index]) {
-        buttonDivs[index].remove();
-      }
-    }
-    
-    // Switch Settings Tab
-    function switchSettingsTab(tab) {
-      document.querySelectorAll('[data-settings-tab]').forEach(settingsTab => {
-        settingsTab.classList.remove('active');
-        if (settingsTab.getAttribute('data-settings-tab') === tab) {
-          settingsTab.classList.add('active');
-        }
-      });
-      
-      document.querySelectorAll('#settings-tab .tab-content').forEach(content => {
-        content.classList.remove('active');
-        if (content.id === `${tab}-settings-content`) {
-          content.classList.add('active');
-        }
-      });
-    }
-    
-    // Save General Settings
-    function saveGeneralSettings() {
-      const platformName = document.getElementById('platform-name').value;
-      const platformLogo = document.getElementById('platform-logo').value;
-      const minDeposit = parseFloat(document.getElementById('min-deposit').value) || 5;
-      const minWithdrawal = parseFloat(document.getElementById('min-withdrawal').value) || 0.10;
-      const serviceFee = parseFloat(document.getElementById('service-fee').value) || 10;
-      
-      const settingsData = {
-        ...settings,
-        platformName: platformName,
-        platformLogo: platformLogo,
-        minDeposit: minDeposit,
-        minWithdrawal: minWithdrawal,
-        serviceFee: serviceFee
-      };
-      
-      database.ref('settings').update(settingsData).then(function() {
-        showNotification('Settings saved successfully', 'success');
-      }).catch(function(error) {
-        console.error('Error saving settings:', error);
-        showNotification('Failed to save settings', 'error');
-      });
-    }
-    
-    // Save Button Settings
-    function saveButtonSettings() {
-      const buttonsContainer = document.getElementById('buttons-container');
-      const buttonDivs = buttonsContainer.querySelectorAll('.form-group');
-      
-      const buttons = [];
-      
-      buttonDivs.forEach((buttonDiv, index) => {
-        const text = buttonDiv.querySelector('.button-text').value;
-        const url = buttonDiv.querySelector('.button-url').value;
-        const imageFile = buttonDiv.querySelector('.button-image').files[0];
-        
-        if (text && url) {
-          buttons.push({
-            text: text,
-            url: url,
-            image: '' // Will be updated if image file is provided
-          });
-          
-          // If image file is provided, upload it
-          if (imageFile) {
-            const storageRef = storage.ref('buttons/' + Date.now() + '_' + imageFile.name);
-            storageRef.put(imageFile).then(function(snapshot) {
-              snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                buttons[index].image = downloadURL;
-                
-                // Update settings with buttons
-                database.ref('settings').update({ buttons: buttons }).then(function() {
-                  showNotification('Button settings saved successfully', 'success');
-                }).catch(function(error) {
-                  console.error('Error saving button settings:', error);
-                  showNotification('Failed to save button settings', 'error');
-                });
-              });
-            });
-          }
-        }
-      });
-      
-      // Update settings with buttons
-      database.ref('settings').update({ buttons: buttons }).then(function() {
-        showNotification('Button settings saved successfully', 'success');
-      }).catch(function(error) {
-        console.error('Error saving button settings:', error);
-        showNotification('Failed to save button settings', 'error');
-      });
-    }
-    
-    // Adjust Balances
-    function adjustBalances() {
-      const userId = document.getElementById('balance-user-id').value;
-      const tonAdjustment = parseFloat(document.getElementById('ton-balance-adjustment').value) || 0;
-      const reason = document.getElementById('balance-adjustment-reason').value;
-      
-      if (!userId || tonAdjustment === 0 || !reason) {
-        showNotification('Please fill all required fields', 'error');
-        return;
-      }
-      
-      database.ref('users/' + userId).once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          const user = snapshot.val();
-          const newTonBalance = (user.tonBalance || 0) + tonAdjustment;
-          
-          database.ref('users/' + userId).update({
-            tonBalance: newTonBalance
-          }).then(function() {
-            showNotification('Balances adjusted successfully', 'success');
-            
-            // Log balance adjustment
-            database.ref('admin/balanceAdjustments').push({
-              userId: userId,
-              userName: user.name,
-              previousTonBalance: user.tonBalance || 0,
-              newTonBalance: newTonBalance,
-              reason: reason,
-              timestamp: Math.floor(Date.now() / 1000),
-              adminId: 'admin' // This would be the actual admin ID in a real system
-            });
-            
-            // Clear form
-            document.getElementById('balance-user-id').value = '';
-            document.getElementById('ton-balance-adjustment').value = '';
-            document.getElementById('balance-adjustment-reason').value = '';
-          }).catch(function(error) {
-            console.error('Error adjusting balances:', error);
-            showNotification('Failed to adjust balances', 'error');
-          });
-        } else {
-          showNotification('User not found', 'error');
-        }
-      });
-    }
-    
-    // Load Analytics
-    function loadAnalytics() {
-      // Count countries
-      const countries = {};
-      users.forEach(user => {
-        const country = user.country || 'Unknown';
-        countries[country] = (countries[country] || 0) + 1;
-      });
-      
-      document.getElementById('total-countries').textContent = Object.keys(countries).length;
-      
-      // Count devices
-      const mobileUsers = users.filter(user => user.device && user.device.includes('Mobile')).length;
-      const desktopUsers = users.filter(user => user.device && !user.device.includes('Mobile')).length;
-      
-      document.getElementById('mobile-users').textContent = mobileUsers;
-      document.getElementById('desktop-users').textContent = desktopUsers;
-      
-      // Render charts
-      renderCountryChart(countries);
-      renderDeviceChart(mobileUsers, desktopUsers);
-      renderLanguageChart();
-    }
-    
-    // Render Country Chart
-    function renderCountryChart(countries) {
-      const ctx = document.getElementById('countryChart').getContext('2d');
-      
-      // Sort countries by count and take top 10
-      const sortedCountries = Object.entries(countries)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10);
-      
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: sortedCountries.map(country => country[0]),
-          datasets: [{
-            label: 'Users',
-            data: sortedCountries.map(country => country[1]),
-            backgroundColor: 'rgba(59, 130, 246, 0.8)',
-            borderColor: 'rgba(59, 130, 246, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: '#cbd5e1'
-              }
-            }
-          },
-          scales: {
-            x: {
-              grid: {
-                color: 'rgba(203, 213, 225, 0.1)'
-              },
-              ticks: {
-                color: '#cbd5e1'
-              }
+        new Chart(langCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['English', 'Chinese', 'Bengali', 'Russian'],
+                datasets: [{
+                    label: 'Users',
+                    data: [langs.en, langs.cn, langs.bn, langs.ru],
+                    backgroundColor: ['#FCD535', '#1E88E5', '#0ECB81', '#F6465D']
+                }]
             },
-            y: {
-              grid: {
-                color: 'rgba(203, 213, 225, 0.1)'
-              },
-              ticks: {
-                color: '#cbd5e1'
-              }
-            }
-          }
-        }
-      });
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#848E9C' } } } }
+        });
     }
     
-    // Render Device Chart
-    function renderDeviceChart(mobileUsers, desktopUsers) {
-      const ctx = document.getElementById('deviceChart').getContext('2d');
-      
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Mobile', 'Desktop'],
-          datasets: [{
-            data: [mobileUsers, desktopUsers],
-            backgroundColor: [
-              'rgba(59, 130, 246, 0.8)',
-              'rgba(16, 185, 129, 0.8)'
-            ],
-            borderColor: [
-              'rgba(59, 130, 246, 1)',
-              'rgba(16, 185, 129, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: '#cbd5e1'
-              }
-            }
-          }
-        }
-      });
-    }
+    // Force render analytics when tab shown
+    const oldSwitchTab = switchTab;
+    switchTab = function(tab) { oldSwitchTab(tab); if(tab === 'analytics') renderAnalytics(); };
+
+    function sendBot(msg, chatId) { fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'HTML' }) }); }
     
-    // Render Language Chart
-    function renderLanguageChart() {
-      const ctx = document.getElementById('languageChart').getContext('2d');
-      
-      // Count languages
-      const languages = {};
-      users.forEach(user => {
-        const language = user.language || 'Unknown';
-        languages[language] = (languages[language] || 0) + 1;
-      });
-      
-      // Sort languages by count and take top 5
-      const sortedLanguages = Object.entries(languages)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
-      
-      new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: sortedLanguages.map(language => language[0]),
-          datasets: [{
-            data: sortedLanguages.map(language => language[1]),
-            backgroundColor: [
-              'rgba(59, 130, 246, 0.8)',
-              'rgba(16, 185, 129, 0.8)',
-              'rgba(245, 158, 11, 0.8)',
-              'rgba(239, 68, 68, 0.8)',
-              'rgba(139, 92, 246, 0.8)'
-            ],
-            borderColor: [
-              'rgba(59, 130, 246, 1)',
-              'rgba(16, 185, 129, 1)',
-              'rgba(245, 158, 11, 1)',
-              'rgba(239, 68, 68, 1)',
-              'rgba(139, 92, 246, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: '#cbd5e1'
-              }
-            }
-          }
-        }
-      });
-    }
-    
-    // Send Bot Message
-    function sendBotMessage(message, chatId, buttons = null, photo = null) {
-      const payload = {
-        chat_id: chatId,
-        text: message,
-        parse_mode: 'HTML'
-      };
-      
-      // Add photo if provided
-      if (photo) {
-        payload.photo = photo;
-        payload.caption = message;
-        delete payload.text;
-      }
-      
-      // Add inline keyboard if buttons are provided
-      if (buttons && buttons.length > 0) {
-        payload.reply_markup = {
-          inline_keyboard: [buttons]
-        };
-      }
-      
-      const endpoint = photo ? 'sendPhoto' : 'sendMessage';
-      
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      }).catch(function(error) {
-        console.error('Error sending bot message:', error);
-      });
-    }
-    
-    // Copy to Clipboard
-    function copyToClipboard(text) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-    }
-    
-    // Show Notification
-    function showNotification(message, type = 'success') {
-      notificationMessage.textContent = message;
-      notification.className = `notification ${type} show`;
-      
-      setTimeout(function() {
-        notification.classList.remove('show');
-      }, 3000);
-    }
+    function showNotification(msg, type='success') { notificationMessage.textContent = msg; notification.className = `notification ${type} show`; setTimeout(() => notification.classList.remove('show'), 3000); }
   </script>
 </body>
 </html>
