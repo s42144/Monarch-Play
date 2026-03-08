@@ -523,47 +523,6 @@
     .history-amount.positive { color: var(--accent-green); }
     .history-amount.negative { color: var(--accent-red); }
     
-    .history-status {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-    
-    .history-status.pending {
-      background: rgba(252, 213, 53, 0.15);
-      color: var(--primary);
-    }
-    
-    .history-status.completed {
-      background: rgba(14, 203, 129, 0.15);
-      color: var(--accent-green);
-    }
-    
-    .history-details-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-top: 1px dashed var(--border-color);
-      margin-top: 8px;
-    }
-    
-    .history-detail-label {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    
-    .history-detail-value {
-      font-size: 12px;
-      color: var(--text-main);
-      font-weight: 600;
-      max-width: 180px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-family: monospace;
-    }
-
     /* Notification */
     .notification {
       position: fixed;
@@ -1918,7 +1877,6 @@
                 </div>
                 <div class="history-amount-row">
                   <div class="history-amount positive">+${d.amount} TON</div>
-                  <div class="history-status pending">Pending</div>
                 </div>
                 <div class="history-details-row">
                   <div class="history-detail-label">Transaction ID</div>
@@ -1948,11 +1906,13 @@
       
       const withdrawCount = userData.withdrawCount || 0;
       const hasDeposit = userData.hasDeposit || false;
-      const canWithdraw = withdrawCount === 0 || hasDeposit;
+      // CHANGE: Logic updated to require deposit for first withdrawal
+      const canWithdraw = hasDeposit || withdrawCount > 0;
       
       content.innerHTML = `
         <div class="card">
           <div class="section-subtitle" style="text-align:center;margin-bottom:16px;font-weight:700">${t('wallet.withdraw')} TON</div>
+          ${!canWithdraw ? `<div style="text-align:center; color:var(--accent-red); font-size:13px; font-weight:600; margin-bottom:12px;">First time deposit required to withdraw</div>` : ''}
           <div class="form-group">
             <label class="form-label">TON Address</label>
             <input id="wd_addr" class="input" placeholder="Enter your TON wallet address">
@@ -2022,7 +1982,6 @@
                 </div>
                 <div class="history-amount-row">
                   <div class="history-amount negative">-${w.amount} TON</div>
-                  <div class="history-status pending">Pending</div>
                 </div>
                 <div class="history-details-row">
                   <div class="history-detail-label">Transaction ID</div>
